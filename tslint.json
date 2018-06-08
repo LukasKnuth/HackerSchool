@@ -9,11 +9,34 @@
     ]
   },
   "rules": {
-    "quotemark": [true, "single"],
-    "indent": [true, "spaces", 2],
-    "interface-name": false,
-    "ordered-imports": false,
+    "no-empty-interface": true,
+    "class-name": true,
+    "only-arrow-functions": true,
+    "no-var-requires": true,
+    "no-var-keyword": true,
+    "no-duplicate-variable": true,
+    "no-shadowed-variable": true,
+    "no-use-before-declare": true,
+    "unified-signatures": true,
+    "no-conditional-assignment": true,
+    "no-invalid-this": true,
+    "no-string-throw": true,
+    "typeof-compare": true,
+    "use-isnan": true,
+    "prefer-const": true,
+    "interface-over-type-literal": true,
+    "new-parens": true,
+    "no-angle-bracket-type-assertion": true,
+    "one-line": true,
+    "whitespace": [true,
+      "check-branch", "check-decl", "check-operator", "check-separator", "check-type", "check-typecast"
+    ],
+
     "object-literal-sort-keys": false,
-    "no-consecutive-blank-lines": false
+    "object-literal-key-quotes": [true, "as-needed"],
+    "quotemark": false,
+    "interface-name": [true, "never-prefix"],
+    "ordered-imports": false,
+    "trailing-comma": false
   }
 }
