@@ -37,6 +37,7 @@
     "quotemark": false,
     "interface-name": [true, "never-prefix"],
     "ordered-imports": false,
-    "trailing-comma": false
+    "trailing-comma": false,
+    "no-trailing-whitespace": false
   }
 }
