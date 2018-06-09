@@ -8,12 +8,14 @@ This is based off of the official `@vue/cli` template with TypeScript configured
 
 **Commands**
 
-    # Get dependencies
-    $ npm install
-    # Start development server
-    $ npm run serve
-    # Build for production (results under /dist)
-    $ npm run build
+```bash
+# Get dependencies
+$ npm install
+# Start development server
+$ npm run serve
+# Build for production (results under /dist)
+$ npm run build
+```
 
 If necessary, `npm run lint` will execute TSLint on it's own. Usually, it's part of "serve" and "build".
 
