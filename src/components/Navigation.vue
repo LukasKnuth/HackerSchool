@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-    import {Component, Emit, Vue} from "vue-property-decorator";
+    import {Component, Vue} from "vue-property-decorator";
 
     interface Link {
         label: string;
@@ -22,7 +22,8 @@
 
         public links: Link[] = [
             {label: "Home", path: "/"},
-            {label: "About", path: "/about"}
+            {label: "About", path: "/about"},
+            {label: "Editor", path: "/editor"}
         ];
 
         public gotoRoute(link: Link) {
