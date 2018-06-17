@@ -11,7 +11,6 @@
   "rules": {
     "no-empty-interface": true,
     "class-name": true,
-    "only-arrow-functions": true,
     "no-var-requires": true,
     "no-var-keyword": true,
     "no-duplicate-variable": true,

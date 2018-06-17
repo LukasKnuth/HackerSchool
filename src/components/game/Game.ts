@@ -12,18 +12,22 @@ export interface GameSprites {
     background: pixi.Sprite;
 }
 
-const loadResources: () => Promise<void> = () => {
-    return new Promise((resolve, reject) => {
-        pixi.loader
-            .add(FILE_ASSET_PLAYER1)
-            .add(FILE_ASSET_BACKGROUND)
-            .on("error", (err) => reject(err))
-            .on("progress", (loader, resource) => {
-                console.log(`Loading ${resource.url}, progress at ${loader.progress}%`);
-            })
-            .load(resolve);
-    });
-};
+function loadResources(): Promise<void> {
+    if (Object.keys(pixi.loader.resources).length > 0) {
+        return Promise.resolve();
+    } else {
+        return new Promise((resolve, reject) => {
+            pixi.loader
+                .add(FILE_ASSET_PLAYER1)
+                .add(FILE_ASSET_BACKGROUND)
+                .on("error", (err) => reject(err))
+                .on("progress", (loader, resource) => {
+                    console.log(`Loading ${resource.url}, progress at ${loader.progress}%`);
+                })
+                .load(resolve);
+        });
+    }
+}
 
 const resourceToSprite: (assetFile: string) => pixi.Sprite = (file) => {
     return new pixi.Sprite(pixi.loader.resources[file].texture);
