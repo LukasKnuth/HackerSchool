@@ -24,7 +24,7 @@
         mounted() {
             const blocklyArea = document.getElementById('blocklyArea');
             const blocklyDiv = document.getElementById('blocklyDiv');
-            const workspacePlayground = Blockly.inject(blocklyDiv, {
+            this.workspace = Blockly.inject(blocklyDiv, {
                 toolbox: document.getElementById('toolbox')
             });
             const resizeEditor = (e) => {
@@ -36,10 +36,16 @@
             };
             window.addEventListener('resize', resizeEditor, false);
             resizeEditor();
-            Blockly.svgResize(workspacePlayground);
+            Blockly.svgResize(this.workspace);
         },
         beforeUpdate() {
             // TODO reset editor, load new blocks from changed level and add them to blockly!
+        },
+        methods: {
+            compile() {
+                Blockly.JavaScript.addReservedWords('code');
+                return Blockly.JavaScript.workspaceToCode(this.workspace);
+            }
         }
     };
 </script>
