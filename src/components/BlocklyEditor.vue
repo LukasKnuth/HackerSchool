@@ -18,6 +18,9 @@
 
     export default {
         name: 'blockly-editor',
+        props: {
+            level: null
+        },
         mounted() {
             const blocklyArea = document.getElementById('blocklyArea');
             const blocklyDiv = document.getElementById('blocklyDiv');
@@ -34,6 +37,9 @@
             window.addEventListener('resize', resizeEditor, false);
             resizeEditor();
             Blockly.svgResize(workspacePlayground);
+        },
+        beforeUpdate() {
+            // TODO reset editor, load new blocks from changed level and add them to blockly!
         }
     };
 </script>

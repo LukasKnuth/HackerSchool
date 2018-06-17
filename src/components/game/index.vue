@@ -4,11 +4,16 @@
 
 <script lang="ts">
     import * as pixi from "pixi.js";
-    import {Component, Vue} from "vue-property-decorator";
+    import {Component, Vue, Prop} from "vue-property-decorator";
     import * as game from "./Game";
+    import {Level} from "../../content/Lesson";
 
     @Component
     export default class Game extends Vue {
+
+        @Prop
+        public level: Level;
+
         private mounted() {
             const app = new pixi.Application({
                 width: 280, height: 280, antialias: true
