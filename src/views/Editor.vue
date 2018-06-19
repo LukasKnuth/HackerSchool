@@ -5,13 +5,14 @@
         </b-row>
         <b-row>
             <b-col>
-                <game :level="level" />
+                <game ref="game" :level="level" />
                 <b-button variant="primary" @click="runGame()">Run Game</b-button>
+                <b-button variant="danger" @click="stopGame()">Stop Game</b-button>
                 <h3 class="header-spacing">Description</h3>
                 <p>{{level.description}}</p>
             </b-col>
             <b-col cols="8" id="blocklyArea">
-                <blockly-editor :level="level" />
+                <blockly-editor ref="editor" :level="level" />
             </b-col>
         </b-row>
     </b-container>
@@ -33,7 +34,12 @@
         public level: Level;
 
         public runGame() {
-            // Todo take code from blockly, give it to game, restart the game.
+            const code = (this.$refs.editor as BlocklyEditor).compile();
+            (this.$refs.game as Game).startGame(code);
+            console.log(code);
+        }
+        public stopGame() {
+            (this.$refs.game as Game).stopGame();
         }
     }
 </script>
