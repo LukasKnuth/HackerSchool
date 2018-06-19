@@ -9,6 +9,13 @@ export default class MazeLevel1 implements Level {
     private pickupItem = new GridPosition(8, 9);
     private doorLocation = new GridPosition(10, 1);
 
+    get mazeHeight(): number {
+        return 10;
+    }
+    get mazeWidth(): number {
+        return 10;
+    }
+
     public getBlocks(): any[] {
         return [];
     }

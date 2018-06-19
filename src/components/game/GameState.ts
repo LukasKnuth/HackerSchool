@@ -31,8 +31,8 @@ export class GameState {
     private playerPosition: GridPosition[] = [new GridPosition(0, 0), new GridPosition(0, 0)];
     private levelState: GridState;
 
-    constructor() {
-        this.levelState = Array.from(new Array(MAP_SIZE), () => new Array(MAP_SIZE));
+    constructor(mazeWidth: number, mazeHeight: number) {
+        this.levelState = Array.from(new Array(mazeWidth), () => new Array(mazeHeight));
     }
 
     public setPlayerPosition(newPosition: GridPosition, playerIndex = 0) {
@@ -89,6 +89,14 @@ export class GameState {
         const temp = this.getGridSquare(positionA);
         this.setGridSquare(positionA, this.getGridSquare(positionB));
         this.setGridSquare(positionB, temp);
+    }
+
+    public get mazeWidth(): number {
+        return this.levelState.length;
+    }
+
+    public get mazeHeight(): number {
+        return this.levelState[0].length;
     }
 
 }

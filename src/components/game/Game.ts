@@ -50,7 +50,7 @@ const LOGIC_TICK_THRESHOLD = 1000;
 
 export function startGameLoop(app: PIXI.Application, level: Level, userCode: string, render: GameRenderer): GameLoop {
     // Reset state:
-    const state = new GameState();
+    const state = new GameState(level.mazeWidth, level.mazeHeight);
     // eval code:
     const context = level.getActions(state);  // TODO this way will capture the gamestate. Is that OK? What about reset?
     const gameLogic = new Function(userCode).bind(context);

@@ -8,6 +8,14 @@ export interface Level {
     name: string;
     description: string;
     maxBlocks: number;
+    /**
+     * How many blocks the maze should have on the X axis
+     */
+    mazeWidth: number;
+    /**
+     * How many blocks the maze should have on the Y axis
+     */
+    mazeHeight: number;
 
     // TODO need something to store/load level state. Files? VueX?
 
