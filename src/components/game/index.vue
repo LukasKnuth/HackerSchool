@@ -7,6 +7,8 @@
     import {Component, Vue, Prop} from "vue-property-decorator";
     import * as game from "./Game";
     import {Level} from "../../content/Lesson";
+    import {GameLoop} from "./Game";
+    import {GameState} from "./GameState";
 
     @Component
     export default class Game extends Vue {
@@ -14,27 +16,33 @@
         @Prop()
         public level: Level;
 
+        private engine: pixi.Application;
+        private gameLoop: GameLoop;
+
         private mounted() {
-            const app = new pixi.Application({
+            this.engine = new pixi.Application({
                 width: 280, height: 280, antialias: true
             });
-            this.$el.appendChild(app.view);
+            this.$el.appendChild(this.engine.view);
 
-            app.renderer.autoResize = true; // TODO stretch to full available width of container
+            this.engine.renderer.autoResize = true; // TODO stretch to full available width of container
 
-            this.initializeGame(app).catch((err) => {
+            game.initializeRenderer(this.engine).catch((err) => {
                 console.error(err); // TODO show error in UI!
             })
         }
 
-        private async initializeGame(app: pixi.Application) {
-            const sprites = await game.loadSprites(app);
-            app.stage.addChild(sprites.background);
-            app.stage.addChild(sprites.player1);
+        public startGame(userCode: string) {
+            this.stopGame();
+            this.gameLoop = game.startGameLoop(this.engine, this.level, userCode, (state: GameState) => {
+                game.renderFrame(state);
+            });
+        }
 
-            sprites.player1.position.set(40, 100);
-            sprites.player1.scale.set(0.25, 0.25);
-
+        public stopGame() {
+            if (this.gameLoop) {
+                game.stopGameLoop(this.engine, this.gameLoop);
+            }
         }
 
     }
