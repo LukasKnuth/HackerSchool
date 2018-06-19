@@ -29,17 +29,17 @@ function loadResources(): Promise<void> {
     }
 }
 
-const resourceToSprite: (assetFile: string) => pixi.Sprite = (file) => {
-    return new pixi.Sprite(pixi.loader.resources[file].texture);
-};
+function resourceToSprite(assetFile: string): pixi.Sprite {
+    return new pixi.Sprite(pixi.loader.resources[assetFile].texture);
+}
 
-export const loadSprites: (app: pixi.Application) => Promise<GameSprites> = async (app) => {
+async function loadSprites(app: pixi.Application): Promise<GameSprites> {
     await loadResources();
     return {
         player1: resourceToSprite(FILE_ASSET_PLAYER1),
         background: resourceToSprite(FILE_ASSET_BACKGROUND)
     };
-};
+}
 
 // ------------------- GAME LOOP ----------------------
 

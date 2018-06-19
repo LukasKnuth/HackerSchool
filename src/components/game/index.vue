@@ -11,7 +11,7 @@
     @Component
     export default class Game extends Vue {
 
-        @Prop
+        @Prop()
         public level: Level;
 
         private mounted() {
@@ -36,5 +36,6 @@
             sprites.player1.scale.set(0.25, 0.25);
 
         }
+
     }
 </script>
