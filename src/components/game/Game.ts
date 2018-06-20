@@ -13,6 +13,7 @@ export type GameRenderer = (state: GameState) => void;
 export interface GameSprites {
     player1: pixi.Sprite;
     background: pixi.Sprite;
+    grid: pixi.Graphics;
 }
 
 function loadResources(): Promise<void> {
@@ -38,9 +39,11 @@ function resourceToSprite(assetFile: string): pixi.Sprite {
 
 async function loadSprites(app: pixi.Application): Promise<GameSprites> {
     await loadResources();
+    const grid = new pixi.Graphics();
     return {
         player1: resourceToSprite(FILE_ASSET_PLAYER1),
-        background: resourceToSprite(FILE_ASSET_BACKGROUND)
+        background: resourceToSprite(FILE_ASSET_BACKGROUND),
+        grid
     };
 }
 
@@ -77,15 +80,32 @@ export function stopGameLoop(app: pixi.Application, loop: GameLoop): void {
 
 // ---------------- RENDER --------------------------
 
-export async function initializeRenderer(app: pixi.Application) {
+export async function initializeRenderer(app: pixi.Application): Promise<GameSprites> {
     const sprites = await loadSprites(app);
     app.stage.addChild(sprites.background);
+    app.stage.addChild(sprites.grid);
     app.stage.addChild(sprites.player1);
 
     sprites.player1.position.set(40, 100);
     sprites.player1.scale.set(0.25, 0.25);
+
+    return sprites;
 }
 
-export function renderFrame(state: GameState) {
-    // TODO render player at position and re-render maze here!
+export function renderFrame(app: PIXI.Application, sprites: GameSprites, state: GameState) {
+    const fullWidth = app.renderer.view.width;
+    const fullHeight = app.renderer.view.height;
+    // Render the maze:
+    const xGridSize = fullWidth / state.mazeWidth;
+    const yGridSize = fullHeight / state.mazeHeight;
+
+    sprites.grid.clear();
+    for (let x = 0; x < state.mazeWidth; x++) {
+        for (let y = 0; y < state.mazeHeight; y++) {
+            sprites.grid.lineStyle(1, 0xacacac, .7);
+            sprites.grid.beginFill(0xfbfbfb, .3);
+            sprites.grid.drawRect(x * xGridSize, y * yGridSize, xGridSize, yGridSize);
+            sprites.grid.endFill();
+        }
+    }
 }

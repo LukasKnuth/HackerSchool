@@ -7,7 +7,7 @@
     import {Component, Vue, Prop} from "vue-property-decorator";
     import * as game from "./Game";
     import {Level} from "../../content/Lesson";
-    import {GameLoop} from "./Game";
+    import {GameLoop, GameSprites} from "./Game";
     import {GameState} from "./GameState";
 
     @Component
@@ -18,6 +18,7 @@
 
         private engine: pixi.Application;
         private gameLoop: GameLoop;
+        private sprites: GameSprites;
 
         private mounted() {
             this.engine = new pixi.Application({
@@ -27,7 +28,9 @@
 
             this.engine.renderer.autoResize = true; // TODO stretch to full available width of container
 
-            game.initializeRenderer(this.engine).catch((err) => {
+            game.initializeRenderer(this.engine).then((sprites: GameSprites) => {
+                this.sprites = sprites;
+            }).catch((err) => {
                 console.error(err); // TODO show error in UI!
             })
         }
@@ -35,7 +38,7 @@
         public startGame(userCode: string) {
             this.stopGame();
             this.gameLoop = game.startGameLoop(this.engine, this.level, userCode, (state: GameState) => {
-                game.renderFrame(state);
+                game.renderFrame(this.engine, this.sprites, state);
             });
         }
 
