@@ -1,25 +1,26 @@
 <template>
     <div>
         <div id="blocklyDiv"></div>
-        <xml v-pre id="toolbox" style="display: none">
-            <block type="controls_if"></block>
-            <block type="controls_repeat_ext"></block>
-            <block type="logic_compare"></block>
-            <block type="math_number"></block>
-            <block type="math_arithmetic"></block>
-            <block type="text"></block>
-            <block type="text_print"></block>
-        </xml>
+        <Toolbox>
+            <ToolboxBlock v-for="block in level.getBlocks()" :key="block" :type="block"></ToolboxBlock>
+        </Toolbox>
     </div>
 </template>
 
 <script lang="js">
     import Blockly from "node-blockly/browser";
+    import ExportBlocks from "../../content/blocks/GameBlocks";
+    import Toolbox from "./Toolbox";
+    import ToolboxBlock from "./Block";
 
     export default {
+        components: {Toolbox, ToolboxBlock},
         name: 'blockly-editor',
         props: {
             level: null
+        },
+        created() {
+            ExportBlocks(Blockly.Blocks);
         },
         mounted() {
             const blocklyArea = document.getElementById('blocklyArea');

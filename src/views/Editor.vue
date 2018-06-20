@@ -20,7 +20,7 @@
 
 <script lang="ts">
     import {Component, Prop, Vue} from "vue-property-decorator";
-    import BlocklyEditor from "../components/BlocklyEditor.vue";
+    import BlocklyEditor from "../components/editor/index.vue";
     import Game from "../components/game/index.vue";
     import {Level} from "../content/Lesson";
     import MazeLevel1 from "../content/lessons/maze/levels/Level1";
