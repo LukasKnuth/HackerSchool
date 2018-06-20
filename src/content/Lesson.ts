@@ -1,9 +1,5 @@
 import {GameState} from '@/components/game/GameState';
 
-class Block {
-    // TODO Define what a block can hold. Copy from Blockly docs?
-}
-
 export interface Level {
     name: string;
     description: string;
@@ -20,10 +16,10 @@ export interface Level {
     // TODO need something to store/load level state. Files? VueX?
 
     /**
-     * Get any available Blockly blocks that can be used in this Level.
-     * @returns {Block[]}
+     * Returns the ids of any Blockly blocks that can be used in this Level.
+     * @see content/blocks/GameBlocks.js
      */
-    getBlocks: () => Block[];
+    getBlocks: () => string[];
     /**
      * This is the object that will be given to the generated code as "this".
      * It should have all methods that the blocks use in their code!
@@ -39,8 +35,17 @@ export interface Level {
 }
 
 export interface Lesson {
+    /**
+     * The name of the overall lesson
+     */
     name: string;
+    /**
+     * Description of the overall lesson.
+     */
     description: string;
-
+    /**
+     * Return all Levels of this lesson.
+     * @returns {Level[]}
+     */
     getLevels: () => Level[];
 }

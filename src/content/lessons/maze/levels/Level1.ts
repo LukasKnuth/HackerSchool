@@ -16,8 +16,8 @@ export default class MazeLevel1 implements Level {
         return 10;
     }
 
-    public getBlocks(): any[] {
-        return [];
+    public getBlocks(): string[] {
+        return ["controls_if", "logic_compare", "math_number", "math_arithmetic", "text", "text_print", "string_length"];
     }
 
     public getActions(gameState: GameState) {
