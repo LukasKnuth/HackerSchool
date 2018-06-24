@@ -31,7 +31,7 @@ export class GridPosition {
     }
 }
 
-type GridState = number[][];
+export type GridState = number[][];
 
 export class GameState {
 

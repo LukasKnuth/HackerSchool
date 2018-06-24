@@ -64,6 +64,8 @@ export function startGameLoop(app: PIXI.Application, level: Level, userCode: str
     // eval code:
     const context = level.getActions(state);  // TODO this way will capture the gamestate. Is that OK? What about reset?
     const gameLogic = new Function(userCode).bind(context);
+    // initialize maze
+    level.initializeState(state);
     // run game loop:
     let gameTime = 0;
     const loop = (delta: number) => {
