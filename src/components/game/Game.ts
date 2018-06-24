@@ -1,5 +1,12 @@
 import * as pixi from "pixi.js";
-import {GameState} from '@/components/game/GameState';
+import {
+    GameState,
+    GridPosition,
+    SQUARE_COLLECTIBLE, SQUARE_GOAL,
+    SQUARE_NEUTRAL,
+    SQUARE_PIT, SQUARE_TELEPORT_ENTRY, SQUARE_TELEPORT_EXIT,
+    SQUARE_TRAP
+} from '@/components/game/GameState';
 import {Level} from '@/content/Lesson';
 
 // ----------------- ASSET LOADING -----------------
@@ -82,12 +89,12 @@ export function stopGameLoop(app: pixi.Application, loop: GameLoop): void {
 
 export async function initializeRenderer(app: pixi.Application): Promise<GameSprites> {
     const sprites = await loadSprites(app);
-    app.stage.addChild(sprites.background);
+    //app.stage.addChild(sprites.background);
     app.stage.addChild(sprites.grid);
     app.stage.addChild(sprites.player1);
 
     sprites.player1.position.set(40, 100);
-    sprites.player1.scale.set(0.25, 0.25);
+    sprites.player1.scale.set(0.1, 0.1);
 
     return sprites;
 }
@@ -98,14 +105,47 @@ export function renderFrame(app: PIXI.Application, sprites: GameSprites, state: 
     // Render the maze:
     const xGridSize = fullWidth / state.mazeWidth;
     const yGridSize = fullHeight / state.mazeHeight;
-
     sprites.grid.clear();
+    const pos = new GridPosition(0, 0);
     for (let x = 0; x < state.mazeWidth; x++) {
+        pos.x = x;
         for (let y = 0; y < state.mazeHeight; y++) {
+            pos.y = y;
+            const square = state.getGridSquare(pos);
             sprites.grid.lineStyle(1, 0xacacac, .7);
-            sprites.grid.beginFill(0xfbfbfb, .3);
+            // Render the square:
+            switch (square) {
+                case SQUARE_PIT:
+                    sprites.grid.beginFill(0xb49147);
+                    break;
+                case SQUARE_TRAP:
+                    sprites.grid.beginFill(0xd84f32);
+                    break;
+                case SQUARE_COLLECTIBLE:
+                    sprites.grid.beginFill(0xdfdd2d);
+                    break;
+                case SQUARE_TELEPORT_ENTRY:
+                    sprites.grid.beginFill(0xb42ddf);
+                    break;
+                case SQUARE_TELEPORT_EXIT:
+                    sprites.grid.beginFill(0xdf2db1);
+                    break;
+                case SQUARE_GOAL:
+                    sprites.grid.beginFill(0x6ab446);
+                    break;
+                case SQUARE_NEUTRAL:
+                default:
+                    sprites.grid.beginFill(0x000);
+            }
             sprites.grid.drawRect(x * xGridSize, y * yGridSize, xGridSize, yGridSize);
             sprites.grid.endFill();
         }
     }
+    // Render the player:
+    const playerPosition = state.getPlayerPosition();
+    const playerX = playerPosition.x * xGridSize;
+    const playerY = playerPosition.y * yGridSize;
+    sprites.player1.x = playerX;
+    sprites.player1.y = playerY;
+    // TODO change player size dynamically?? Also center him inside the grid!
 }
