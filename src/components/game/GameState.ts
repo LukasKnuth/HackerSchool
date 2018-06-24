@@ -35,7 +35,8 @@ type GridState = number[][];
 
 export class GameState {
 
-    public isGameOver: boolean = false;
+    private isGameOver: boolean = false;
+    private isGameWon: boolean = false;
     private playerPosition: GridPosition[] = [new GridPosition(0, 0), new GridPosition(0, 0)];
     private levelState: GridState;
 
@@ -105,6 +106,11 @@ export class GameState {
 
     public get mazeHeight(): number {
         return this.levelState[0].length;
+    }
+
+    public setGameOver(isOver = true, isWin = false) {
+        this.isGameOver = isOver;
+        this.isGameWon = isWin;
     }
 
 }
