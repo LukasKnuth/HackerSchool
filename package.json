@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "bootstrap-vue": "^2.0.0-rc.11",
+    "js-interpreter": "^1.4.6",
     "node-blockly": "^1.0.35",
     "pixi.js": "^4.8.1",
     "vue": "^2.5.16",

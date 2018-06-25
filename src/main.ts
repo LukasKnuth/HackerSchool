@@ -1,3 +1,4 @@
+/// <reference path="./shim-js-interpreter.d.ts" />
 import BootstrapVue from "bootstrap-vue";
 import Vue from "vue";
 import App from "./App.vue";
