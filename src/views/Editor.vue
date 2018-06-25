@@ -28,14 +28,14 @@
     @Component({
         components: {BlocklyEditor, Game}
     })
-    export default class Lessons extends Vue {
+    export default class Editor extends Vue {
 
         @Prop({default: () => new MazeLevel1()})
-        public level: Level;
+        public level?: Level;
 
         public runGame() {
-            const code = (this.$refs.editor as BlocklyEditor).compile();
-            (this.$refs.game as Game).startGame(code);
+            const code = (this.$refs.editor as any).compile();
+            (this.$refs.game as any).startGame(code);
             console.log(code);
         }
         public stopGame() {

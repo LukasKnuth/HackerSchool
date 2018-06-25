@@ -14,11 +14,11 @@
     export default class Game extends Vue {
 
         @Prop()
-        public level: Level;
+        public level?: Level;
 
-        private engine: pixi.Application;
-        private gameLoop: GameLoop;
-        private sprites: GameSprites;
+        private engine?: pixi.Application;
+        private gameLoop?: GameLoop;
+        private sprites?: GameSprites;
 
         private mounted() {
             this.engine = new pixi.Application({
@@ -37,13 +37,18 @@
 
         public startGame(userCode: string) {
             this.stopGame();
-            this.gameLoop = game.startGameLoop(this.engine, this.level, userCode, (state: GameState) => {
-                game.renderFrame(this.engine, this.sprites, state);
-            });
+            const engine = this.engine, sprites = this.sprites, level = this.level;
+            if (engine && sprites && level) {
+                this.gameLoop = game.startGameLoop(engine, level, userCode, (state: GameState) => {
+                    game.renderFrame(engine, sprites, state);
+                });
+            } else {
+                console.error("Can't start game, something is not initialized!", engine, sprites, level);
+            }
         }
 
         public stopGame() {
-            if (this.gameLoop) {
+            if (this.engine && this.gameLoop) {
                 game.stopGameLoop(this.engine, this.gameLoop);
             }
         }

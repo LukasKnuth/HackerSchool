@@ -7,7 +7,7 @@
 
     @Component
     export default class ToolboxBlock extends Vue {
-        @Prop()
-        public type: string;
+        @Prop({default: () => ""})
+        public type?: string;
     }
 </script>
