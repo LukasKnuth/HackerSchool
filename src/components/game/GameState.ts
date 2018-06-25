@@ -33,11 +33,34 @@ export class GridPosition {
 
 export type GridState = number[][];
 
+export class PlayerPosition extends GridPosition {
+    constructor(x: number, y: number, public angle: number){
+        super(x, y);
+    }
+
+    public equals(other: GridPosition|PlayerPosition): boolean {
+        if (other instanceof PlayerPosition) {
+            return super.equals(other) && this.angle === other.angle;
+        } else {
+            return super.equals(other);
+        }
+    }
+
+    public clone(): PlayerPosition {
+        return new PlayerPosition(this.x, this.y, this.angle);
+    }
+
+    public turn(amount: number): this {
+        this.angle += amount;
+        return this;
+    }
+}
+
 export class GameState {
 
     private isGameOver: boolean = false;
     private isGameWon: boolean = false;
-    private playerPosition: GridPosition[] = [new GridPosition(0, 0), new GridPosition(0, 0)];
+    private playerPosition: PlayerPosition[] = [new PlayerPosition(0, 0, 0), new PlayerPosition(0, 0, 0)];
     private levelState: GridState;
 
     constructor(mazeWidth: number, mazeHeight: number) {
@@ -57,12 +80,12 @@ export class GameState {
         }
     }
 
-    public getPlayerPosition(playerIndex = 0) {
+    public getPlayerPosition(playerIndex = 0): PlayerPosition {
         // TODO instead of copy, can we return an immtable version? This won't work with moveX() methods though!
         if (this.playerPosition.length > playerIndex) {
             return this.playerPosition[playerIndex].clone();
         } else {
-            return new GridPosition(-1, -1);
+            return new PlayerPosition(-1, -1, 0);
         }
     }
 
