@@ -1,4 +1,5 @@
 import {GameState, GridState} from '@/components/game/GameState';
+import Interpreter, {API} from 'js-interpreter';
 
 // TODO need something to store/load level state. Files? VueX?
 export interface Level {
@@ -30,7 +31,7 @@ export interface Level {
      * It should have all methods that the blocks use in their code!
      * @returns {any}
      */
-    getActions(gameState: GameState): any;
+    exportAPI(gameState: GameState): API;
     /**
      * Simulate a step for this level. This is where you can interact with the games state and make changes,
      *  for example, move the player to another location (teleport) or remove consumables from the map.

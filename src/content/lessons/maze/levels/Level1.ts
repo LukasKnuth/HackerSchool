@@ -6,6 +6,7 @@ import {
     SQUARE_PIT,
     SQUARE_TELEPORT_ENTRY, SQUARE_TRAP
 } from '@/components/game/GameState';
+import {API, default as Interpreter, InterpreterScope} from 'js-interpreter';
 
 export default class MazeLevel1 implements Level {
     public readonly name = "Level 1";
@@ -39,11 +40,16 @@ export default class MazeLevel1 implements Level {
         ];
     }
 
-    public getActions(gameState: GameState) {
-        return {
-            walkForward: () => {
+    public exportAPI(gameState: GameState): API {
+        return (interpreter: Interpreter, scope: InterpreterScope) => {
+            const moveWrapper = () => {
                 gameState.setPlayerPosition(gameState.getPlayerPosition().moveX(1));
-            }
+            };
+            interpreter.setProperty(scope, "moveX", interpreter.createNativeFunction(moveWrapper));
+            const alertWrapper = (text: string) => {
+                alert(text);
+            };
+            interpreter.setProperty(scope, "alert", interpreter.createNativeFunction(alertWrapper));
         };
     }
 

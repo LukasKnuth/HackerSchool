@@ -8,6 +8,7 @@ import {
     SQUARE_TRAP
 } from '@/components/game/GameState';
 import {Level} from '@/content/Lesson';
+import Interpreter from "js-interpreter";
 
 // ----------------- ASSET LOADING -----------------
 
@@ -62,8 +63,8 @@ export function startGameLoop(app: PIXI.Application, level: Level, userCode: str
     // Reset state:
     const state = new GameState(level.mazeWidth, level.mazeHeight);
     // eval code:
-    const context = level.getActions(state);  // TODO this way will capture the gamestate. Is that OK? What about reset?
-    const gameLogic = new Function(userCode).bind(context);
+    const api = level.exportAPI(state);  // TODO this way will capture the gamestate. Is that OK? What about reset?
+    const interpreter = new Interpreter(userCode, api);
     // initialize maze
     level.initializeState(state);
     // run game loop:
@@ -73,7 +74,9 @@ export function startGameLoop(app: PIXI.Application, level: Level, userCode: str
         if (gameTime >= LOGIC_TICK_THRESHOLD) {
             console.log("Tick!");
             gameTime = 0;
-            gameLogic(delta);
+            if (!interpreter.step()) {// TODO this step is a very small unit. Maybe run until gameState is changed?
+                console.log("User Code has no more steps to execute!");
+            }
             level.tick(state);
         }
         render(state);
