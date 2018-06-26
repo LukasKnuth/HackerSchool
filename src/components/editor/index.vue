@@ -12,7 +12,7 @@
     import ExportBlocks from "../../content/blocks/GameBlocks";
     import Toolbox from "./Toolbox";
     import ToolboxBlock from "./Block";
-    import {BLOCK_EXECUTED} from "../game/Game";
+    import {BLOCK_EXECUTING} from "../game/Game";
 
     export default {
         components: {Toolbox, ToolboxBlock},
@@ -46,8 +46,8 @@
         methods: {
             compile() {
                 Blockly.JavaScript.addReservedWords('code');
-                Blockly.JavaScript.STATEMENT_PREFIX = `${BLOCK_EXECUTED}(%1);\n`;
-                Blockly.JavaScript.addReservedWords(BLOCK_EXECUTED);
+                Blockly.JavaScript.STATEMENT_PREFIX = `${BLOCK_EXECUTING}(%1);\n`;
+                Blockly.JavaScript.addReservedWords(BLOCK_EXECUTING);
                 return Blockly.JavaScript.workspaceToCode(this.workspace);
             },
             highlightBlock(blockId) {

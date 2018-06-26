@@ -6,7 +6,7 @@
         <b-row>
             <b-col>
                 <game ref="game" :level="level"
-                      @block-executed="highlightBlock"
+                      @block-executing="highlightBlock"
                       :running.sync="gameIsRunning"
                 />
                 <b-button :variant="buttonColor" @click="buttonClick">{{buttonText}}</b-button>

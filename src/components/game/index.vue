@@ -42,7 +42,7 @@
             if (engine && sprites && level) {
                 this.gameLoop = game.startGameLoop(engine, level, userCode, (state: GameState) => {
                     game.renderFrame(engine, sprites, state);
-                }, (blockId: string) => this.$emit("block-executed", blockId));
+                }, (blockId: string) => this.$emit("block-executing", blockId));
                 this.$emit("update:running", true); // TODO Add automatic emit when code ends!
             } else {
                 console.error("Can't start game, something is not initialized!", engine, sprites, level);

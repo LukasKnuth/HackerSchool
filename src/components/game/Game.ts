@@ -10,7 +10,7 @@ import {
 import {Level} from '@/content/Lesson';
 import Interpreter, {API, InterpreterScope} from 'js-interpreter';
 
-export const BLOCK_EXECUTED = "blockExecuted";
+export const BLOCK_EXECUTING = "blockExecuting";
 
 // ----------------- ASSET LOADING -----------------
 
@@ -75,7 +75,7 @@ export function startGameLoop(app: PIXI.Application, level: Level, userCode: str
     };
     const apiWrapper: API = (interp: Interpreter, scope: InterpreterScope) => {
         const highlightWrapper = (id: any) => highlightBlock(id ? id.toString() : '');
-        interp.setProperty(scope, BLOCK_EXECUTED, interp.createNativeFunction(highlightWrapper));
+        interp.setProperty(scope, BLOCK_EXECUTING, interp.createNativeFunction(highlightWrapper));
         // Add the levels own API
         api(interp, scope);
     };
