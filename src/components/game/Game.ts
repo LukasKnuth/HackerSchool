@@ -98,11 +98,8 @@ export function startGameLoop(app: PIXI.Application, level: Level, userCode: str
             gameTime = 0;
             do {
                 hasMoreCode = interpreter.step();
-                if (!hasMoreCode) { // TODO stop the actual execution and ticker here?!?!
-                    console.log("User Code has no more steps to execute!");
-                    if (gameLoop.onGameTerminated) {
-                        gameLoop.onGameTerminated();
-                    }
+                if (!hasMoreCode && gameLoop.onGameTerminated) {
+                    gameLoop.onGameTerminated();
                 }
             } while (!blockExecutionPause && hasMoreCode);
             blockExecutionPause = false;

@@ -20,7 +20,7 @@
         private gameLoop?: GameLoop;
         private sprites?: GameSprites;
 
-        private mounted() {
+        private mounted() { // TODO need to do cleanup? (in unmount?) What when we change levels?
             this.engine = new pixi.Application({
                 width: 280, height: 280, antialias: true
             });
@@ -44,7 +44,11 @@
                     game.renderFrame(engine, sprites, state);
                 });
                 this.gameLoop.onBlockExecuting = (blockId: string) => this.emitBlockExecuting(blockId);
-                this.gameLoop.onGameTerminated = () => this.emitRunningUpdate(false);
+                this.gameLoop.onGameTerminated = () => {
+                    console.log("User Code has no more steps to execute!");
+                    this.stopGame();
+                    this.emitRunningUpdate(false);
+                };
                 this.emitRunningUpdate(true);
             } else {
                 console.error("Can't start game, something is not initialized!", engine, sprites, level);
