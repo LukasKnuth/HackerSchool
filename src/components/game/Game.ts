@@ -65,6 +65,12 @@ async function loadSprites(app: pixi.Application): Promise<GameSprites> {
 
 const LOGIC_TICK_THRESHOLD = 1000;
 
+export function renderPreview(app: PIXI.Application, level: Level, render: GameRenderer) {
+    const gameState = new GameState(level.mazeWidth, level.mazeHeight); // This is thrown away immediately...
+    level.initializeState(gameState);
+    render(gameState);
+}
+
 export function startGameLoop(app: PIXI.Application, level: Level, userCode: string, render: GameRenderer): GameLoop {
     // Create fresh state:
     let gameLoop: GameLoop;
@@ -88,7 +94,7 @@ export function startGameLoop(app: PIXI.Application, level: Level, userCode: str
     // eval code:
     const interpreter = new Interpreter(userCode, apiWrapper);
     // initialize maze
-    level.initializeState(gameState); // TODO this needs to be earlier, can't see level otherwise!
+    level.initializeState(gameState);
     // run game loop:
     let gameTime = 0;
     const loop = (delta: number) => {
