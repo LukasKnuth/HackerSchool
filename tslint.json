@@ -18,7 +18,7 @@
     "no-use-before-declare": true,
     "unified-signatures": true,
     "no-conditional-assignment": true,
-    "no-invalid-this": true,
+    "no-invalid-this": false,
     "no-string-throw": true,
     "typeof-compare": true,
     "use-isnan": true,

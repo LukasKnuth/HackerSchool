@@ -32,12 +32,12 @@
                 this.sprites = sprites;
             }).catch((err) => {
                 console.error(err); // TODO show error in UI!
-            })
+            });
         }
 
         public startGame(userCode: string) {
             this.stopGame();
-            const engine = this.engine, sprites = this.sprites, level = this.level;
+            const [engine, sprites, level] = [this.engine, this.sprites, this.level];
             if (engine && sprites && level) {
                 this.gameLoop = game.startGameLoop(engine, level, userCode, (state: GameState) => {
                     game.renderFrame(engine, sprites, state);
