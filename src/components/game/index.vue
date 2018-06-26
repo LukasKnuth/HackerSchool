@@ -42,8 +42,10 @@
             if (engine && sprites && level) {
                 this.gameLoop = game.startGameLoop(engine, level, userCode, (state: GameState) => {
                     game.renderFrame(engine, sprites, state);
-                }, (blockId: string) => this.$emit("block-executing", blockId));
-                this.$emit("update:running", true); // TODO Add automatic emit when code ends!
+                });
+                this.gameLoop.onBlockExecuting = (blockId: string) => this.emitBlockExecuting(blockId);
+                this.gameLoop.onGameTerminated = () => this.emitRunningUpdate(false);
+                this.emitRunningUpdate(true);
             } else {
                 console.error("Can't start game, something is not initialized!", engine, sprites, level);
             }
@@ -52,8 +54,19 @@
         public stopGame() {
             if (this.engine && this.gameLoop) {
                 game.stopGameLoop(this.engine, this.gameLoop);
-                this.$emit("update:running", false);
+                this.emitRunningUpdate(false);
             }
+        }
+
+        private emitRunningUpdate(isRunning: boolean) {
+            if (!isRunning) {
+                // this clears the highlighting in the editor
+                this.emitBlockExecuting(null);
+            }
+            this.$emit("update:running", isRunning);
+        }
+        private emitBlockExecuting(blockId: string) {
+            this.$emit("block-executing", blockId)
         }
 
     }

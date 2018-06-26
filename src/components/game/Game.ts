@@ -17,7 +17,11 @@ export const BLOCK_EXECUTING = "blockExecuting";
 const FILE_ASSET_PLAYER1 = "/sprites/player.png";
 const FILE_ASSET_BACKGROUND = "/sprites/background.png";
 
-export type GameLoop = (delta: number) => void;
+export interface GameLoop {
+    ticker: (delta: number) => void;
+    onBlockExecuting?: (blockId: string) => void;
+    onGameTerminated?: () => void;
+}
 export type GameRenderer = (state: GameState) => void;
 
 export interface GameSprites {
@@ -61,54 +65,63 @@ async function loadSprites(app: pixi.Application): Promise<GameSprites> {
 
 const LOGIC_TICK_THRESHOLD = 1000;
 
-export function startGameLoop(app: PIXI.Application, level: Level, userCode: string, render: GameRenderer,
-                              onBlockExecuted: (id: string) => void): GameLoop {
+export function startGameLoop(app: PIXI.Application, level: Level, userCode: string, render: GameRenderer): GameLoop {
     // Create fresh state:
-    const state = new GameState(level.mazeWidth, level.mazeHeight);
-    const api = level.exportAPI(state);  // TODO this way will capture the gamestate. Is that OK? What about reset?
+    let gameLoop: GameLoop;
+    const gameState = new GameState(level.mazeWidth, level.mazeHeight);
+    const userCodeApi = level.exportAPI(gameState);  // TODO this way will capture the gamestate. Is that OK? What about reset?
     // Inject the block-highlighting callback:
     let hasMoreCode = true;
-    let highlightPause = false;
-    const highlightBlock = (blockId: string) => {
-        onBlockExecuted(blockId);
-        highlightPause = true;
+    let blockExecutionPause = false;
+    const onBlockExecuting = (blockId: string) => {
+        if (gameLoop.onBlockExecuting) {
+            gameLoop.onBlockExecuting(blockId);
+        }
+        blockExecutionPause = true;
     };
     const apiWrapper: API = (interp: Interpreter, scope: InterpreterScope) => {
-        const highlightWrapper = (id: any) => highlightBlock(id ? id.toString() : '');
-        interp.setProperty(scope, BLOCK_EXECUTING, interp.createNativeFunction(highlightWrapper));
+        const blockExecWrapper = (id: any) => onBlockExecuting(id ? id.toString() : '');
+        interp.setProperty(scope, BLOCK_EXECUTING, interp.createNativeFunction(blockExecWrapper));
         // Add the levels own API
-        api(interp, scope);
+        userCodeApi(interp, scope);
     };
     // eval code:
     const interpreter = new Interpreter(userCode, apiWrapper);
     // initialize maze
-    level.initializeState(state);
+    level.initializeState(gameState); // TODO this needs to be earlier, can't see level otherwise!
     // run game loop:
     let gameTime = 0;
     const loop = (delta: number) => {
         gameTime += app.ticker.elapsedMS * delta;
         if (gameTime >= LOGIC_TICK_THRESHOLD && hasMoreCode) {
-            console.log("Tick!");
+            console.log("Ticking User-Code (single Block execution)!");
             gameTime = 0;
             do {
                 hasMoreCode = interpreter.step();
-                if (!hasMoreCode) { // TODO stop the execution here!
+                if (!hasMoreCode) { // TODO stop the actual execution and ticker here?!?!
                     console.log("User Code has no more steps to execute!");
+                    if (gameLoop.onGameTerminated) {
+                        gameLoop.onGameTerminated();
+                    }
                 }
-            } while (!highlightPause && hasMoreCode);
-            highlightPause = false;
-            level.tick(state);
+            } while (!blockExecutionPause && hasMoreCode);
+            blockExecutionPause = false;
+            level.tick(gameState);
         }
-        render(state);
+        render(gameState);
     };
+    gameLoop = {ticker: loop};
     app.ticker.add(loop);
     app.ticker.start();
-    return loop;
+    return gameLoop;
 }
 
 export function stopGameLoop(app: pixi.Application, loop: GameLoop): void {
-    app.ticker.remove(loop);
+    app.ticker.remove(loop.ticker);
     app.ticker.stop();
+    // unset these so it can be collected!
+    loop.onGameTerminated = undefined;
+    loop.onBlockExecuting = undefined;
 }
 
 // ---------------- RENDER --------------------------
