@@ -102,6 +102,7 @@ export function startGameLoop(app: PIXI.Application, level: Level, userCode: str
         render(state);
     };
     app.ticker.add(loop);
+    app.ticker.start();
     return loop;
 }
 

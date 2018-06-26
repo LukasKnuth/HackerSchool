@@ -26,6 +26,7 @@
             });
             this.$el.appendChild(this.engine.view);
 
+            this.engine.ticker.autoStart = false;
             this.engine.renderer.autoResize = true; // TODO stretch to full available width of container
 
             game.initializeRenderer(this.engine).then((sprites: GameSprites) => {
