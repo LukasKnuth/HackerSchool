@@ -69,8 +69,8 @@
             }
             this.$emit("update:running", isRunning);
         }
-        private emitBlockExecuting(blockId: string) {
-            this.$emit("block-executing", blockId)
+        private emitBlockExecuting(blockId: string|null) {
+            this.$emit("block-executing", blockId);
         }
 
     }
