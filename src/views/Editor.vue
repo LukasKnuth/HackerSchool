@@ -5,7 +5,7 @@
         </b-row>
         <b-row>
             <b-col>
-                <game ref="game" :level="level" @blockExecuted="highlightBlock" />
+                <game ref="game" :level="level" @block-executed="highlightBlock" />
                 <b-button variant="primary" @click="runGame()">Run Game</b-button>
                 <b-button variant="danger" @click="stopGame()">Stop Game</b-button>
                 <h3 class="header-spacing">Description</h3>
