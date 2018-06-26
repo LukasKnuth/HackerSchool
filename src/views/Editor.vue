@@ -5,9 +5,11 @@
         </b-row>
         <b-row>
             <b-col>
-                <game ref="game" :level="level" @block-executed="highlightBlock" />
-                <b-button variant="primary" @click="runGame()">Run Game</b-button>
-                <b-button variant="danger" @click="stopGame()">Stop Game</b-button>
+                <game ref="game" :level="level"
+                      @block-executed="highlightBlock"
+                      :running.sync="gameIsRunning"
+                />
+                <b-button :variant="buttonColor" @click="buttonClick">{{buttonText}}</b-button>
                 <h3 class="header-spacing">Description</h3>
                 <p>{{level.description}}</p>
             </b-col>
@@ -33,13 +35,22 @@
         @Prop({default: () => new MazeLevel1()})
         public level?: Level;
 
-        public runGame() {
-            const code = (this.$refs.editor as any).compile();
-            (this.$refs.game as any).startGame(code);
-            console.log(code);
+        private gameIsRunning: boolean = false;
+
+        get buttonColor() {
+            return this.gameIsRunning ? "danger" : "primary";
         }
-        public stopGame() {
-            (this.$refs.game as Game).stopGame();
+        get buttonText() {
+            return this.gameIsRunning ? "Stop Game" : "Run Game";
+        }
+
+        public buttonClick() {
+            if (this.gameIsRunning) {
+                (this.$refs.game as any).stopGame();
+            } else {
+                const code = (this.$refs.editor as any).compile();
+                (this.$refs.game as any).startGame(code);
+            }
         }
 
         public highlightBlock(blockId: string) {
