@@ -8,7 +8,9 @@ import {
     SQUARE_TRAP
 } from '@/components/game/GameState';
 import {Level} from '@/content/Lesson';
-import Interpreter from "js-interpreter";
+import Interpreter, {API, InterpreterScope} from 'js-interpreter';
+
+export const BLOCK_EXECUTED = "blockExecuted";
 
 // ----------------- ASSET LOADING -----------------
 
@@ -59,24 +61,42 @@ async function loadSprites(app: pixi.Application): Promise<GameSprites> {
 
 const LOGIC_TICK_THRESHOLD = 1000;
 
-export function startGameLoop(app: PIXI.Application, level: Level, userCode: string, render: GameRenderer): GameLoop {
-    // Reset state:
+export function startGameLoop(app: PIXI.Application, level: Level, userCode: string, render: GameRenderer,
+                              onBlockExecuted: (id: string) => void): GameLoop {
+    // Create fresh state:
     const state = new GameState(level.mazeWidth, level.mazeHeight);
-    // eval code:
     const api = level.exportAPI(state);  // TODO this way will capture the gamestate. Is that OK? What about reset?
-    const interpreter = new Interpreter(userCode, api);
+    // Inject the block-highlighting callback:
+    let hasMoreCode = true;
+    let highlightPause = false;
+    const highlightBlock = (blockId: string) => {
+        onBlockExecuted(blockId);
+        highlightPause = true;
+    };
+    const apiWrapper: API = (interp: Interpreter, scope: InterpreterScope) => {
+        const highlightWrapper = (id: any) => highlightBlock(id ? id.toString() : '');
+        interp.setProperty(scope, BLOCK_EXECUTED, interp.createNativeFunction(highlightWrapper));
+        // Add the levels own API
+        api(interp, scope);
+    };
+    // eval code:
+    const interpreter = new Interpreter(userCode, apiWrapper);
     // initialize maze
     level.initializeState(state);
     // run game loop:
     let gameTime = 0;
     const loop = (delta: number) => {
         gameTime += app.ticker.elapsedMS * delta;
-        if (gameTime >= LOGIC_TICK_THRESHOLD) {
+        if (gameTime >= LOGIC_TICK_THRESHOLD && hasMoreCode) {
             console.log("Tick!");
             gameTime = 0;
-            if (!interpreter.step()) {// TODO this step is a very small unit. Maybe run until gameState is changed?
-                console.log("User Code has no more steps to execute!");
-            }
+            do {
+                hasMoreCode = interpreter.step();
+                if (!hasMoreCode) { // TODO stop the execution here!
+                    console.log("User Code has no more steps to execute!");
+                }
+            } while (!highlightPause && hasMoreCode);
+            highlightPause = false;
             level.tick(state);
         }
         render(state);

@@ -5,7 +5,7 @@
         </b-row>
         <b-row>
             <b-col>
-                <game ref="game" :level="level" />
+                <game ref="game" :level="level" @blockExecuted="highlightBlock" />
                 <b-button variant="primary" @click="runGame()">Run Game</b-button>
                 <b-button variant="danger" @click="stopGame()">Stop Game</b-button>
                 <h3 class="header-spacing">Description</h3>
@@ -40,6 +40,10 @@
         }
         public stopGame() {
             (this.$refs.game as Game).stopGame();
+        }
+
+        public highlightBlock(blockId: string) {
+            (this.$refs.editor as any).highlightBlock(blockId);
         }
     }
 </script>

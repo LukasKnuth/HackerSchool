@@ -9,6 +9,7 @@
     import {Level} from "../../content/Lesson";
     import {GameLoop, GameSprites} from "./Game";
     import {GameState} from "./GameState";
+    import {BLOCK_EXECUTED} from "./Game";
 
     @Component
     export default class Game extends Vue {
@@ -41,7 +42,7 @@
             if (engine && sprites && level) {
                 this.gameLoop = game.startGameLoop(engine, level, userCode, (state: GameState) => {
                     game.renderFrame(engine, sprites, state);
-                });
+                }, (blockId: string) => this.$emit(BLOCK_EXECUTED, blockId));
             } else {
                 console.error("Can't start game, something is not initialized!", engine, sprites, level);
             }
