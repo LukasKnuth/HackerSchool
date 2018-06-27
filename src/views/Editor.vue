@@ -9,12 +9,29 @@
                       @block-executing="highlightBlock"
                       :running.sync="gameIsRunning"
                 />
-                <b-button :variant="buttonColor" @click="buttonClick">{{buttonText}}</b-button>
+                <b-container>
+                    <b-row class="stat-row">
+                        <b-col cols="5">Instructions</b-col>
+                        <b-col>{{instructionCounter}}</b-col>
+                    </b-row>
+                    <b-row class="stat-row">
+                        <b-col cols="5">Blocks</b-col>
+                        <b-col>{{blockCount}} / {{level.maxBlocks}}</b-col>
+                    </b-row>
+                    <b-row class="control-row" align-h="center">
+                        <b-col cols="5">
+                            <b-button :variant="buttonColor" @click="buttonClick">{{buttonText}}</b-button>
+                        </b-col>
+                    </b-row>
+                </b-container>
                 <h3 class="header-spacing">Description</h3>
                 <p>{{level.description}}</p>
             </b-col>
             <b-col cols="8" id="blocklyArea">
-                <blockly-editor ref="editor" :level="level" />
+                <blockly-editor ref="editor"
+                                :level="level"
+                                :blocks.sync="blockCount"
+                />
             </b-col>
         </b-row>
     </b-container>
@@ -35,7 +52,9 @@
         @Prop({default: () => new MazeLevel1()})
         public level?: Level;
 
-        private gameIsRunning: boolean = false;
+        public instructionCounter: number = 0;
+        public gameIsRunning: boolean = false;
+        public blockCount: number = 0;
 
         get buttonColor() {
             return this.gameIsRunning ? "danger" : "primary";
@@ -48,12 +67,14 @@
             if (this.gameIsRunning) {
                 (this.$refs.game as any).stopGame();
             } else {
+                this.instructionCounter = 0;
                 const code = (this.$refs.editor as any).compile();
                 (this.$refs.game as any).startGame(code);
             }
         }
 
         public highlightBlock(blockId: string) {
+            this.instructionCounter++;
             (this.$refs.editor as any).highlightBlock(blockId);
         }
     }
@@ -61,6 +82,12 @@
 
 <style lang="scss">
     .header-spacing {
+        margin-top: 20px;
+    }
+    .stat-row {
+        margin-top: 2px;
+    }
+    .control-row {
         margin-top: 20px;
     }
 </style>

@@ -37,7 +37,8 @@
             const blocklyArea = document.getElementById('blocklyArea');
             const blocklyDiv = document.getElementById('blocklyDiv');
             this.workspace = Blockly.inject(blocklyDiv, {
-                toolbox: document.getElementById('toolbox')
+                toolbox: document.getElementById('toolbox'),
+                maxBlocks: this.level ? this.level.maxBlocks : Infinity
             });
             const resizeEditor = (e) => {
                 // take available width provided by area
@@ -49,14 +50,19 @@
             window.addEventListener('resize', resizeEditor, false);
             resizeEditor();
             Blockly.svgResize(this.workspace);
-            // events
-            this.workspace.addChangeListener(() => {
+            this.workspaceListener = this.workspace.addChangeListener((event) => {
                 this.canUndo = this.workspace.undoStack_.length > 0;
                 this.canRedo = this.workspace.redoStack_.length > 0;
-            })
+                if (event.type === Blockly.Events.BLOCK_CREATE || event.type === Blockly.Events.BLOCK_DELETE) {
+                    this.emitBlockCountUpdate(this.workspace.getAllBlocks().length);
+                }
+            });
         },
-        updated() {
-            // TODO reset editor, load new blocks from changed level and add them to blockly!
+        beforeDestroy() {
+            if (this.workspaceListener) {
+                this.workspace.removeChangeListener(this.workspaceListener);
+            }
+            this.workspace.dispose();
         },
         methods: {
             compile() {
@@ -75,6 +81,19 @@
             },
             redo() {
                 this.workspace.undo(true);
+            },
+            emitBlockCountUpdate(blockCount) {
+                this.$emit("update:blocks", blockCount);
+            }
+        },
+        watch: {
+            level(oldVal, newVal) {
+                console.log("Updating editor");
+                // New blocks are already loaded in the template, reset everything:
+                this.workspace.clear();
+                this.emitBlockCountUpdate(0);
+                this.workspace.clearUndo();
+                this.workspace.options.maxBlocks = newVal.maxBlocks;
             }
         }
     };
