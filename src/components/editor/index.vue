@@ -1,5 +1,9 @@
 <template>
     <div>
+        <b-nav>
+            <b-nav-item :disabled="!canUndo" @click="undo()">Undo</b-nav-item>
+            <b-nav-item :disabled="!canRedo" @click="redo()">Redo</b-nav-item>
+        </b-nav>
         <div id="blocklyDiv"></div>
         <Toolbox>
             <ToolboxBlock v-for="block in level.getBlocks()" :key="block" :type="block"></ToolboxBlock>
@@ -20,6 +24,12 @@
         props: {
             level: null
         },
+        data() {
+            return {
+                canUndo: false,
+                canRedo: false
+            }
+        },
         created() {
             ExportBlocks(Blockly.Blocks);
         },
@@ -39,8 +49,13 @@
             window.addEventListener('resize', resizeEditor, false);
             resizeEditor();
             Blockly.svgResize(this.workspace);
+            // events
+            this.workspace.addChangeListener(() => {
+                this.canUndo = this.workspace.undoStack_.length > 0;
+                this.canRedo = this.workspace.redoStack_.length > 0;
+            })
         },
-        beforeUpdate() {
+        updated() {
             // TODO reset editor, load new blocks from changed level and add them to blockly!
         },
         methods: {
@@ -54,6 +69,12 @@
                 if (this.workspace) {
                     this.workspace.highlightBlock(blockId);
                 }
+            },
+            undo() {
+                this.workspace.undo(false);
+            },
+            redo() {
+                this.workspace.undo(true);
             }
         }
     };
