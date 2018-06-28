@@ -1,3 +1,5 @@
+import Blockly from "node-blockly/browser";
+
 /*
     This is where ALL available blocks for levels live. Just add them to the supplied "blocks"-variable.
 
@@ -7,7 +9,7 @@
     IMPORTANT: The strings used for exporting the blocks MUST be unique to the block! As a guideline, name them like
      "[component]_[operation]", e.g. "game_walk".
 */
-export default function(blocks) {
+export default function(blocks, generators) {
     blocks['string_length'] = {
         init() {
             this.appendValueInput('VALUE')
@@ -19,4 +21,8 @@ export default function(blocks) {
             this.setHelpUrl('http://www.w3schools.com/jsref/jsref_length_string.asp');
         }
     };
+    generators['string_length'] = (block) => {
+        const arg0 = Blockly.JavaScript.valueToCode(block, "VALUE", Blockly.JavaScript.ORDER_FUNCTION_CALL) || "''";
+        return [arg0 + '.length', Blockly.JavaScript.ORDER_MEMBER];
+    }
 }

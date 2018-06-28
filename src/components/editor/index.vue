@@ -31,7 +31,7 @@
             }
         },
         created() {
-            ExportBlocks(Blockly.Blocks);
+            ExportBlocks(Blockly.Blocks, Blockly.JavaScript);
         },
         mounted() {
             const blocklyArea = document.getElementById('blocklyArea');
