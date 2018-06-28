@@ -4,7 +4,7 @@
 
 <script lang="ts">
     import * as pixi from "pixi.js";
-    import {Component, Vue, Prop} from "vue-property-decorator";
+    import {Component, Vue, Prop, Watch} from "vue-property-decorator";
     import * as game from "./Game";
     import {Level} from "../../content/Lesson";
     import {GameLoop, GameSprites} from "./Game";
@@ -20,7 +20,7 @@
         private gameLoop?: GameLoop;
         private sprites?: GameSprites;
 
-        private mounted() { // TODO need to do cleanup? (in unmount?) What when we change levels?
+        private mounted() {
             this.engine = new pixi.Application({
                 width: 280, height: 280, antialias: true
             });
@@ -36,7 +36,15 @@
                 console.error(err); // TODO show error in UI!
             });
         }
-        private updated() {
+        private beforeDestroy() {
+            if (this.engine) {
+                this.engine.destroy(true);
+            }
+        }
+
+        @Watch("level")
+        private onLevelChange(){
+            this.stopGame();
             this.renderPreview();
         }
 
