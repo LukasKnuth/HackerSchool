@@ -82,12 +82,26 @@ export class GameState {
     }
 
     public getPlayerPosition(playerIndex = 0): PlayerPosition {
-        // TODO instead of copy, can we return an immtable version? This won't work with moveX() methods though!
+        // TODO instead of copy, pass a PlayerPosition instance and mutate it to the internal state!
         if (this.playerPosition.length > playerIndex) {
             return this.playerPosition[playerIndex].clone();
         } else {
             return new PlayerPosition(-1, -1, 0);
         }
+    }
+
+    public walkPlayer(amount: number, playerIndex = 0): void {
+        const position = this.getPlayerPosition(playerIndex);
+        if (position.angle >= 315 && position.angle < 45) {
+            position.y += amount;
+        } else if (position.angle >= 45 && position.angle < 135) {
+            position.x += amount;
+        } else if (position.angle >= 135 && position.angle < 225) {
+            position.y -= amount;
+        } else if (position.angle >= 225 && position.angle < 315) {
+            position.x -= amount;
+        }
+        this.setPlayerPosition(position, playerIndex);
     }
 
     /**
