@@ -85,7 +85,7 @@
                 }
             },
             newVariable(button) {
-                Blockly.Variables.createVariableButtonHandler(button.getTargetWorkspace());
+                Blockly.Variables.createVariableButtonHandler(button.getTargetWorkspace(), null, "any");
             },
             undo() {
                 this.workspace.undo(false);
