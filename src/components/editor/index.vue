@@ -28,7 +28,7 @@
             return {
                 canUndo: false,
                 canRedo: false
-            }
+            };
         },
         created() {
             ExportBlocks(Blockly.Blocks, Blockly.JavaScript);
