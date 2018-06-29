@@ -26,6 +26,7 @@ export type GameRenderer = (state: GameState) => void;
 
 export interface GameSprites {
     player1: pixi.Sprite;
+    player1Cone: pixi.Graphics;
     background: pixi.Sprite;
     grid: pixi.Graphics;
 }
@@ -53,11 +54,11 @@ function resourceToSprite(assetFile: string): pixi.Sprite {
 
 async function loadSprites(app: pixi.Application): Promise<GameSprites> {
     await loadResources();
-    const grid = new pixi.Graphics();
     return {
         player1: resourceToSprite(FILE_ASSET_PLAYER1),
+        player1Cone: new pixi.Graphics(),
         background: resourceToSprite(FILE_ASSET_BACKGROUND),
-        grid
+        grid: new pixi.Graphics()
     };
 }
 
@@ -75,7 +76,7 @@ export function startGameLoop(app: PIXI.Application, level: Level, userCode: str
     // Create fresh state:
     let gameLoop: GameLoop;
     const gameState = new GameState(level.mazeWidth, level.mazeHeight);
-    const userCodeApi = level.exportAPI(gameState);  // TODO this way will capture the gamestate. Is that OK? What about reset?
+    const userCodeApi = level.exportAPI(gameState);
     // Inject the block-highlighting callback:
     let hasMoreCode = true;
     let blockExecutionPause = false;
@@ -131,9 +132,10 @@ export function stopGameLoop(app: pixi.Application, loop: GameLoop): void {
 
 export async function initializeRenderer(app: pixi.Application): Promise<GameSprites> {
     const sprites = await loadSprites(app);
-    //app.stage.addChild(sprites.background);
+    // app.stage.addChild(sprites.background);
     app.stage.addChild(sprites.grid);
     app.stage.addChild(sprites.player1);
+    app.stage.addChild(sprites.player1Cone);
 
     sprites.player1.position.set(40, 100);
     sprites.player1.scale.set(0.1, 0.1);
@@ -189,5 +191,20 @@ export function renderFrame(app: PIXI.Application, sprites: GameSprites, state: 
     const playerY = playerPosition.y * yGridSize;
     sprites.player1.x = playerX;
     sprites.player1.y = playerY;
+
+    // TODO instead of this, add a arrow to the sprite and rotate it!
+    sprites.player1Cone.clear();
+    sprites.player1Cone.beginFill(0xfa1122, .7);
+    const size = 20;
+    sprites.player1Cone.moveTo(0, 0);
+    sprites.player1Cone.lineTo(0, size);
+    sprites.player1Cone.lineTo(size, size);
+    sprites.player1Cone.lineTo(0, 0);
+    sprites.player1Cone.pivot = new pixi.Point(size / 2, size / 2);
+    sprites.player1Cone.rotation = (playerPosition.angle + 135) * 0.0174533;
+    sprites.player1Cone.x = playerX + (xGridSize / 2);
+    sprites.player1Cone.y = playerY + (yGridSize / 2);
+    sprites.player1Cone.endFill();
+
     // TODO change player size dynamically?? Also center him inside the grid!
 }
