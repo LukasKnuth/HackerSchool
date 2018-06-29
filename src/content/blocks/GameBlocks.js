@@ -24,5 +24,28 @@ export default function(blocks, generators) {
     generators['string_length'] = (block) => {
         const arg0 = Blockly.JavaScript.valueToCode(block, "VALUE", Blockly.JavaScript.ORDER_FUNCTION_CALL) || "''";
         return [arg0 + '.length', Blockly.JavaScript.ORDER_MEMBER];
-    }
+    };
+
+    // ----------- Movement ------------
+    blocks['forward'] = {
+        init() {
+            this.setTooltip("Moves the character forward by one field in the direction it's currently looking at");
+            this.setColour(200);
+            this.setNextStatement(true);
+            this.setPreviousStatement(true);
+            this.appendDummyInput().appendField('forward'); // label
+        }
+    };
+    generators['forward'] = () => "move(1);\n";
+
+    blocks['backward'] = {
+        init() {
+            this.setTooltip("Moves the character back by one field in the direction it's currently looking at");
+            this.setColour(200);
+            this.setNextStatement(true);
+            this.setPreviousStatement(true);
+            this.appendDummyInput().appendField('backward'); // label
+        }
+    };
+    generators['backward'] = () => "move(-1);\n";
 }

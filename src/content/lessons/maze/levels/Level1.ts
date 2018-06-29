@@ -35,17 +35,19 @@ export default class MazeLevel1 implements Level {
 
     public getBlocks(): string[] {
         return [
-            "controls_if", "logic_compare", "math_number", "math_arithmetic",
-            "text", "text_print", "string_length"
+            "controls_if", "controls_repeat",
+            "logic_compare", "math_number", "math_arithmetic", "text_print",
+            "forward", "backward"
         ];
     }
 
     public exportAPI(gameState: GameState): API {
         return (interpreter: Interpreter, scope: InterpreterScope) => {
-            const moveWrapper = () => {
-                gameState.setPlayerPosition(gameState.getPlayerPosition().moveX(1));
+            const moveWrapper = (amount: number) => {
+                console.log("Moving player by " + amount);
+                gameState.walkPlayer(amount);
             };
-            interpreter.setProperty(scope, "moveX", interpreter.createNativeFunction(moveWrapper));
+            interpreter.setProperty(scope, "move", interpreter.createNativeFunction(moveWrapper));
             const alertWrapper = (text: string) => {
                 alert(text);
             };
