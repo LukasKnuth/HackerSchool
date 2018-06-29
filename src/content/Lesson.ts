@@ -1,5 +1,9 @@
 import {GameState, GridState} from '@/components/game/GameState';
-import Interpreter, {API} from 'js-interpreter';
+import {API} from 'js-interpreter';
+
+export interface BlockToolbox {
+    [keys: string]: string[];
+}
 
 // TODO need something to store/load level state. Files? VueX?
 export interface Level {
@@ -25,7 +29,7 @@ export interface Level {
      * Returns the ids of any Blockly blocks that can be used in this Level.
      * @see content/blocks/GameBlocks.js
      */
-    getBlocks(): string[]; // TODO there should be the option to make categories!
+    getBlocks(): BlockToolbox;
     /**
      * This is the object that will be given to the generated code as "this".
      * It should have all methods that the blocks use in their code!

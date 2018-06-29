@@ -1,4 +1,4 @@
-import {Level} from '@/content/Lesson';
+import {BlockToolbox, Level} from '@/content/Lesson';
 import {
     GameState,
     GridPosition, GridState, PlayerPosition,
@@ -33,12 +33,12 @@ export default class MazeLevel1 implements Level {
         return 10;
     }
 
-    public getBlocks(): string[] {
-        return [
-            "controls_if", "controls_repeat",
-            "logic_compare", "math_number", "math_arithmetic", "text_print",
-            "forward", "backward"
-        ];
+    public getBlocks(): BlockToolbox {
+        return {
+            Control: ["controls_if", "controls_repeat"],
+            Logic: ["logic_compare", "math_number", "math_arithmetic", "text_print"],
+            Game: ["forward", "backward"]
+        };
     }
 
     public exportAPI(gameState: GameState): API {

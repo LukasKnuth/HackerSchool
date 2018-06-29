@@ -6,7 +6,12 @@
         </b-nav>
         <div id="blocklyDiv"></div>
         <Toolbox>
-            <ToolboxBlock v-for="block in level.getBlocks()" :key="block" :type="block"></ToolboxBlock>
+            <ToolboxCategory v-for="(blocks, category) in level.getBlocks()" :name="category">
+                <ToolboxBlock v-for="block in blocks" :key="block" :type="block"></ToolboxBlock>
+            </ToolboxCategory>
+            <ToolboxCategory name="Variables" custom="VARIABLE">
+                <ToolboxButton title="New Variable" callbackKey="newVariable"></ToolboxButton>
+            </ToolboxCategory>
         </Toolbox>
     </div>
 </template>
@@ -16,10 +21,12 @@
     import ExportBlocks from "../../content/blocks/GameBlocks";
     import Toolbox from "./Toolbox";
     import ToolboxBlock from "./Block";
+    import ToolboxCategory from "./Category";
+    import ToolboxButton from "./Button";
     import {BLOCK_EXECUTING} from "../game/Game";
 
     export default {
-        components: {Toolbox, ToolboxBlock},
+        components: {Toolbox, ToolboxBlock, ToolboxCategory, ToolboxButton},
         name: 'blockly-editor',
         props: {
             level: null
@@ -57,6 +64,7 @@
                     this.emitBlockCountUpdate(this.workspace.getAllBlocks().length);
                 }
             });
+            this.workspace.registerButtonCallback("newVariable", this.newVariable.bind(this));
         },
         beforeDestroy() {
             if (this.workspaceListener) {
@@ -75,6 +83,9 @@
                 if (this.workspace) {
                     this.workspace.highlightBlock(blockId);
                 }
+            },
+            newVariable(button) {
+                Blockly.Variables.createVariableButtonHandler(button.getTargetWorkspace());
             },
             undo() {
                 this.workspace.undo(false);
