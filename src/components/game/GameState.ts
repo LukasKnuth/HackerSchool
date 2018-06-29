@@ -67,11 +67,12 @@ export class GameState {
         this.levelState = Array.from(new Array(mazeWidth), () => new Array(mazeHeight));
     }
 
-    public setPlayerPosition(newPosition: GridPosition, playerIndex = 0) {
+    public setPlayerPosition(newPosition: PlayerPosition, playerIndex = 0) {
         if (this.playerPosition.length > playerIndex) {
             // Copies the (mutable) value into the local position
             this.playerPosition[playerIndex].x = newPosition.x;
             this.playerPosition[playerIndex].y = newPosition.y;
+            this.playerPosition[playerIndex].angle = newPosition.angle;
         } else {
             console.error(
                 `No player at index ${playerIndex}, only ${this.playerPosition.length} players available. `

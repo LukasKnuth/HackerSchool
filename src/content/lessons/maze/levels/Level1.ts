@@ -1,7 +1,7 @@
 import {Level} from '@/content/Lesson';
 import {
     GameState,
-    GridPosition, GridState,
+    GridPosition, GridState, PlayerPosition,
     SQUARE_COLLECTIBLE, SQUARE_GOAL, SQUARE_NEUTRAL,
     SQUARE_PIT,
     SQUARE_TELEPORT_ENTRY, SQUARE_TRAP
@@ -55,7 +55,7 @@ export default class MazeLevel1 implements Level {
 
     public initializeState(gameState: GameState): void {
         gameState.setGridState(this.initialMazeLayout);
-        gameState.setPlayerPosition(new GridPosition(8, 8));
+        gameState.setPlayerPosition(new PlayerPosition(8, 8, 270));
     }
 
     public tick(gameState: GameState) {
@@ -73,7 +73,7 @@ export default class MazeLevel1 implements Level {
                 break;
             case SQUARE_TELEPORT_ENTRY:
                 // Teleport player
-                gameState.setPlayerPosition(new GridPosition(7, 2));
+                gameState.setPlayerPosition(new PlayerPosition(7, 2, player.angle));
                 break;
             case SQUARE_GOAL:
                 gameState.setGameOver(true, true);
