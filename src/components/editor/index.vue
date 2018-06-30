@@ -9,9 +9,10 @@
             <ToolboxCategory v-for="(blocks, category) in level.getBlocks()" :name="category">
                 <ToolboxBlock v-for="block in blocks" :key="block" :type="block"></ToolboxBlock>
             </ToolboxCategory>
-            <ToolboxCategory name="Variables" custom="VARIABLE">
+            <ToolboxCategory v-if="level.allowVariables" name="Variables" custom="VARIABLE">
                 <ToolboxButton title="New Variable" callbackKey="newVariable"></ToolboxButton>
             </ToolboxCategory>
+            <ToolboxCategory v-if="level.allowMethods" name="Functions" custom="PROCEDURE"></ToolboxCategory>
         </Toolbox>
     </div>
 </template>

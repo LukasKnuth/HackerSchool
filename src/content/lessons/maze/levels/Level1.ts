@@ -12,6 +12,8 @@ export default class MazeLevel1 implements Level {
     public readonly name = "Level 1";
     public readonly description = "A test level about mazes!";
     public maxBlocks = Infinity;
+    public allowMethods = true;
+    public allowVariables = true;
 
     private initialMazeLayout: GridState = [
         [2, 2, 2, 2, 2, 2, 2, 0, 0, 7],

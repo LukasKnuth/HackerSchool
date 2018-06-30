@@ -9,6 +9,9 @@ export interface BlockToolbox {
 export interface Level {
     name: string;
     description: string;
+    /**
+     * The maximum number of blocks allowed for the solution, or "Infinity" for no limit.
+     */
     maxBlocks: number;
     /**
      * How many blocks the maze should have on the X axis
@@ -18,6 +21,14 @@ export interface Level {
      * How many blocks the maze should have on the Y axis
      */
     mazeHeight: number;
+    /**
+     * Show the method-category in the Editor-Toolbox?
+     */
+    allowMethods: boolean;
+    /**
+     * Show the variable-category in the Editor-Toolbox?
+     */
+    allowVariables: boolean;
 
     /**
      * Set the initial game state, like the maze and player position.
