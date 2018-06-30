@@ -36,18 +36,21 @@ export default class MazeLevel1 implements Level {
     public getBlocks(): BlockToolbox {
         return {
             Control: ["controls_if", "controls_repeat"],
-            Logic: ["logic_compare", "math_number", "math_arithmetic", "text_print"],
-            Game: ["forward", "backward"]
+            Logic: ["logic_compare", "math_number", "math_arithmetic", "text_print", "text"],
+            Game: ["forward", "backward", 'turn_left', 'turn_right']
         };
     }
 
     public exportAPI(gameState: GameState): API {
         return (interpreter: Interpreter, scope: InterpreterScope) => {
             const moveWrapper = (amount: number) => {
-                console.log("Moving player by " + amount);
                 gameState.walkPlayer(amount);
             };
             interpreter.setProperty(scope, "move", interpreter.createNativeFunction(moveWrapper));
+            const turnWrapper = (degrees: number) => {
+                gameState.turnPlayer(degrees);
+            };
+            interpreter.setProperty(scope, "turn", interpreter.createNativeFunction(turnWrapper));
             const alertWrapper = (text: string) => {
                 alert(text);
             };

@@ -1,5 +1,7 @@
 import Blockly from "node-blockly/browser";
 
+const GAME_HUE = 30;
+
 /*
     This is where ALL available blocks for levels live. Just add them to the supplied "blocks"-variable.
 
@@ -30,7 +32,7 @@ export default function(blocks, generators) {
     blocks['forward'] = {
         init() {
             this.setTooltip("Moves the character forward by one field in the direction it's currently looking at");
-            this.setColour(200);
+            this.setColour(GAME_HUE);
             this.setNextStatement(true);
             this.setPreviousStatement(true);
             this.appendDummyInput().appendField('forward'); // label
@@ -41,11 +43,34 @@ export default function(blocks, generators) {
     blocks['backward'] = {
         init() {
             this.setTooltip("Moves the character back by one field in the direction it's currently looking at");
-            this.setColour(200);
+            this.setColour(GAME_HUE);
             this.setNextStatement(true);
             this.setPreviousStatement(true);
             this.appendDummyInput().appendField('backward'); // label
         }
     };
     generators['backward'] = () => "move(-1);\n";
+
+    // --------- Rotation ------------
+    blocks['turn_left'] = {
+        init() {
+            this.setTooltip("Spins the character 90° to the left.");
+            this.setColour(GAME_HUE);
+            this.setNextStatement(true);
+            this.setPreviousStatement(true);
+            this.appendDummyInput().appendField('turn left'); // label
+        }
+    };
+    generators['turn_left'] = () => "turn(-90);\n";
+
+    blocks['turn_right'] = {
+        init() {
+            this.setTooltip("Spins the character 90° to the right.");
+            this.setColour(GAME_HUE);
+            this.setNextStatement(true);
+            this.setPreviousStatement(true);
+            this.appendDummyInput().appendField('turn right'); // label
+        }
+    };
+    generators['turn_right'] = () => "turn(90);\n";
 }
