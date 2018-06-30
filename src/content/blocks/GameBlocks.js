@@ -35,7 +35,7 @@ export default function(blocks, generators) {
             this.setColour(GAME_HUE);
             this.setNextStatement(true);
             this.setPreviousStatement(true);
-            this.appendDummyInput().appendField('forward'); // label
+            this.appendDummyInput().appendField('go forward'); // label
         }
     };
     generators['forward'] = () => "move(1);\n";
@@ -46,7 +46,7 @@ export default function(blocks, generators) {
             this.setColour(GAME_HUE);
             this.setNextStatement(true);
             this.setPreviousStatement(true);
-            this.appendDummyInput().appendField('backward'); // label
+            this.appendDummyInput().appendField('go backward'); // label
         }
     };
     generators['backward'] = () => "move(-1);\n";
