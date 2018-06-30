@@ -101,7 +101,6 @@ export function startGameLoop(app: PIXI.Application, level: Level, userCode: str
     const loop = (delta: number) => {
         gameTime += app.ticker.elapsedMS * delta;
         if (gameTime >= LOGIC_TICK_THRESHOLD && hasMoreCode) {
-            console.log("Ticking User-Code (single Block execution)!");
             gameTime = 0;
             do {
                 hasMoreCode = interpreter.step();

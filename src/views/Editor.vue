@@ -69,6 +69,7 @@
             } else {
                 this.instructionCounter = 0;
                 const code = (this.$refs.editor as any).compile();
+                console.log(`-------- ${new Date()}: Newly generated code ------\n`, code);
                 (this.$refs.game as any).startGame(code);
             }
         }
