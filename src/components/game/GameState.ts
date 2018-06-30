@@ -9,6 +9,8 @@ export const SQUARE_TELEPORT_ENTRY = 5;
 export const SQUARE_TELEPORT_EXIT = 6;
 export const SQUARE_GOAL = 7;
 
+const ANGLE_MAX = 360;
+
 export class GridPosition {
     constructor(public x: number, public y: number){}
 
@@ -34,8 +36,18 @@ export class GridPosition {
 export type GridState = number[][];
 
 export class PlayerPosition extends GridPosition {
-    constructor(x: number, y: number, public angle: number){
+    private currentAngle: number = 0;
+
+    constructor(x: number, y: number, angle: number){
         super(x, y);
+        this.angle = angle;
+    }
+
+    public get angle() {
+        return this.currentAngle;
+    }
+    public set angle(newValue: number) {
+        this.currentAngle = newValue % ANGLE_MAX;
     }
 
     public equals(other: GridPosition|PlayerPosition): boolean {
@@ -101,6 +113,12 @@ export class GameState {
         } else if (position.angle >= 315 || position.angle < 45) {
             position.y -= amount;
         }
+        this.setPlayerPosition(position, playerIndex);
+    }
+
+    public turnPlayer(byDegrees: number, playerIndex = 0): void {
+        const position = this.getPlayerPosition(playerIndex);
+        position.angle = ((byDegrees + ANGLE_MAX) + position.angle) % ANGLE_MAX;
         this.setPlayerPosition(position, playerIndex);
     }
 
