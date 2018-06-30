@@ -92,14 +92,14 @@ export class GameState {
 
     public walkPlayer(amount: number, playerIndex = 0): void {
         const position = this.getPlayerPosition(playerIndex);
-        if (position.angle >= 315 && position.angle < 45) {
-            position.y += amount;
-        } else if (position.angle >= 45 && position.angle < 135) {
+        if (position.angle >= 45 && position.angle < 135) {
             position.x += amount;
         } else if (position.angle >= 135 && position.angle < 225) {
-            position.y -= amount;
+            position.y += amount;
         } else if (position.angle >= 225 && position.angle < 315) {
             position.x -= amount;
+        } else if (position.angle >= 315 || position.angle < 45) {
+            position.y -= amount;
         }
         this.setPlayerPosition(position, playerIndex);
     }
