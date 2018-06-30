@@ -11,7 +11,7 @@ import {API, default as Interpreter, InterpreterScope} from 'js-interpreter';
 export default class MazeLevel1 implements Level {
     public readonly name = "Level 1";
     public readonly description = "A test level about mazes!";
-    public maxBlocks = 8;
+    public maxBlocks = Infinity;
 
     private initialMazeLayout: GridState = [
         [2, 2, 2, 2, 2, 2, 2, 0, 0, 7],
@@ -35,9 +35,10 @@ export default class MazeLevel1 implements Level {
 
     public getBlocks(): BlockToolbox {
         return {
-            Control: ["controls_if", "controls_repeat"],
-            Logic: ["logic_compare", "math_number", "math_arithmetic", "text_print", "text"],
-            Game: ["forward", "backward", 'turn_left', 'turn_right']
+            Control: ["controls_if", "controls_repeat_ext", "controls_whileUntil", "string_length"],
+            Game: ["forward", "backward", 'turn_left', 'turn_right'],
+            Logic: ["logic_compare", "logic_operation", "logic_negate", "math_arithmetic", "math_modulo"],
+            Values: ["math_number", "text", "logic_boolean", "text_print", "math_random_int"]
         };
     }
 
