@@ -35,7 +35,7 @@
                 />
             </b-col>
         </b-row>
-        <div class="overlay">
+        <div class="overlay" v-if="level.showDebugLog">
             <div class="preview">
                 <h3 class="peek" @click="showDebugLog = !showDebugLog">
                     <font-awesome-icon :icon="debugLogIcon" />

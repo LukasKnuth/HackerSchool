@@ -14,6 +14,7 @@ export default class MazeLevel1 implements Level {
     public maxBlocks = Infinity;
     public allowMethods = true;
     public allowVariables = true;
+    public showDebugLog = true;
 
     private initialMazeLayout: GridState = [
         [2, 2, 2, 2, 2, 2, 2, 0, 0, 7],

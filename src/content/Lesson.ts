@@ -29,6 +29,10 @@ export interface Level {
      * Show the variable-category in the Editor-Toolbox?
      */
     allowVariables: boolean;
+    /**
+     * Show the debug-log overlay in the Editor?
+     */
+    showDebugLog: boolean;
 
     /**
      * Set the initial game state, like the maze and player position.
