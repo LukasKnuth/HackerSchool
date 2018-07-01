@@ -95,8 +95,9 @@ export function startGameLoop(app: PIXI.Application, level: Level, userCode: str
     const apiWrapper: API = (interp: Interpreter, scope: InterpreterScope) => {
         const blockExecWrapper = (id: any) => onBlockExecuting(id ? id.toString() : '');
         interp.setProperty(scope, BLOCK_EXECUTING, interp.createNativeFunction(blockExecWrapper));
-        const logWrapper = (log: string, blockId: string) => {
-            onLogAppend(log.toString(), blockId ? blockId.toString() : '');
+        const logWrapper = (variable: string, log: string, blockId: string) => {
+            const line = `${variable.toString()} is: ${log.toString()}`;
+            onLogAppend(line, blockId ? blockId.toString() : '');
         };
         interp.setProperty(scope, "debugLog", interp.createNativeFunction(logWrapper));
         // Add the levels own API
