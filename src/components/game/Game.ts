@@ -159,7 +159,7 @@ export function renderFrame(app: PIXI.Application, sprites: GameSprites, state: 
             // Render the square:
             switch (square) {
                 case SQUARE_PIT:
-                    sprites.grid.beginFill(0xb49147);
+                    sprites.grid.beginFill(0x000000);
                     break;
                 case SQUARE_TRAP:
                     sprites.grid.beginFill(0xd84f32);
@@ -178,7 +178,7 @@ export function renderFrame(app: PIXI.Application, sprites: GameSprites, state: 
                     break;
                 case SQUARE_NEUTRAL:
                 default:
-                    sprites.grid.beginFill(0x000);
+                    sprites.grid.beginFill(0xBBBBBB);
             }
             sprites.grid.drawRect(x * xGridSize, y * yGridSize, xGridSize, yGridSize);
             sprites.grid.endFill();
