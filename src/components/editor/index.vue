@@ -53,7 +53,7 @@
                 blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
                 // take available rest-height of window:
                 const rect = blocklyArea.getBoundingClientRect();
-                blocklyDiv.style.height = (window.innerHeight - rect.top) + 'px';
+                blocklyDiv.style.height = (window.innerHeight - rect.top - 60) + 'px';
             };
             window.addEventListener('resize', resizeEditor, false);
             resizeEditor();

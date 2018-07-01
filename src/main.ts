@@ -6,10 +6,10 @@ import store from "./store";
 
 import BootstrapVue from "bootstrap-vue";
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCoffee } from '@fortawesome/free-solid-svg-icons';
+import { faAngleUp, faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-library.add(faCoffee);
+library.add(faAngleUp, faAngleDown);
 
 Vue.config.productionTip = false;
 
