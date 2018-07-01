@@ -8,7 +8,7 @@ import {
 } from '@/components/game/GameState';
 import {API, default as Interpreter, InterpreterScope} from 'js-interpreter';
 
-export default class MazeLevel1 implements Level {
+export default class TestLevel implements Level {
     public readonly name = "Level 1";
     public readonly description = "A test level about mazes!";
     public maxBlocks = Infinity;
