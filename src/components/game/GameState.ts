@@ -103,24 +103,34 @@ export class GameState {
         }
     }
 
-    public walkPlayer(amount: number, playerIndex = 0): void {
-        const position = this.getPlayerPosition(playerIndex);
-        if (position.angle >= 45 && position.angle < 135) {
-            position.x += amount;
-        } else if (position.angle >= 135 && position.angle < 225) {
-            position.y += amount;
-        } else if (position.angle >= 225 && position.angle < 315) {
-            position.x -= amount;
-        } else if (position.angle >= 315 || position.angle < 45) {
-            position.y -= amount;
-        }
-        this.setPlayerPosition(position, playerIndex);
-    }
-
     public turnPlayer(byDegrees: number, playerIndex = 0): void {
         const position = this.getPlayerPosition(playerIndex);
         position.angle = ((byDegrees + ANGLE_MAX) + position.angle) % ANGLE_MAX;
         this.setPlayerPosition(position, playerIndex);
+    }
+
+    private getNextPosition(playerIndex: number, steps = 1) {
+        const position = this.getPlayerPosition(playerIndex);
+        if (position.angle >= 45 && position.angle < 135) {
+            position.x += steps;
+        } else if (position.angle >= 135 && position.angle < 225) {
+            position.y += steps;
+        } else if (position.angle >= 225 && position.angle < 315) {
+            position.x -= steps;
+        } else if (position.angle >= 315 || position.angle < 45) {
+            position.y -= steps;
+        }
+        return position;
+    }
+
+    public walkPlayer(amount: number, playerIndex = 0): void {
+        const newPosition = this.getNextPosition(playerIndex, amount);
+        this.setPlayerPosition(newPosition, playerIndex);
+    }
+
+    public getNextTile(playerIndex = 0): GridTile {
+        const nextPosition = this.getNextPosition(playerIndex);
+        return this.getGridTile(nextPosition);
     }
 
     /**
