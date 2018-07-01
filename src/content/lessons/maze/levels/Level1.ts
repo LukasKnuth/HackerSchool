@@ -6,7 +6,7 @@ import {
     SQUARE_PIT,
     SQUARE_TELEPORT_ENTRY, SQUARE_TRAP
 } from '@/components/game/GameState';
-import {API, default as Interpreter, InterpreterScope} from 'js-interpreter';
+import {API, default as Interpreter, InterpreterScope, PrimitiveObject} from 'js-interpreter';
 
 export default class MazeLevel1 implements Level {
     public readonly name = "Level 1";
@@ -25,7 +25,7 @@ export default class MazeLevel1 implements Level {
         [2, 0, 0, 0, 2, 2, 0, 4, 0, 2],
         [2, 0, 3, 0, 0, 0, 0, 0, 0, 2],
         [2, 0, 0, 0, 3, 0, 2, 2, 2, 2],
-        [2, 0, 0, 0, 0, 0, 0, 0, 0, 2],
+        [2, 0, 0, 0, 0, 0, 0, 4, 0, 2],
         [2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
     ];
 
@@ -48,16 +48,16 @@ export default class MazeLevel1 implements Level {
 
     public exportAPI(gameState: GameState): API {
         return (interpreter: Interpreter, scope: InterpreterScope) => {
-            const moveWrapper = (amount: number) => {
-                gameState.walkPlayer(amount);
+            const moveWrapper = (amount: PrimitiveObject) => {
+                gameState.walkPlayer(amount.toNumber());
             };
             interpreter.setProperty(scope, "move", interpreter.createNativeFunction(moveWrapper));
-            const turnWrapper = (degrees: number) => {
-                gameState.turnPlayer(degrees);
+            const turnWrapper = (degrees: PrimitiveObject) => {
+                gameState.turnPlayer(degrees.toNumber());
             };
             interpreter.setProperty(scope, "turn", interpreter.createNativeFunction(turnWrapper));
-            const alertWrapper = (text: string) => {
-                alert(text);
+            const alertWrapper = (text: PrimitiveObject) => {
+                alert(text.toString());
             };
             interpreter.setProperty(scope, "alert", interpreter.createNativeFunction(alertWrapper));
         };
