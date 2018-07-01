@@ -2,10 +2,10 @@ import * as pixi from "pixi.js";
 import {
     GameState,
     GridPosition,
-    SQUARE_COLLECTIBLE, SQUARE_GOAL,
-    SQUARE_NEUTRAL,
-    SQUARE_PIT, SQUARE_TELEPORT_ENTRY, SQUARE_TELEPORT_EXIT,
-    SQUARE_TRAP
+    TILE_COLLECTIBLE, TILE_GOAL,
+    TILE_NEUTRAL,
+    TILE_PIT, TILE_TELEPORT_ENTRY, TILE_TELEPORT_EXIT,
+    TILE_TRAP
 } from '@/components/game/GameState';
 import {Level} from '@/content/Lesson';
 import Interpreter, {API, InterpreterScope} from 'js-interpreter';
@@ -169,25 +169,25 @@ export function renderFrame(app: PIXI.Application, sprites: GameSprites, state: 
             sprites.grid.lineStyle(1, 0xacacac, .7);
             // Render the square:
             switch (square) {
-                case SQUARE_PIT:
+                case TILE_PIT:
                     sprites.grid.beginFill(0xb49147);
                     break;
-                case SQUARE_TRAP:
+                case TILE_TRAP:
                     sprites.grid.beginFill(0xd84f32);
                     break;
-                case SQUARE_COLLECTIBLE:
+                case TILE_COLLECTIBLE:
                     sprites.grid.beginFill(0xdfdd2d);
                     break;
-                case SQUARE_TELEPORT_ENTRY:
+                case TILE_TELEPORT_ENTRY:
                     sprites.grid.beginFill(0xb42ddf);
                     break;
-                case SQUARE_TELEPORT_EXIT:
+                case TILE_TELEPORT_EXIT:
                     sprites.grid.beginFill(0xdf2db1);
                     break;
-                case SQUARE_GOAL:
+                case TILE_GOAL:
                     sprites.grid.beginFill(0x6ab446);
                     break;
-                case SQUARE_NEUTRAL:
+                case TILE_NEUTRAL:
                 default:
                     sprites.grid.beginFill(0x000);
             }

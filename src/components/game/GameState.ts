@@ -1,13 +1,17 @@
 const MAP_INVALID_SQUARE = -1;
 
 // Map squares:
-export const SQUARE_NEUTRAL = 1;
-export const SQUARE_PIT = 2;
-export const SQUARE_TRAP = 3;
-export const SQUARE_COLLECTIBLE = 4;
-export const SQUARE_TELEPORT_ENTRY = 5;
-export const SQUARE_TELEPORT_EXIT = 6;
-export const SQUARE_GOAL = 7;
+export const TILE_NEUTRAL = 1;
+export const TILE_PIT = 2;
+export const TILE_TRAP = 3;
+export const TILE_COLLECTIBLE = 4;
+export const TILE_TELEPORT_ENTRY = 5;
+export const TILE_TELEPORT_EXIT = 6;
+export const TILE_GOAL = 7;
+
+// This isn't actually placeable, it's used as a fake-return to check around the player.
+export const TILE_ENEMY = -1;
+export const TILE_ENEMY_COLOR = 8; // TODO add this for MP!
 
 const ANGLE_MAX = 360;
 

@@ -2,9 +2,9 @@ import {BlockToolbox, Level} from '@/content/Lesson';
 import {
     GameState,
     GridPosition, GridState, PlayerPosition,
-    SQUARE_COLLECTIBLE, SQUARE_GOAL, SQUARE_NEUTRAL,
-    SQUARE_PIT,
-    SQUARE_TELEPORT_ENTRY, SQUARE_TRAP
+    TILE_COLLECTIBLE, TILE_ENEMY, TILE_ENEMY_COLOR, TILE_GOAL, TILE_NEUTRAL,
+    TILE_PIT,
+    TILE_TELEPORT_ENTRY, TILE_TRAP
 } from '@/components/game/GameState';
 import {API, default as Interpreter, InterpreterScope, PrimitiveObject} from 'js-interpreter';
 
@@ -72,20 +72,20 @@ export default class MazeLevel1 implements Level {
         const player = gameState.getPlayerPosition();
         const standingOn = gameState.getGridTile(player);
         switch (standingOn) {
-            case SQUARE_PIT:
-            case SQUARE_TRAP:
+            case TILE_PIT:
+            case TILE_TRAP:
                 gameState.setGameOver();
                 break;
-            case SQUARE_COLLECTIBLE:
+            case TILE_COLLECTIBLE:
                 // This reveals the Teleporter!
-                gameState.setGridTile(new GridPosition(2, 2), SQUARE_TELEPORT_ENTRY);
-                gameState.setGridTile(player, SQUARE_NEUTRAL);
+                gameState.setGridTile(new GridPosition(2, 2), TILE_TELEPORT_ENTRY);
+                gameState.setGridTile(player, TILE_NEUTRAL);
                 break;
-            case SQUARE_TELEPORT_ENTRY:
+            case TILE_TELEPORT_ENTRY:
                 // Teleport player
                 gameState.setPlayerPosition(new PlayerPosition(7, 2, player.angle));
                 break;
-            case SQUARE_GOAL:
+            case TILE_GOAL:
                 gameState.setGameOver(true, true);
         }
     }
