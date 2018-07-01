@@ -33,7 +33,8 @@ export class GridPosition {
     }
 }
 
-export type GridState = number[][];
+export type GridTile = number;
+export type GridState = GridTile[][];
 
 export class PlayerPosition extends GridPosition {
     private currentAngle: number = 0;
@@ -131,7 +132,7 @@ export class GameState {
         this.levelState = Array.from(newState, (arr) => Array.from(arr));
     }
 
-    public setGridSquare(position: GridPosition, content: number) {
+    public setGridTile(position: GridPosition, content: GridTile) {
         if (this.levelState.length > position.y && this.levelState[position.y].length > position.x) {
             this.levelState[position.y][position.x] = content;
         } else {
@@ -142,7 +143,7 @@ export class GameState {
         }
     }
 
-    public getGridSquare(position: GridPosition) {
+    public getGridTile(position: GridPosition): GridTile {
         if (this.levelState.length > position.y && this.levelState[position.y].length > position.x) {
             return this.levelState[position.y][position.x];
         } else {
@@ -150,10 +151,10 @@ export class GameState {
         }
     }
 
-    public swapGridSquares(positionA: GridPosition, positionB: GridPosition) {
-        const temp = this.getGridSquare(positionA);
-        this.setGridSquare(positionA, this.getGridSquare(positionB));
-        this.setGridSquare(positionB, temp);
+    public swapGridTiles(positionA: GridPosition, positionB: GridPosition) {
+        const temp = this.getGridTile(positionA);
+        this.setGridTile(positionA, this.getGridTile(positionB));
+        this.setGridTile(positionB, temp);
     }
 
     public get mazeWidth(): number {

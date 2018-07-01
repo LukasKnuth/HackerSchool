@@ -164,7 +164,7 @@ export function renderFrame(app: PIXI.Application, sprites: GameSprites, state: 
         pos.x = x;
         for (let y = 0; y < state.mazeHeight; y++) {
             pos.y = y;
-            const square = state.getGridSquare(pos);
+            const square = state.getGridTile(pos);
             sprites.grid.lineStyle(1, 0xacacac, .7);
             // Render the square:
             switch (square) {

@@ -70,7 +70,7 @@ export default class MazeLevel1 implements Level {
 
     public tick(gameState: GameState) {
         const player = gameState.getPlayerPosition();
-        const standingOn = gameState.getGridSquare(player);
+        const standingOn = gameState.getGridTile(player);
         switch (standingOn) {
             case SQUARE_PIT:
             case SQUARE_TRAP:
@@ -78,8 +78,8 @@ export default class MazeLevel1 implements Level {
                 break;
             case SQUARE_COLLECTIBLE:
                 // This reveals the Teleporter!
-                gameState.setGridSquare(new GridPosition(2, 2), SQUARE_TELEPORT_ENTRY);
-                gameState.setGridSquare(player, SQUARE_NEUTRAL);
+                gameState.setGridTile(new GridPosition(2, 2), SQUARE_TELEPORT_ENTRY);
+                gameState.setGridTile(player, SQUARE_NEUTRAL);
                 break;
             case SQUARE_TELEPORT_ENTRY:
                 // Teleport player
