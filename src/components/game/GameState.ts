@@ -77,7 +77,10 @@ export class GameState {
 
     private isGameOver: boolean = false;
     private isGameWon: boolean = false;
-    private playerPosition: PlayerPosition[] = [new PlayerPosition(0, 0, 0), new PlayerPosition(0, 0, 0)];
+    private playerPosition: PlayerPosition[] = [
+        new PlayerPosition(0, 0, 0), // player
+        new PlayerPosition(-100, -100, 0) // enemy (placed out-of-bounds to avoid sensoring him by accident!)
+    ];
     private levelState: GridState;
 
     constructor(mazeWidth: number, mazeHeight: number) {
@@ -135,6 +138,18 @@ export class GameState {
     public getNextTile(playerIndex = 0): GridTile {
         const nextPosition = this.getNextPosition(playerIndex);
         return this.getGridTile(nextPosition);
+    }
+
+    public sensorNext(playerIndex = 0): any {
+        const nextPosition = this.getNextPosition(playerIndex);
+        const closeEnemy = this.playerPosition.find((enemyPosition: PlayerPosition) => {
+            return nextPosition.equals(enemyPosition);
+        });
+        if (closeEnemy) {
+            return TILE_ENEMY;
+        } else {
+            return this.getNextTile(playerIndex);
+        }
     }
 
     /**
