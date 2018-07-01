@@ -3,7 +3,7 @@ const MAP_INVALID_SQUARE = -1;
 // Map squares:
 export const SQUARE_NEUTRAL = 1;
 export const SQUARE_PIT = 2;
-export const SQUARE_TRAP = 3;
+export const SQUARE_BLUE = 3;
 export const SQUARE_COLLECTIBLE = 4;
 export const SQUARE_TELEPORT_ENTRY = 5;
 export const SQUARE_TELEPORT_EXIT = 6;
@@ -13,6 +13,7 @@ export const SQUARE_GOAL = 7;
 export const _ = SQUARE_NEUTRAL;
 export const X = SQUARE_PIT;
 export const T = SQUARE_COLLECTIBLE;
+export const B = SQUARE_BLUE;
 
 export const PLAYER_ORIENTATION_UP = 0;
 export const PLAYER_ORIENTATION_RIGHT = 90;

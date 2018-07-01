@@ -5,7 +5,7 @@ import {
     SQUARE_COLLECTIBLE, SQUARE_GOAL,
     SQUARE_NEUTRAL,
     SQUARE_PIT, SQUARE_TELEPORT_ENTRY, SQUARE_TELEPORT_EXIT,
-    SQUARE_TRAP
+    SQUARE_BLUE
 } from '@/components/game/GameState';
 import {Level} from '@/content/Lesson';
 import Interpreter, {API, InterpreterScope} from 'js-interpreter';
@@ -161,8 +161,8 @@ export function renderFrame(app: PIXI.Application, sprites: GameSprites, state: 
                 case SQUARE_PIT:
                     sprites.grid.beginFill(0x000000);
                     break;
-                case SQUARE_TRAP:
-                    sprites.grid.beginFill(0xd84f32);
+                case SQUARE_BLUE:
+                    sprites.grid.beginFill(0x4f4fff);
                     break;
                 case SQUARE_COLLECTIBLE:
                     sprites.grid.beginFill(0xdfdd2d);

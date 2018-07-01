@@ -4,7 +4,7 @@ import {
     GridPosition, GridState, PlayerPosition,
     SQUARE_COLLECTIBLE, SQUARE_GOAL, SQUARE_NEUTRAL,
     SQUARE_PIT,
-    SQUARE_TELEPORT_ENTRY, SQUARE_TRAP
+    SQUARE_TELEPORT_ENTRY, SQUARE_BLUE
 } from '@/components/game/GameState';
 import {API, default as Interpreter, InterpreterScope} from 'js-interpreter';
 
@@ -71,7 +71,7 @@ export default class TestLevel implements Level {
         const standingOn = gameState.getGridSquare(player);
         switch (standingOn) {
             case SQUARE_PIT:
-            case SQUARE_TRAP:
+            case SQUARE_BLUE:
                 gameState.setGameOver();
                 break;
             case SQUARE_COLLECTIBLE:
