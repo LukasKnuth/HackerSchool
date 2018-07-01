@@ -14,7 +14,7 @@ export default class Lvl04_AdvancedLoop implements Level {
     public readonly maxBlocks = 5;
     public readonly mazeHeight = 15;
     public readonly mazeWidth = 15;
-    public readonly name = "Level 4 - Fortgeschrittene Schleifen";
+    public readonly name = "Level 4 - Schleifen für Fortgeschrittene";
 
     private initialMazeLayout: GridState = [
         [X, X, X, X, X, X, X, X, X, X, X, X, X, X, _],
@@ -40,7 +40,7 @@ export default class Lvl04_AdvancedLoop implements Level {
     }
 
     getBlocks(): BlockToolbox {
-        return undefined;
+        return undefined;//only `repeat X times` block from repeat section
     }
 
     initializeState(gameState: GameState): void {

@@ -10,7 +10,7 @@ export default class Lvl05_LoopWithOuterCode implements Level {
     public readonly allowMethods = false;
     public readonly allowVariables = false;
     public readonly description = "";
-    public readonly maxBlocks = 14;
+    public readonly maxBlocks = 15;
     public readonly mazeHeight = 15;
     public readonly mazeWidth = 15;
     public readonly name = "Level 5 - Komplexe Schleifen";
@@ -39,12 +39,12 @@ export default class Lvl05_LoopWithOuterCode implements Level {
     }
 
     getBlocks(): BlockToolbox {
-        return undefined;
+        return undefined;//only `repeat X times` block from repeat section
     }
 
     initializeState(gameState: GameState): void {
         gameState.setGridState(this.initialMazeLayout);
-        gameState.setPlayerPosition(new PlayerPosition(2, 2, PLAYER_ORIENTATION_RIGHT));
+        gameState.setPlayerPosition(new PlayerPosition(1, 3, PLAYER_ORIENTATION_UP));
     }
 
     tick(gameState: GameState): void {

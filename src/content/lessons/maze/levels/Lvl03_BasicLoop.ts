@@ -39,7 +39,7 @@ export default class Lvl03_BasicLoop implements Level {
     }
 
     getBlocks(): BlockToolbox {
-        return undefined;
+        return undefined;//only `repeat X times` block from repeat section
     }
 
     initializeState(gameState: GameState): void {
