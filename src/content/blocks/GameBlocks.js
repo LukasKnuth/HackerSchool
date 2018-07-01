@@ -89,7 +89,7 @@ export default function(blocks, generators) {
     };
     generators['debug_log'] = (block) => {
         const input = Blockly.JavaScript.valueToCode(block, 'value', Blockly.JavaScript.ORDER_ATOMIC);
-        return `debugLog("${input}", (${input}).toString(), "${block.id}");\n`;
+        return `debugLog("${input || "[no input]"}", (${input || "''"}).toString(), "${block.id}");\n`;
     };
 
 }
