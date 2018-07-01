@@ -62,7 +62,7 @@
     import MazeLevel1 from "../content/lessons/maze/levels/Level1";
 
     interface DebugLogEntry {
-        line: string,
+        line: string;
         blockId: string;
         instruction: number;
     }
@@ -112,9 +112,9 @@
             (this.$refs.editor as any).highlightBlock(blockId);
         }
         public debugLogAppend(log: string, blockId: string) {
-            this.debugLog.push({line: log, blockId: blockId, instruction: this.instructionCounter});
+            this.debugLog.push({line: log, blockId, instruction: this.instructionCounter});
         }
-        public onLogHover(item?: DebugLogEntry) {
+        public onLogHover(item: DebugLogEntry) {
             (this.$refs.editor as any).highlightBlock(item.blockId);
         }
         public onLogLeave() {
