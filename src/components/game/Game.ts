@@ -21,6 +21,7 @@ export interface GameLoop {
     ticker: (delta: number) => void;
     onBlockExecuting?: (blockId: string) => void;
     onGameTerminated?: () => void;
+    onDebugLog?: (log: string, blockId: string) => void;
 }
 export type GameRenderer = (state: GameState) => void;
 
@@ -86,9 +87,18 @@ export function startGameLoop(app: PIXI.Application, level: Level, userCode: str
         }
         blockExecutionPause = true;
     };
+    const onLogAppend = (log: string, blockId: string) => {
+        if (gameLoop.onDebugLog) {
+            gameLoop.onDebugLog(log, blockId);
+        }
+    };
     const apiWrapper: API = (interp: Interpreter, scope: InterpreterScope) => {
         const blockExecWrapper = (id: any) => onBlockExecuting(id ? id.toString() : '');
         interp.setProperty(scope, BLOCK_EXECUTING, interp.createNativeFunction(blockExecWrapper));
+        const logWrapper = (log: string, blockId: string) => {
+            onLogAppend(log.toString(), blockId ? blockId.toString() : '');
+        };
+        interp.setProperty(scope, "debugLog", interp.createNativeFunction(logWrapper));
         // Add the levels own API
         userCodeApi(interp, scope);
     };

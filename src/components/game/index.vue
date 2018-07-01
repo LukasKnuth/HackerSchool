@@ -75,6 +75,7 @@
                     this.stopGame();
                     this.emitRunningUpdate(false);
                 };
+                this.gameLoop.onDebugLog = (log: string, blockId: string) => this.logAppendEmit(log, blockId);
                 this.emitRunningUpdate(true);
             } else {
                 console.error("Can't start game, something is not initialized!", engine, level);
@@ -96,6 +97,9 @@
         }
         private emitBlockExecuting(blockId: string|null) {
             this.$emit("block-executing", blockId);
+        }
+        private logAppendEmit(log: string, blockId: string) {
+            this.$emit("debug-log-append", log, blockId);
         }
 
     }

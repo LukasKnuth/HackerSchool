@@ -1,6 +1,7 @@
 import Blockly from "node-blockly/browser";
 
 const GAME_HUE = 30;
+const DEBUG_HUE = 345;
 
 /*
     This is where ALL available blocks for levels live. Just add them to the supplied "blocks"-variable.
@@ -73,4 +74,21 @@ export default function(blocks, generators) {
         }
     };
     generators['turn_right'] = () => "turn(90);\n";
+
+    // --------- DEBUG -----------
+    blocks['debug_log'] = {
+        init() {
+            this.setTooltip("Logs the given variable to the Debug Log in the bottom right corner.");
+            this.setColour(DEBUG_HUE);
+            this.setNextStatement(true);
+            this.setPreviousStatement(true);
+            this.appendDummyInput().appendField('log'); // label
+            this.appendValueInput("value").setCheck(null);
+            this.setInputsInline(true);
+        }
+    };
+    generators['debug_log'] = (block) => {
+        const input = Blockly.JavaScript.valueToCode(block, 'value', Blockly.JavaScript.ORDER_ATOMIC);
+        return `debugLog((${input}).toString(), "${block.id}");\n`;
+    }
 }
