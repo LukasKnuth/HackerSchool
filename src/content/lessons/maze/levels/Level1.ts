@@ -38,8 +38,8 @@ export default class MazeLevel1 implements Level {
 
     public getBlocks(): BlockToolbox {
         return {
-            Control: ["controls_if", "controls_repeat_ext", "controls_whileUntil", "string_length"],
-            Game: ["forward", "backward", 'turn_left', 'turn_right'],
+            Control: ["controls_if", "controls_repeat_ext", "controls_whileUntil"],
+            Game: ["forward", "backward", 'turn_left', 'turn_right', 'sensor_camera', 'has_collectible'],
             Logic: ["logic_compare", "logic_operation", "logic_negate", "math_arithmetic", "math_modulo"],
             Values: ["math_number", "text", "logic_boolean", "text_print", "math_random_int"],
             Debug: ["debug_log"]
@@ -60,6 +60,29 @@ export default class MazeLevel1 implements Level {
                 alert(text.toString());
             };
             interpreter.setProperty(scope, "alert", interpreter.createNativeFunction(alertWrapper));
+            // Sensors
+            const cameraWrapper = () => {
+                return interpreter.createPrimitive(gameState.sensorNext());
+            };
+            interpreter.setProperty(scope, "sensorCamera", interpreter.createNativeFunction(cameraWrapper));
+            const tileHasWrapper = (type: PrimitiveObject, tile: PrimitiveObject) => {
+                if (type.valueOf() === undefined || type.valueOf() === null) {
+                    return false;
+                }
+                switch (type.toString()) {
+                    case 'collectible':
+                        return interpreter.createPrimitive(tile.toNumber() === TILE_COLLECTIBLE);
+                    case "trap":
+                        return interpreter.createPrimitive(tile.toNumber() === TILE_TRAP);
+                    case "enemy_color":
+                        return interpreter.createPrimitive(tile.toNumber() === TILE_ENEMY_COLOR);
+                    case "enemy":
+                        return interpreter.createPrimitive(tile.toNumber() === TILE_ENEMY);
+                    default:
+                        return interpreter.createPrimitive(false);
+                }
+            };
+            interpreter.setProperty(scope, "tileHas", interpreter.createNativeFunction(tileHasWrapper));
         };
     }
 
