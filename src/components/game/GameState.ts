@@ -9,6 +9,16 @@ export const SQUARE_TELEPORT_ENTRY = 5;
 export const SQUARE_TELEPORT_EXIT = 6;
 export const SQUARE_GOAL = 7;
 
+//Level square shorthands
+export const _ = SQUARE_NEUTRAL;
+export const X = SQUARE_PIT;
+export const T = SQUARE_COLLECTIBLE;
+
+export const PLAYER_ORIENTATION_UP = 0;
+export const PLAYER_ORIENTATION_RIGHT = 90;
+export const PLAYER_ORIENTATION_DOWN = 180;
+export const PLAYER_ORIENTATION_LEFT = 270;
+
 const ANGLE_MAX = 360;
 
 export class GridPosition {
