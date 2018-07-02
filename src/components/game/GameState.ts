@@ -153,6 +153,20 @@ export class GameState {
         }
     }
 
+    public sensorAround(playerIndex = 0): ExtendedGridTile[] {
+        const position = this.getPlayerPosition(playerIndex);
+        const searchPosition = new GridPosition(0, 0);
+        const results = new Set<number>();
+        for (let x = position.x - 2; x <= position.x + 2; x++) {
+            for (let y = position.y - 2; y <= position.y + 2; y++) {
+                searchPosition.x = x;
+                searchPosition.y = y;
+                results.add(this.getGridTile(searchPosition));
+            }
+        }
+        return Array.from(results);
+    }
+
     /**
      * This operation is EXPENSIVE, because it copies the entire array.
      * @param {GridState} newState
