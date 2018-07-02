@@ -38,6 +38,7 @@ export class GridPosition {
 }
 
 export type GridTile = number;
+export type ExtendedGridTile = GridTile;
 export type GridState = GridTile[][];
 
 export class PlayerPosition extends GridPosition {
@@ -140,7 +141,7 @@ export class GameState {
         return this.getGridTile(nextPosition);
     }
 
-    public sensorNext(playerIndex = 0): any {
+    public sensorNext(playerIndex = 0): ExtendedGridTile {
         const nextPosition = this.getNextPosition(playerIndex);
         const closeEnemy = this.playerPosition.find((enemyPosition: PlayerPosition) => {
             return nextPosition.equals(enemyPosition);
