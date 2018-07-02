@@ -6,7 +6,8 @@ import {
     TILE_PIT,
     TILE_TELEPORT_ENTRY, TILE_TRAP
 } from '@/components/game/GameState';
-import {API, default as Interpreter, InterpreterScope, PrimitiveObject} from 'js-interpreter';
+import {API, default as Interpreter, InterpreterScope} from 'js-interpreter';
+import {attachGameBlockAPI} from '@/content/blocks/API';
 
 export default class MazeLevel1 implements Level {
     public readonly name = "Level 1";
@@ -41,53 +42,14 @@ export default class MazeLevel1 implements Level {
             Control: ["controls_if", "controls_repeat_ext", "controls_whileUntil"],
             Game: ["forward", "backward", 'turn_left', 'turn_right', 'sensor_camera', 'sensor_radar'],
             Logic: ["logic_compare", "logic_operation", "logic_negate", "math_arithmetic", "math_modulo"],
-            Values: ["math_number", "text", "logic_boolean", "text_print", "math_random_int"],
+            Values: ["math_number", "text", "logic_boolean", "math_random_int"],
             Debug: ["debug_log"]
         };
     }
 
     public exportAPI(gameState: GameState): API {
         return (interpreter: Interpreter, scope: InterpreterScope) => {
-            const moveWrapper = (amount: PrimitiveObject) => {
-                gameState.walkPlayer(amount.toNumber());
-            };
-            interpreter.setProperty(scope, "move", interpreter.createNativeFunction(moveWrapper));
-            const turnWrapper = (degrees: PrimitiveObject) => {
-                gameState.turnPlayer(degrees.toNumber());
-            };
-            interpreter.setProperty(scope, "turn", interpreter.createNativeFunction(turnWrapper));
-            const alertWrapper = (text: PrimitiveObject) => {
-                alert(text.toString());
-            };
-            interpreter.setProperty(scope, "alert", interpreter.createNativeFunction(alertWrapper));
-            // Sensors
-            const checkType = (tile: GridTile, type: string) => {
-                switch (type) {
-                    case 'collectible':
-                        return tile === TILE_COLLECTIBLE;
-                    case "trap":
-                        return tile === TILE_TRAP;
-                    case "enemy_color":
-                        return tile === TILE_ENEMY_COLOR;
-                    case "enemy":
-                        return tile === TILE_ENEMY;
-                    default:
-                        return false;
-                }
-            };
-            const cameraWrapper = (type: PrimitiveObject) => {
-                const tile = gameState.sensorNext();
-                const result = checkType(tile, type.toString());
-                return interpreter.createPrimitive(result);
-            };
-            interpreter.setProperty(scope, "sensorCamera", interpreter.createNativeFunction(cameraWrapper));
-            const radarWrapper = (type: PrimitiveObject) => {
-                const tiles = gameState.sensorAround();
-                const typeString = type.toString();
-                const result = tiles.some((tile: GridTile) => checkType(tile, typeString));
-                return interpreter.createPrimitive(result);
-            };
-            interpreter.setProperty(scope, "sensorRadar", interpreter.createNativeFunction(radarWrapper));
+            attachGameBlockAPI(interpreter, scope, gameState);
         };
     }
 

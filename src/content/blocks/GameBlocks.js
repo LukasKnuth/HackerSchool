@@ -1,4 +1,5 @@
 import Blockly from "node-blockly/browser";
+import * as api from "./API";
 
 const GAME_HUE = 30;
 const DEBUG_HUE = 345;
@@ -17,22 +18,6 @@ function escapeString(value) {
      "[component]_[operation]", e.g. "game_walk".
 */
 export default function(blocks, generators) {
-    blocks['string_length'] = {
-        init() {
-            this.appendValueInput('VALUE')
-                .setCheck('String')
-                .appendField('length of');
-            this.setOutput(true, 'Number');
-            this.setColour(160);
-            this.setTooltip('Returns number of letters in the provided text.');
-            this.setHelpUrl('http://www.w3schools.com/jsref/jsref_length_string.asp');
-        }
-    };
-    generators['string_length'] = (block) => {
-        const arg0 = Blockly.JavaScript.valueToCode(block, "VALUE", Blockly.JavaScript.ORDER_FUNCTION_CALL) || "''";
-        return [arg0 + '.length', Blockly.JavaScript.ORDER_MEMBER];
-    };
-
     // ----------- Movement ------------
     blocks['forward'] = {
         init() {
@@ -43,7 +28,7 @@ export default function(blocks, generators) {
             this.appendDummyInput().appendField('go forward'); // label
         }
     };
-    generators['forward'] = () => "move(1);\n";
+    generators['forward'] = () => `${api.FUNCTION_MOVE}(1);\n`;
 
     blocks['backward'] = {
         init() {
@@ -54,7 +39,7 @@ export default function(blocks, generators) {
             this.appendDummyInput().appendField('go backward'); // label
         }
     };
-    generators['backward'] = () => "move(-1);\n";
+    generators['backward'] = () => `${api.FUNCTION_MOVE}(-1);\n`;
 
     // --------- Rotation ------------
     blocks['turn_left'] = {
@@ -66,7 +51,7 @@ export default function(blocks, generators) {
             this.appendDummyInput().appendField('turn left'); // label
         }
     };
-    generators['turn_left'] = () => "turn(-90);\n";
+    generators['turn_left'] = () => `${api.FUNCTION_TURN}(-90);\n`;
 
     blocks['turn_right'] = {
         init() {
@@ -77,7 +62,7 @@ export default function(blocks, generators) {
             this.appendDummyInput().appendField('turn right'); // label
         }
     };
-    generators['turn_right'] = () => "turn(90);\n";
+    generators['turn_right'] = () => `${api.FUNCTION_TURN}(90);\n`;
 
     // --------- DEBUG -----------
     blocks['debug_log'] = {
@@ -99,8 +84,8 @@ export default function(blocks, generators) {
 
     // ------- SENSORS ---------
     const tileTypeEnum = [
-        ["a collectible", "collectible"], ["a trap", "trap"],
-        ["an enemy color", "enemy_color"], ["an enemy", "enemy"],
+        ["a collectible", api.PARAM_COLLECTIBLE], ["a trap", api.PARAM_TRAP],
+        ["an enemy color", api.PARAM_ENEMY_COLOR], ["an enemy", api.PARAM_ENEMY],
     ];
 
     blocks['sensor_camera'] = {
@@ -115,7 +100,7 @@ export default function(blocks, generators) {
     };
     generators['sensor_camera'] = (block) => {
         const tile_type = block.getFieldValue('tile_type');
-        return [`sensorCamera("${tile_type}")`, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+        return [`${api.FUNCTION_SENSOR_CAMERA}("${tile_type}")`, Blockly.JavaScript.ORDER_FUNCTION_CALL];
     };
 
     blocks['sensor_radar'] = {
@@ -130,7 +115,7 @@ export default function(blocks, generators) {
     };
     generators['sensor_radar'] = (block) => {
         const tile_type = block.getFieldValue('tile_type');
-        return [`sensorRadar("${tile_type}")`, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+        return [`${api.FUNCTION_SENSOR_RADAR}("${tile_type}")`, Blockly.JavaScript.ORDER_FUNCTION_CALL];
     };
 
 }
