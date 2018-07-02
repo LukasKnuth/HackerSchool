@@ -98,12 +98,15 @@ export default function(blocks, generators) {
     };
 
     // ------- SENSORS ---------
+    const tileTypeEnum = [
+        ["a collectible", "collectible"], ["a trap", "trap"],
+        ["an enemy color", "enemy_color"], ["an enemy", "enemy"],
+    ];
+
     blocks['sensor_camera'] = {
         init() {
-            this.appendDummyInput().appendField("camera sees").appendField(new Blockly.FieldDropdown([
-                ["a collectible", "collectible"], ["a trap", "trap"],
-                ["an enemy color", "enemy_color"], ["an enemy", "enemy"],
-            ]), "tile_type");
+            this.appendDummyInput().appendField("camera sees")
+                .appendField(new Blockly.FieldDropdown(tileTypeEnum), "tile_type");
             this.setInputsInline(true);
             this.setOutput(true, "Boolean");
             this.setColour(GAME_HUE);
@@ -113,6 +116,21 @@ export default function(blocks, generators) {
     generators['sensor_camera'] = (block) => {
         const tile_type = block.getFieldValue('tile_type');
         return [`sensorCamera("${tile_type}")`, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+    };
+
+    blocks['sensor_radar'] = {
+        init() {
+            this.appendDummyInput().appendField("radar senses")
+                .appendField(new Blockly.FieldDropdown(tileTypeEnum), "tile_type");
+            this.setInputsInline(true);
+            this.setOutput(true, "Boolean");
+            this.setColour(GAME_HUE);
+            this.setTooltip("Use the radar to check a two tiles around the current player position.");
+        }
+    };
+    generators['sensor_radar'] = (block) => {
+        const tile_type = block.getFieldValue('tile_type');
+        return [`sensorRadar("${tile_type}")`, Blockly.JavaScript.ORDER_FUNCTION_CALL];
     };
 
 }
