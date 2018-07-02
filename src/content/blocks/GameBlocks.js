@@ -3,6 +3,10 @@ import Blockly from "node-blockly/browser";
 const GAME_HUE = 30;
 const DEBUG_HUE = 345;
 
+function escapeString(value) {
+    return value.replace(/['"]/g, `\\"`);
+}
+
 /*
     This is where ALL available blocks for levels live. Just add them to the supplied "blocks"-variable.
 
@@ -89,7 +93,8 @@ export default function(blocks, generators) {
     };
     generators['debug_log'] = (block) => {
         const input = Blockly.JavaScript.valueToCode(block, 'value', Blockly.JavaScript.ORDER_ATOMIC);
-        return `debugLog("${input || "[no input]"}", (${input || "''"}).toString(), "${block.id}");\n`;
+        const escapedInput = escapeString(input);
+        return `debugLog("${escapedInput || "[no input]"}", (${input || "''"}).toString(), "${block.id}");\n`;
     };
 
     // ------- SENSORS ---------
