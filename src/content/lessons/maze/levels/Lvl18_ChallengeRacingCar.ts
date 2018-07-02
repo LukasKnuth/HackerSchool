@@ -13,7 +13,7 @@ export default class Lvl18_ChallengeRacingCar implements Level {
     public readonly maxBlocks = 25; //verify that number
     public readonly mazeHeight = 15;
     public readonly mazeWidth = 15;
-    public readonly name = "Level 17 - Prüfung: Unüberholbar";
+    public readonly name = "Level 18 - Prüfung: Unüberholbar";
 
     private initialMazeLayout: GridState = [
         [X, X, X, X, X, X, X, X, X, X, X, X, X, X, X],
