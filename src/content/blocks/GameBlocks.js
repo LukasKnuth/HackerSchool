@@ -100,36 +100,19 @@ export default function(blocks, generators) {
     // ------- SENSORS ---------
     blocks['sensor_camera'] = {
         init() {
-            this.appendDummyInput().appendField("camera");
-            this.setOutput(true, "Tile");
+            this.appendDummyInput().appendField("camera sees").appendField(new Blockly.FieldDropdown([
+                ["a collectible", "collectible"], ["a trap", "trap"],
+                ["an enemy color", "enemy_color"], ["an enemy", "enemy"],
+            ]), "tile_type");
+            this.setInputsInline(true);
+            this.setOutput(true, "Boolean");
             this.setColour(GAME_HUE);
             this.setTooltip("Use the camera to check a Tile on step in the current player direction.");
         }
     };
-    generators['sensor_camera'] = () => {
-        return ["sensorCamera()", Blockly.JavaScript.ORDER_FUNCTION_CALL];
-    };
-
-    // ------ TILES ---------
-    blocks['has_collectible'] = {
-        init() {
-            this.appendValueInput("sensor_result").setCheck("Tile").appendField("result");
-            this.appendDummyInput()
-                .appendField("has")
-                .appendField(new Blockly.FieldDropdown([
-                    ["a collectible", "collectible"], ["a trap", "trap"],
-                    ["an enemy color", "enemy_color"], ["an enemy", "enemy"],
-                ]), "tile_type");
-            this.setInputsInline(true);
-            this.setOutput(true, "Boolean");
-            this.setColour(GAME_HUE);
-            this.setTooltip("Checks if the given Sensor result has a collectible in it.");
-        }
-    };
-    generators['has_collectible'] = (block) => {
-        const sensor_result = Blockly.JavaScript.valueToCode(block, 'sensor_result', Blockly.JavaScript.ORDER_ATOMIC);
+    generators['sensor_camera'] = (block) => {
         const tile_type = block.getFieldValue('tile_type');
-        return [`tileHas("${tile_type}", ${sensor_result || "null"})`, Blockly.JavaScript.ORDER_NONE];
-    }
+        return [`sensorCamera("${tile_type}")`, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+    };
 
 }

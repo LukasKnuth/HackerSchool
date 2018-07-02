@@ -39,7 +39,7 @@ export default class MazeLevel1 implements Level {
     public getBlocks(): BlockToolbox {
         return {
             Control: ["controls_if", "controls_repeat_ext", "controls_whileUntil"],
-            Game: ["forward", "backward", 'turn_left', 'turn_right', 'sensor_camera', 'has_collectible'],
+            Game: ["forward", "backward", 'turn_left', 'turn_right', 'sensor_camera'],
             Logic: ["logic_compare", "logic_operation", "logic_negate", "math_arithmetic", "math_modulo"],
             Values: ["math_number", "text", "logic_boolean", "text_print", "math_random_int"],
             Debug: ["debug_log"]
@@ -61,28 +61,22 @@ export default class MazeLevel1 implements Level {
             };
             interpreter.setProperty(scope, "alert", interpreter.createNativeFunction(alertWrapper));
             // Sensors
-            const cameraWrapper = () => {
-                return interpreter.createPrimitive(gameState.sensorNext());
-            };
-            interpreter.setProperty(scope, "sensorCamera", interpreter.createNativeFunction(cameraWrapper));
-            const tileHasWrapper = (type: PrimitiveObject, tile: PrimitiveObject) => {
-                if (type.valueOf() === undefined || type.valueOf() === null) {
-                    return false;
-                }
+            const cameraWrapper = (type: PrimitiveObject) => {
+                const tile = gameState.sensorNext();
                 switch (type.toString()) {
                     case 'collectible':
-                        return interpreter.createPrimitive(tile.toNumber() === TILE_COLLECTIBLE);
+                        return interpreter.createPrimitive(tile === TILE_COLLECTIBLE);
                     case "trap":
-                        return interpreter.createPrimitive(tile.toNumber() === TILE_TRAP);
+                        return interpreter.createPrimitive(tile === TILE_TRAP);
                     case "enemy_color":
-                        return interpreter.createPrimitive(tile.toNumber() === TILE_ENEMY_COLOR);
+                        return interpreter.createPrimitive(tile === TILE_ENEMY_COLOR);
                     case "enemy":
-                        return interpreter.createPrimitive(tile.toNumber() === TILE_ENEMY);
+                        return interpreter.createPrimitive(tile === TILE_ENEMY);
                     default:
                         return interpreter.createPrimitive(false);
                 }
             };
-            interpreter.setProperty(scope, "tileHas", interpreter.createNativeFunction(tileHasWrapper));
+            interpreter.setProperty(scope, "sensorCamera", interpreter.createNativeFunction(cameraWrapper));
         };
     }
 
