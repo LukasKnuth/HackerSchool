@@ -1,4 +1,5 @@
 import * as pixi from "pixi.js";
+import "pixi-sound";
 import {
     GameState,
     GridPosition, TILE_BLUE,
@@ -16,6 +17,8 @@ export const BLOCK_EXECUTING = "blockExecuting";
 
 const FILE_ASSET_PLAYER1 = "/sprites/player.png";
 const FILE_ASSET_BACKGROUND = "/sprites/background.png";
+const FILE_SOUND_SUCCESS = "/sounds/success.mp3";
+const FILE_SOUND_FAIL = "/sounds/fail.mp3";
 
 export interface GameLoop {
     ticker: (delta: number) => void;
@@ -26,19 +29,23 @@ export interface GameLoop {
 }
 export type GameRenderer = (state: GameState) => void;
 
-export interface GameSprites {
+export interface GameResources {
     player1: pixi.Sprite;
     player1Cone: pixi.Graphics;
     background: pixi.Sprite;
     grid: pixi.Graphics;
+    win: pixi.sound.Sound;
+    fail: pixi.sound.Sound;
 }
 
-function loadResources(): Promise<void> {
+function startLoader(): Promise<void> {
     if (Object.keys(pixi.loader.resources).length > 0) {
         return Promise.resolve();
     } else {
         return new Promise((resolve, reject) => {
             pixi.loader
+                .add(FILE_SOUND_SUCCESS)
+                .add(FILE_SOUND_FAIL)
                 .add(FILE_ASSET_PLAYER1)
                 .add(FILE_ASSET_BACKGROUND)
                 .on("error", (err) => reject(err))
@@ -53,14 +60,19 @@ function loadResources(): Promise<void> {
 function resourceToSprite(assetFile: string): pixi.Sprite {
     return new pixi.Sprite(pixi.loader.resources[assetFile].texture);
 }
+function resourceToSound(assetFile: string): pixi.sound.Sound {
+    return (pixi.loader.resources[assetFile] as any).sound;
+}
 
-async function loadSprites(app: pixi.Application): Promise<GameSprites> {
-    await loadResources();
+async function loadResources(app: pixi.Application): Promise<GameResources> {
+    await startLoader();
     return {
         player1: resourceToSprite(FILE_ASSET_PLAYER1),
         player1Cone: new pixi.Graphics(),
         background: resourceToSprite(FILE_ASSET_BACKGROUND),
-        grid: new pixi.Graphics()
+        grid: new pixi.Graphics(),
+        win: resourceToSound(FILE_SOUND_SUCCESS),
+        fail: resourceToSound(FILE_SOUND_FAIL)
     };
 }
 
@@ -148,8 +160,8 @@ export function stopGameLoop(app: pixi.Application, loop: GameLoop): void {
 
 // ---------------- RENDER --------------------------
 
-export async function initializeRenderer(app: pixi.Application): Promise<GameSprites> {
-    const sprites = await loadSprites(app);
+export async function initializeRenderer(app: pixi.Application): Promise<GameResources> {
+    const sprites = await loadResources(app);
     // app.stage.addChild(sprites.background);
     app.stage.addChild(sprites.grid);
     app.stage.addChild(sprites.player1);
@@ -161,20 +173,20 @@ export async function initializeRenderer(app: pixi.Application): Promise<GameSpr
     return sprites;
 }
 
-export function renderFrame(app: PIXI.Application, sprites: GameSprites, state: GameState) {
+export function renderFrame(app: PIXI.Application, resources: GameResources, state: GameState) {
     const fullWidth = app.renderer.view.width;
     const fullHeight = app.renderer.view.height;
     // Render the maze:
     const xGridSize = fullWidth / state.mazeWidth;
     const yGridSize = fullHeight / state.mazeHeight;
-    sprites.grid.clear();
+    resources.grid.clear();
     const pos = new GridPosition(0, 0);
     for (let x = 0; x < state.mazeWidth; x++) {
         pos.x = x;
         for (let y = 0; y < state.mazeHeight; y++) {
             pos.y = y;
             const square = state.getGridTile(pos);
-            sprites.grid.lineStyle(1, 0xacacac, .7);
+            resources.grid.lineStyle(1, 0xacacac, .7);
             // Render the square:
             switch (square) {
                 case TILE_PIT:
@@ -187,42 +199,50 @@ export function renderFrame(app: PIXI.Application, sprites: GameSprites, state: 
                     sprites.grid.beginFill(0x22CC22);
                     break;
                 case TILE_COLLECTIBLE:
-                    sprites.grid.beginFill(0xdfdd2d);
+                    resources.grid.beginFill(0xdfdd2d);
                     break;
                 case TILE_TELEPORT_ENTRY:
-                    sprites.grid.beginFill(0xb42ddf);
+                    resources.grid.beginFill(0xb42ddf);
                     break;
                 case TILE_TELEPORT_EXIT:
-                    sprites.grid.beginFill(0xdf2db1);
+                    resources.grid.beginFill(0xdf2db1);
                     break;
                 case TILE_NEUTRAL:
                 default:
                     sprites.grid.beginFill(0xBBBBBB);
             }
-            sprites.grid.drawRect(x * xGridSize, y * yGridSize, xGridSize, yGridSize);
-            sprites.grid.endFill();
+            resources.grid.drawRect(x * xGridSize, y * yGridSize, xGridSize, yGridSize);
+            resources.grid.endFill();
         }
     }
     // Render the player:
+    // TODO change player size dynamically?? Also center him inside the grid!
     const playerPosition = state.getPlayerPosition();
     const playerX = playerPosition.x * xGridSize;
     const playerY = playerPosition.y * yGridSize;
-    sprites.player1.x = playerX;
-    sprites.player1.y = playerY;
+    resources.player1.x = playerX;
+    resources.player1.y = playerY;
 
     // TODO instead of this, add a arrow to the sprite and rotate it!
-    sprites.player1Cone.clear();
-    sprites.player1Cone.beginFill(0xfa1122, .7);
+    resources.player1Cone.clear();
+    resources.player1Cone.beginFill(0xfa1122, .7);
     const size = 20;
-    sprites.player1Cone.moveTo(0, 0);
-    sprites.player1Cone.lineTo(0, size);
-    sprites.player1Cone.lineTo(size, size);
-    sprites.player1Cone.lineTo(0, 0);
-    sprites.player1Cone.pivot = new pixi.Point(size / 2, size / 2);
-    sprites.player1Cone.rotation = (playerPosition.angle + 135) * 0.0174533;
-    sprites.player1Cone.x = playerX + (xGridSize / 2);
-    sprites.player1Cone.y = playerY + (yGridSize / 2);
-    sprites.player1Cone.endFill();
+    resources.player1Cone.moveTo(0, 0);
+    resources.player1Cone.lineTo(0, size);
+    resources.player1Cone.lineTo(size, size);
+    resources.player1Cone.lineTo(0, 0);
+    resources.player1Cone.pivot = new pixi.Point(size / 2, size / 2);
+    resources.player1Cone.rotation = (playerPosition.angle + 135) * 0.0174533;
+    resources.player1Cone.x = playerX + (xGridSize / 2);
+    resources.player1Cone.y = playerY + (yGridSize / 2);
+    resources.player1Cone.endFill();
 
-    // TODO change player size dynamically?? Also center him inside the grid!
+    // Play sounds?
+    if (state.isGameOver && state.isGameWon) {
+        resources.win.volume = 0.05;
+        resources.win.play();
+    } else if ((state.isGameOver || !state.isGameRunning) && !state.isGameWon) {
+        resources.fail.volume = 0.5;
+        resources.fail.play();
+    }
 }

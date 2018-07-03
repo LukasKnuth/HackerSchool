@@ -4,10 +4,11 @@
 
 <script lang="ts">
     import * as pixi from "pixi.js";
+    import "pixi-sound";
     import {Component, Vue, Prop, Watch} from "vue-property-decorator";
     import * as game from "./Game";
     import {Level} from "../../content/Lesson";
-    import {GameLoop, GameSprites} from "./Game";
+    import {GameLoop, GameResources} from "./Game";
     import {GameState} from "./GameState";
 
     @Component
@@ -18,7 +19,7 @@
 
         private engine?: pixi.Application;
         private gameLoop?: GameLoop;
-        private sprites?: GameSprites;
+        private resources?: GameResources;
 
         private mounted() {
             this.engine = new pixi.Application({
@@ -29,8 +30,8 @@
             this.engine.ticker.autoStart = false;
             this.engine.renderer.autoResize = true; // TODO stretch to full available width of container
 
-            game.initializeRenderer(this.engine).then((sprites: GameSprites) => {
-                this.sprites = sprites;
+            game.initializeRenderer(this.engine).then((resources: GameResources) => {
+                this.resources = resources;
                 this.renderPreview();
             }).catch((err) => {
                 console.error(err); // TODO show error in UI!
@@ -56,11 +57,11 @@
             }
         }
         private frameRenderer(state: GameState) {
-            const [engine, sprites] = [this.engine, this.sprites];
-            if (engine && sprites) {
-                game.renderFrame(engine, sprites, state);
+            const [engine, resources] = [this.engine, this.resources];
+            if (engine && resources) {
+                game.renderFrame(engine, resources, state);
             } else {
-                console.log("Couldn't render frame, something is not initialized", engine, sprites);
+                console.log("Couldn't render frame, something is not initialized", engine, resources);
             }
         }
 
