@@ -21,6 +21,7 @@ export interface GameLoop {
     ticker: (delta: number) => void;
     onBlockExecuting?: (blockId: string) => void;
     onGameTerminated?: () => void;
+    onGameOver?: (victory: boolean, message: string) => void;
     onDebugLog?: (log: string, blockId: string) => void;
 }
 export type GameRenderer = (state: GameState) => void;
@@ -111,16 +112,22 @@ export function startGameLoop(app: PIXI.Application, level: Level, userCode: str
     let gameTime = 0;
     const loop = (delta: number) => {
         gameTime += app.ticker.elapsedMS * delta;
-        if (gameTime >= LOGIC_TICK_THRESHOLD && hasMoreCode) {
+        if (gameTime >= LOGIC_TICK_THRESHOLD && hasMoreCode && !gameState.isGameOver) {
             gameTime = 0;
             do {
                 hasMoreCode = interpreter.step();
-                if (!hasMoreCode && gameLoop.onGameTerminated) {
-                    gameLoop.onGameTerminated();
-                }
             } while (!blockExecutionPause && hasMoreCode);
             blockExecutionPause = false;
             level.tick(gameState);
+            // Check game termination
+            if (gameState.isGameOver || !hasMoreCode) {
+                if (gameLoop.onGameTerminated) {
+                    gameLoop.onGameTerminated();
+                }
+                if (gameState.isGameOver && gameLoop.onGameOver) {
+                    gameLoop.onGameOver(gameState.isGameWon, gameState.gameOverReason);
+                }
+            }
         }
         render(gameState);
     };
