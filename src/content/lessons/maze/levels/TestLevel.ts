@@ -26,7 +26,7 @@ export default class TestLevel implements Level {
         [2, 0, 0, 0, 2, 2, 0, 4, 0, 2],
         [2, 0, 0, 0, 0, 0, 0, 0, 0, 2],
         [2, 0, 0, 0, 3, 0, 2, 2, 2, 2],
-        [2, 0, 0, 0, 0, 0, 0, 4, 0, 2],
+        [2, 0, 0, 0, 0, 0, 0, 3, 0, 2],
         [2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
     ];
 
@@ -64,7 +64,7 @@ export default class TestLevel implements Level {
         switch (standingOn) {
             case TILE_PIT:
             case TILE_TRAP:
-                gameState.setGameOver();
+                gameState.setGameOver(true, false, "You ran into a trap...");
                 break;
             case TILE_COLLECTIBLE:
                 // This reveals the Teleporter!
@@ -75,6 +75,8 @@ export default class TestLevel implements Level {
                 // Teleport player
                 gameState.setPlayerPosition(new PlayerPosition(7, 2, player.angle));
                 break;
+            case TILE_GOAL:
+                gameState.setGameOver(true, true, "Goal was reached");
         }
     }
 

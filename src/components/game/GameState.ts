@@ -89,8 +89,9 @@ export class PlayerPosition extends GridPosition {
 
 export class GameState {
 
-    private isGameOver: boolean = false;
-    private isGameWon: boolean = false;
+    private _gameOverReason: string = "";
+    private _isGameOver: boolean = false;
+    private _isGameWon: boolean = false;
     private playerPosition: PlayerPosition[] = [
         new PlayerPosition(0, 0, 0), // player
         new PlayerPosition(-100, -100, 0) // enemy (placed out-of-bounds to avoid sensoring him by accident!)
@@ -222,9 +223,20 @@ export class GameState {
         return this.levelState[0].length;
     }
 
-    public setGameOver(isOver = true, isWin = false) {
-        this.isGameOver = isOver;
-        this.isGameWon = isWin;
+    public setGameOver(isOver = true, isWin = false, reason = "") {
+        this._isGameOver = isOver;
+        this._isGameWon = isWin;
+        this._gameOverReason = reason;
+    }
+
+    public get isGameOver() {
+        return this._isGameOver;
+    }
+    public get isGameWon() {
+        return this._isGameWon;
+    }
+    public get gameOverReason() {
+        return this._gameOverReason;
     }
 
 }
