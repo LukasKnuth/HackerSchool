@@ -122,6 +122,7 @@ export function startGameLoop(app: PIXI.Application, level: Level, userCode: str
             // Check game termination
             if (gameState.isGameOver || !hasMoreCode) {
                 if (gameLoop.onGameTerminated) {
+                    gameState.isGameRunning = false;
                     gameLoop.onGameTerminated();
                 }
                 if (gameState.isGameOver && gameLoop.onGameOver) {
