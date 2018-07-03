@@ -1,11 +1,11 @@
 import * as pixi from "pixi.js";
 import {
     GameState,
-    GridPosition,
-    SQUARE_COLLECTIBLE, SQUARE_GOAL,
-    SQUARE_NEUTRAL,
-    SQUARE_PIT, SQUARE_TELEPORT_ENTRY, SQUARE_TELEPORT_EXIT,
-    SQUARE_BLUE, SQUARE_GREEN
+    GridPosition, TILE_BLUE,
+    TILE_COLLECTIBLE, TILE_GREEN,
+    TILE_NEUTRAL,
+    TILE_PIT,
+
 } from '@/components/game/GameState';
 import {Level} from '@/content/Lesson';
 import Interpreter, {API, InterpreterScope} from 'js-interpreter';
@@ -21,6 +21,7 @@ export interface GameLoop {
     ticker: (delta: number) => void;
     onBlockExecuting?: (blockId: string) => void;
     onGameTerminated?: () => void;
+    onDebugLog?: (log: string, blockId: string) => void;
 }
 export type GameRenderer = (state: GameState) => void;
 
@@ -86,9 +87,19 @@ export function startGameLoop(app: PIXI.Application, level: Level, userCode: str
         }
         blockExecutionPause = true;
     };
+    const onLogAppend = (log: string, blockId: string) => {
+        if (gameLoop.onDebugLog) {
+            gameLoop.onDebugLog(log, blockId);
+        }
+    };
     const apiWrapper: API = (interp: Interpreter, scope: InterpreterScope) => {
         const blockExecWrapper = (id: any) => onBlockExecuting(id ? id.toString() : '');
         interp.setProperty(scope, BLOCK_EXECUTING, interp.createNativeFunction(blockExecWrapper));
+        const logWrapper = (variable: string, log: string, blockId: string) => {
+            const line = `${variable.toString()} is: ${log.toString()}`;
+            onLogAppend(line, blockId ? blockId.toString() : '');
+        };
+        interp.setProperty(scope, "debugLog", interp.createNativeFunction(logWrapper));
         // Add the levels own API
         userCodeApi(interp, scope);
     };
@@ -154,32 +165,23 @@ export function renderFrame(app: PIXI.Application, sprites: GameSprites, state: 
         pos.x = x;
         for (let y = 0; y < state.mazeHeight; y++) {
             pos.y = y;
-            const square = state.getGridSquare(pos);
+            const square = state.getGridTile(pos);
             sprites.grid.lineStyle(1, 0xacacac, .7);
             // Render the square:
             switch (square) {
-                case SQUARE_PIT:
-                    sprites.grid.beginFill(0x000000);
+                case TILE_PIT:
+                    sprites.grid.beginFill(0xb49147);
                     break;
-                case SQUARE_BLUE:
-                    sprites.grid.beginFill(0x4f4fff);
+                case TILE_BLUE:
+                    sprites.grid.beginFill(0xd84f32);
                     break;
-                case SQUARE_GREEN:
+                case TILE_GREEN:
                     sprites.grid.beginFill(0x4fff4f);
                     break;
-                case SQUARE_COLLECTIBLE:
+                case TILE_COLLECTIBLE:
                     sprites.grid.beginFill(0xdfdd2d);
                     break;
-                case SQUARE_TELEPORT_ENTRY:
-                    sprites.grid.beginFill(0xb42ddf);
-                    break;
-                case SQUARE_TELEPORT_EXIT:
-                    sprites.grid.beginFill(0xdf2db1);
-                    break;
-                case SQUARE_GOAL:
-                    sprites.grid.beginFill(0x6ab446);
-                    break;
-                case SQUARE_NEUTRAL:
+                case TILE_NEUTRAL:
                 default:
                     sprites.grid.beginFill(0xBBBBBB);
             }

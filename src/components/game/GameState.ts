@@ -1,21 +1,23 @@
 const MAP_INVALID_SQUARE = -1;
 
 // Map squares:
-export const SQUARE_NEUTRAL = 1;
-export const SQUARE_PIT = 2;
-export const SQUARE_BLUE = 3;
-export const SQUARE_GREEN = 4;
-export const SQUARE_COLLECTIBLE = 9;
-export const SQUARE_TELEPORT_ENTRY = 5;
-export const SQUARE_TELEPORT_EXIT = 6;
-export const SQUARE_GOAL = 7;
+export const TILE_BLUE = 3;
+export const TILE_GREEN = 4;
+export const TILE_NEUTRAL = 1;
+export const TILE_PIT = 2;
+export const TILE_TRAP = 3;
+export const TILE_COLLECTIBLE = 9;
+
+// This isn't actually placeable, it's used as a fake-return to check around the player.
+export const TILE_ENEMY = -1;
+export const TILE_ENEMY_COLOR = 8; // TODO add this for MP!
 
 //Level square shorthands
-export const _ = SQUARE_NEUTRAL;
-export const X = SQUARE_PIT;
-export const T = SQUARE_COLLECTIBLE;
-export const B = SQUARE_BLUE;
-export const G = SQUARE_GREEN;
+export const _ = TILE_NEUTRAL;
+export const X = TILE_PIT;
+export const T = TILE_COLLECTIBLE;
+export const B = TILE_BLUE;
+export const G = TILE_GREEN;
 
 export const PLAYER_ORIENTATION_UP = 0;
 export const PLAYER_ORIENTATION_RIGHT = 90;
@@ -46,7 +48,9 @@ export class GridPosition {
     }
 }
 
-export type GridState = number[][];
+export type GridTile = number;
+export type ExtendedGridTile = GridTile;
+export type GridState = GridTile[][];
 
 export class PlayerPosition extends GridPosition {
     private currentAngle: number = 0;
@@ -85,7 +89,10 @@ export class GameState {
 
     private isGameOver: boolean = false;
     private isGameWon: boolean = false;
-    private playerPosition: PlayerPosition[] = [new PlayerPosition(0, 0, 0), new PlayerPosition(0, 0, 0)];
+    private playerPosition: PlayerPosition[] = [
+        new PlayerPosition(0, 0, 0), // player
+        new PlayerPosition(-100, -100, 0) // enemy (placed out-of-bounds to avoid sensoring him by accident!)
+    ];
     private levelState: GridState;
 
     constructor(mazeWidth: number, mazeHeight: number) {
@@ -115,24 +122,60 @@ export class GameState {
         }
     }
 
-    public walkPlayer(amount: number, playerIndex = 0): void {
-        const position = this.getPlayerPosition(playerIndex);
-        if (position.angle >= 45 && position.angle < 135) {
-            position.x += amount;
-        } else if (position.angle >= 135 && position.angle < 225) {
-            position.y += amount;
-        } else if (position.angle >= 225 && position.angle < 315) {
-            position.x -= amount;
-        } else if (position.angle >= 315 || position.angle < 45) {
-            position.y -= amount;
-        }
-        this.setPlayerPosition(position, playerIndex);
-    }
-
     public turnPlayer(byDegrees: number, playerIndex = 0): void {
         const position = this.getPlayerPosition(playerIndex);
         position.angle = ((byDegrees + ANGLE_MAX) + position.angle) % ANGLE_MAX;
         this.setPlayerPosition(position, playerIndex);
+    }
+
+    private getNextPosition(playerIndex: number, steps = 1) {
+        const position = this.getPlayerPosition(playerIndex);
+        if (position.angle >= 45 && position.angle < 135) {
+            position.x += steps;
+        } else if (position.angle >= 135 && position.angle < 225) {
+            position.y += steps;
+        } else if (position.angle >= 225 && position.angle < 315) {
+            position.x -= steps;
+        } else if (position.angle >= 315 || position.angle < 45) {
+            position.y -= steps;
+        }
+        return position;
+    }
+
+    public walkPlayer(amount: number, playerIndex = 0): void {
+        const newPosition = this.getNextPosition(playerIndex, amount);
+        this.setPlayerPosition(newPosition, playerIndex);
+    }
+
+    public getNextTile(playerIndex = 0): GridTile {
+        const nextPosition = this.getNextPosition(playerIndex);
+        return this.getGridTile(nextPosition);
+    }
+
+    public sensorNext(playerIndex = 0): ExtendedGridTile {
+        const nextPosition = this.getNextPosition(playerIndex);
+        const closeEnemy = this.playerPosition.find((enemyPosition: PlayerPosition) => {
+            return nextPosition.equals(enemyPosition);
+        });
+        if (closeEnemy) {
+            return TILE_ENEMY;
+        } else {
+            return this.getNextTile(playerIndex);
+        }
+    }
+
+    public sensorAround(playerIndex = 0): ExtendedGridTile[] {
+        const position = this.getPlayerPosition(playerIndex);
+        const searchPosition = new GridPosition(0, 0);
+        const results = new Set<number>();
+        for (let x = position.x - 2; x <= position.x + 2; x++) {
+            for (let y = position.y - 2; y <= position.y + 2; y++) {
+                searchPosition.x = x;
+                searchPosition.y = y;
+                results.add(this.getGridTile(searchPosition));
+            }
+        }
+        return Array.from(results);
     }
 
     /**
@@ -144,7 +187,7 @@ export class GameState {
         this.levelState = Array.from(newState, (arr) => Array.from(arr));
     }
 
-    public setGridSquare(position: GridPosition, content: number) {
+    public setGridTile(position: GridPosition, content: GridTile) {
         if (this.levelState.length > position.y && this.levelState[position.y].length > position.x) {
             this.levelState[position.y][position.x] = content;
         } else {
@@ -155,7 +198,7 @@ export class GameState {
         }
     }
 
-    public getGridSquare(position: GridPosition) {
+    public getGridTile(position: GridPosition): GridTile {
         if (this.levelState.length > position.y && this.levelState[position.y].length > position.x) {
             return this.levelState[position.y][position.x];
         } else {
@@ -163,10 +206,10 @@ export class GameState {
         }
     }
 
-    public swapGridSquares(positionA: GridPosition, positionB: GridPosition) {
-        const temp = this.getGridSquare(positionA);
-        this.setGridSquare(positionA, this.getGridSquare(positionB));
-        this.setGridSquare(positionB, temp);
+    public swapGridTiles(positionA: GridPosition, positionB: GridPosition) {
+        const temp = this.getGridTile(positionA);
+        this.setGridTile(positionA, this.getGridTile(positionB));
+        this.setGridTile(positionB, temp);
     }
 
     public get mazeWidth(): number {

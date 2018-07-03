@@ -1,12 +1,13 @@
 import {BlockToolbox, Level} from '@/content/Lesson';
 import {
     GameState,
-    GridPosition, GridState, PlayerPosition,
-    SQUARE_COLLECTIBLE, SQUARE_GOAL, SQUARE_NEUTRAL,
-    SQUARE_PIT,
-    SQUARE_TELEPORT_ENTRY, SQUARE_BLUE
+    GridPosition, GridState, GridTile, PlayerPosition,
+    TILE_COLLECTIBLE, TILE_ENEMY, TILE_ENEMY_COLOR, TILE_GOAL, TILE_NEUTRAL,
+    TILE_PIT,
+    TILE_TELEPORT_ENTRY, TILE_TRAP
 } from '@/components/game/GameState';
 import {API, default as Interpreter, InterpreterScope} from 'js-interpreter';
+import {attachGameBlockAPI} from '@/content/blocks/API';
 
 export default class TestLevel implements Level {
     public readonly name = "Level 1";
@@ -14,6 +15,7 @@ export default class TestLevel implements Level {
     public maxBlocks = Infinity;
     public allowMethods = true;
     public allowVariables = true;
+    public showDebugLog = true;
 
     private initialMazeLayout: GridState = [
         [2, 2, 2, 2, 2, 2, 2, 0, 0, 7],
@@ -22,9 +24,9 @@ export default class TestLevel implements Level {
         [2, 0, 3, 0, 0, 0, 2, 2, 2, 2],
         [2, 0, 0, 0, 2, 2, 0, 0, 0, 2],
         [2, 0, 0, 0, 2, 2, 0, 4, 0, 2],
-        [2, 0, 3, 0, 0, 0, 0, 0, 0, 2],
-        [2, 0, 0, 0, 3, 0, 2, 2, 2, 2],
         [2, 0, 0, 0, 0, 0, 0, 0, 0, 2],
+        [2, 0, 0, 0, 3, 0, 2, 2, 2, 2],
+        [2, 0, 0, 0, 0, 0, 0, 4, 0, 2],
         [2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
     ];
 
@@ -37,27 +39,17 @@ export default class TestLevel implements Level {
 
     public getBlocks(): BlockToolbox {
         return {
-            Control: ["controls_if", "controls_repeat_ext", "controls_whileUntil", "string_length"],
-            Game: ["forward", "backward", 'turn_left', 'turn_right'],
+            Control: ["controls_if", "controls_repeat_ext", "controls_whileUntil"],
+            Game: ["forward", "backward", 'turn_left', 'turn_right', 'sensor_camera', 'sensor_radar'],
             Logic: ["logic_compare", "logic_operation", "logic_negate", "math_arithmetic", "math_modulo"],
-            Values: ["math_number", "text", "logic_boolean", "text_print", "math_random_int"]
+            Values: ["math_number", "text", "logic_boolean", "math_random_int"],
+            Debug: ["debug_log"]
         };
     }
 
     public exportAPI(gameState: GameState): API {
         return (interpreter: Interpreter, scope: InterpreterScope) => {
-            const moveWrapper = (amount: number) => {
-                gameState.walkPlayer(amount);
-            };
-            interpreter.setProperty(scope, "move", interpreter.createNativeFunction(moveWrapper));
-            const turnWrapper = (degrees: number) => {
-                gameState.turnPlayer(degrees);
-            };
-            interpreter.setProperty(scope, "turn", interpreter.createNativeFunction(turnWrapper));
-            const alertWrapper = (text: string) => {
-                alert(text);
-            };
-            interpreter.setProperty(scope, "alert", interpreter.createNativeFunction(alertWrapper));
+            attachGameBlockAPI(interpreter, scope, gameState);
         };
     }
 
@@ -68,22 +60,22 @@ export default class TestLevel implements Level {
 
     public tick(gameState: GameState) {
         const player = gameState.getPlayerPosition();
-        const standingOn = gameState.getGridSquare(player);
+        const standingOn = gameState.getGridTile(player);
         switch (standingOn) {
-            case SQUARE_PIT:
-            case SQUARE_BLUE:
+            case TILE_PIT:
+            case TILE_TRAP:
                 gameState.setGameOver();
                 break;
-            case SQUARE_COLLECTIBLE:
+            case TILE_COLLECTIBLE:
                 // This reveals the Teleporter!
-                gameState.setGridSquare(new GridPosition(2, 2), SQUARE_TELEPORT_ENTRY);
-                gameState.setGridSquare(player, SQUARE_NEUTRAL);
+                gameState.setGridTile(new GridPosition(2, 2), TILE_TELEPORT_ENTRY);
+                gameState.setGridTile(player, TILE_NEUTRAL);
                 break;
-            case SQUARE_TELEPORT_ENTRY:
+            case TILE_TELEPORT_ENTRY:
                 // Teleport player
                 gameState.setPlayerPosition(new PlayerPosition(7, 2, player.angle));
                 break;
-            case SQUARE_GOAL:
+            case TILE_GOAL:
                 gameState.setGameOver(true, true);
         }
     }
