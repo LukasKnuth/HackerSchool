@@ -173,10 +173,10 @@ export function renderFrame(app: PIXI.Application, sprites: GameSprites, state: 
                     sprites.grid.beginFill(0x020202);
                     break;
                 case TILE_BLUE:
-                    sprites.grid.beginFill(0xd84f32);
+                    sprites.grid.beginFill(0x2222CC);
                     break;
                 case TILE_GREEN:
-                    sprites.grid.beginFill(0x4fff4f);
+                    sprites.grid.beginFill(0x22CC22);
                     break;
                 case TILE_COLLECTIBLE:
                     sprites.grid.beginFill(0xdfdd2d);
