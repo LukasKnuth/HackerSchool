@@ -59,7 +59,7 @@
     import BlocklyEditor from "../components/editor/index.vue";
     import Game from "../components/game/index.vue";
     import {Level} from "../content/Lesson";
-    import MazeLevel1 from "../content/lessons/maze/levels/Level1";
+    import TestLevel from "../content/lessons/maze/levels/TestLevel";
 
     interface DebugLogEntry {
         line: string;
@@ -72,7 +72,7 @@
     })
     export default class Editor extends Vue {
 
-        @Prop({default: () => new MazeLevel1()})
+        @Prop({default: () => new TestLevel()})
         public level?: Level;
 
         public instructionCounter: number = 0;

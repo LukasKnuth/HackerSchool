@@ -1,11 +1,11 @@
 import * as pixi from "pixi.js";
 import {
     GameState,
-    GridPosition,
-    TILE_COLLECTIBLE, TILE_GOAL,
+    GridPosition, TILE_BLUE,
+    TILE_COLLECTIBLE, TILE_GREEN,
     TILE_NEUTRAL,
     TILE_PIT, TILE_TELEPORT_ENTRY, TILE_TELEPORT_EXIT,
-    TILE_TRAP
+
 } from '@/components/game/GameState';
 import {Level} from '@/content/Lesson';
 import Interpreter, {API, InterpreterScope} from 'js-interpreter';
@@ -170,10 +170,13 @@ export function renderFrame(app: PIXI.Application, sprites: GameSprites, state: 
             // Render the square:
             switch (square) {
                 case TILE_PIT:
-                    sprites.grid.beginFill(0xb49147);
+                    sprites.grid.beginFill(0x020202);
                     break;
-                case TILE_TRAP:
-                    sprites.grid.beginFill(0xd84f32);
+                case TILE_BLUE:
+                    sprites.grid.beginFill(0x2222CC);
+                    break;
+                case TILE_GREEN:
+                    sprites.grid.beginFill(0x22CC22);
                     break;
                 case TILE_COLLECTIBLE:
                     sprites.grid.beginFill(0xdfdd2d);
@@ -184,12 +187,9 @@ export function renderFrame(app: PIXI.Application, sprites: GameSprites, state: 
                 case TILE_TELEPORT_EXIT:
                     sprites.grid.beginFill(0xdf2db1);
                     break;
-                case TILE_GOAL:
-                    sprites.grid.beginFill(0x6ab446);
-                    break;
                 case TILE_NEUTRAL:
                 default:
-                    sprites.grid.beginFill(0x000);
+                    sprites.grid.beginFill(0xBBBBBB);
             }
             sprites.grid.drawRect(x * xGridSize, y * yGridSize, xGridSize, yGridSize);
             sprites.grid.endFill();

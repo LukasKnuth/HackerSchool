@@ -1,17 +1,30 @@
 const MAP_INVALID_SQUARE = -1;
 
 // Map squares:
+export const TILE_BLUE = 3;
+export const TILE_GREEN = 4;
 export const TILE_NEUTRAL = 1;
 export const TILE_PIT = 2;
 export const TILE_TRAP = 3;
-export const TILE_COLLECTIBLE = 4;
+export const TILE_COLLECTIBLE = 9;
 export const TILE_TELEPORT_ENTRY = 5;
 export const TILE_TELEPORT_EXIT = 6;
-export const TILE_GOAL = 7;
 
 // This isn't actually placeable, it's used as a fake-return to check around the player.
 export const TILE_ENEMY = -1;
 export const TILE_ENEMY_COLOR = 8; // TODO add this for MP!
+
+//Level square shorthands
+export const _ = TILE_NEUTRAL;
+export const X = TILE_PIT;
+export const T = TILE_COLLECTIBLE;
+export const B = TILE_BLUE;
+export const G = TILE_GREEN;
+
+export const PLAYER_ORIENTATION_UP = 0;
+export const PLAYER_ORIENTATION_RIGHT = 90;
+export const PLAYER_ORIENTATION_DOWN = 180;
+export const PLAYER_ORIENTATION_LEFT = 270;
 
 const ANGLE_MAX = 360;
 

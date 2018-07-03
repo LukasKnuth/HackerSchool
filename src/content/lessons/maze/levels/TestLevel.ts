@@ -2,14 +2,14 @@ import {BlockToolbox, Level} from '@/content/Lesson';
 import {
     GameState,
     GridPosition, GridState, GridTile, PlayerPosition,
-    TILE_COLLECTIBLE, TILE_ENEMY, TILE_ENEMY_COLOR, TILE_GOAL, TILE_NEUTRAL,
+    TILE_COLLECTIBLE, TILE_ENEMY, TILE_ENEMY_COLOR, TILE_NEUTRAL,
     TILE_PIT,
     TILE_TELEPORT_ENTRY, TILE_TRAP
 } from '@/components/game/GameState';
 import {API, default as Interpreter, InterpreterScope} from 'js-interpreter';
 import {attachGameBlockAPI} from '@/content/blocks/API';
 
-export default class MazeLevel1 implements Level {
+export default class TestLevel implements Level {
     public readonly name = "Level 1";
     public readonly description = "A test level about mazes!";
     public maxBlocks = Infinity;
@@ -75,8 +75,6 @@ export default class MazeLevel1 implements Level {
                 // Teleport player
                 gameState.setPlayerPosition(new PlayerPosition(7, 2, player.angle));
                 break;
-            case TILE_GOAL:
-                gameState.setGameOver(true, true);
         }
     }
 
