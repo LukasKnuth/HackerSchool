@@ -190,13 +190,13 @@ export function renderFrame(app: PIXI.Application, resources: GameResources, sta
             // Render the square:
             switch (square) {
                 case TILE_PIT:
-                    sprites.grid.beginFill(0x020202);
+                    resources.grid.beginFill(0x020202);
                     break;
                 case TILE_BLUE:
-                    sprites.grid.beginFill(0x2222CC);
+                    resources.grid.beginFill(0x2222CC);
                     break;
                 case TILE_GREEN:
-                    sprites.grid.beginFill(0x22CC22);
+                    resources.grid.beginFill(0x22CC22);
                     break;
                 case TILE_COLLECTIBLE:
                     resources.grid.beginFill(0xdfdd2d);
@@ -209,7 +209,7 @@ export function renderFrame(app: PIXI.Application, resources: GameResources, sta
                     break;
                 case TILE_NEUTRAL:
                 default:
-                    sprites.grid.beginFill(0xBBBBBB);
+                    resources.grid.beginFill(0xBBBBBB);
             }
             resources.grid.drawRect(x * xGridSize, y * yGridSize, xGridSize, yGridSize);
             resources.grid.endFill();

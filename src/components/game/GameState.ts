@@ -14,7 +14,7 @@ export const TILE_TELEPORT_EXIT = 6;
 export const TILE_ENEMY = -1;
 export const TILE_ENEMY_COLOR = 8; // TODO add this for MP!
 
-//Level square shorthands
+// Level square shorthands
 export const _ = TILE_NEUTRAL;
 export const X = TILE_PIT;
 export const T = TILE_COLLECTIBLE;
