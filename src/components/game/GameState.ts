@@ -7,6 +7,8 @@ export const TILE_NEUTRAL = 1;
 export const TILE_PIT = 2;
 export const TILE_TRAP = 3;
 export const TILE_COLLECTIBLE = 9;
+export const TILE_TELEPORT_ENTRY = 5;
+export const TILE_TELEPORT_EXIT = 6;
 
 // This isn't actually placeable, it's used as a fake-return to check around the player.
 export const TILE_ENEMY = -1;

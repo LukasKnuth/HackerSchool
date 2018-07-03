@@ -4,7 +4,7 @@ import {
     GridPosition, TILE_BLUE,
     TILE_COLLECTIBLE, TILE_GREEN,
     TILE_NEUTRAL,
-    TILE_PIT,
+    TILE_PIT, TILE_TELEPORT_ENTRY, TILE_TELEPORT_EXIT,
 
 } from '@/components/game/GameState';
 import {Level} from '@/content/Lesson';
@@ -180,6 +180,12 @@ export function renderFrame(app: PIXI.Application, sprites: GameSprites, state: 
                     break;
                 case TILE_COLLECTIBLE:
                     sprites.grid.beginFill(0xdfdd2d);
+                    break;
+                case TILE_TELEPORT_ENTRY:
+                    sprites.grid.beginFill(0xb42ddf);
+                    break;
+                case TILE_TELEPORT_EXIT:
+                    sprites.grid.beginFill(0xdf2db1);
                     break;
                 case TILE_NEUTRAL:
                 default:
