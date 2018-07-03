@@ -8,9 +8,14 @@
                 <game ref="game" :level="level"
                       @block-executing="highlightBlock"
                       @debug-log-append="debugLogAppend"
+                      @game-over="onGameOver"
                       :running.sync="gameIsRunning"
                 />
                 <b-container>
+                    <b-row class="gameover-row" v-if="gameOverReason">
+                        <b-col cols="4">Game Over</b-col>
+                        <b-col>{{gameOverReason}}</b-col>
+                    </b-row>
                     <b-row class="stat-row">
                         <b-col cols="5">Instructions</b-col>
                         <b-col>{{instructionCounter}}</b-col>
@@ -51,6 +56,9 @@
                 ></b-table>
             </div>
         </div>
+        <b-modal ref="gameOverModal" title="Game Over">
+            <p class="my-4">{{gameOverReason}}</p>
+        </b-modal>
     </b-container>
 </template>
 
@@ -80,6 +88,7 @@
         public blockCount: number = 0;
         public debugLog: DebugLogEntry[] = [];
         public showDebugLog: boolean = false;
+        public gameOverReason: string = "";
 
         get debugLogIcon() {
             return this.showDebugLog ? "angle-down" : "angle-up";
@@ -100,6 +109,7 @@
                 (this.$refs.game as any).stopGame();
             } else {
                 this.debugLog = [];
+                this.gameOverReason = "";
                 this.instructionCounter = 0;
                 const code = (this.$refs.editor as any).compile();
                 console.log(`-------- ${new Date()}: Newly generated code ------\n`, code);
@@ -107,6 +117,7 @@
             }
         }
 
+        // ----- GAME EVENTS -------
         public highlightBlock(blockId: string) {
             this.instructionCounter++;
             (this.$refs.editor as any).highlightBlock(blockId);
@@ -114,6 +125,14 @@
         public debugLogAppend(log: string, blockId: string) {
             this.debugLog.push({line: log, blockId, instruction: this.instructionCounter});
         }
+        public onGameOver(victory: boolean, reason: string) {
+            this.gameOverReason = reason;
+            if (victory) {
+                (this.$refs.gameOverModal as any).show();
+            }
+        }
+
+        // ----- DEBUG LOG EVENTS ---
         public onLogHover(item: DebugLogEntry) {
             (this.$refs.editor as any).highlightBlock(item.blockId);
         }
@@ -133,6 +152,9 @@
     }
     .control-row {
         margin-top: 20px;
+    }
+    .gameover-row {
+        color: red;
     }
     .overlay {
         padding: 0 20px;
