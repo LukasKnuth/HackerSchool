@@ -170,7 +170,7 @@ export function renderFrame(app: PIXI.Application, sprites: GameSprites, state: 
             // Render the square:
             switch (square) {
                 case TILE_PIT:
-                    sprites.grid.beginFill(0xb49147);
+                    sprites.grid.beginFill(0x020202);
                     break;
                 case TILE_BLUE:
                     sprites.grid.beginFill(0xd84f32);
