@@ -13,11 +13,11 @@ export const ACTION_SELECT_LESSON = "selectLesson";
 export const ACTION_SELECT_LEVEL = "selectLevel";
 export const ACTION_SET_LEVEL_PROGRESS = "setLevelProgress";
 
-interface LevelProgress {
+export interface LevelProgress {
     isFinished: boolean;
     // TODO extend this to hold workspace-xml, etz.
 }
-interface LessonProgress {
+export interface LessonProgress {
     levelProgress: {
         [index: number]: LevelProgress
     }
@@ -30,12 +30,18 @@ interface CourseProgressState {
     }
 }
 type Context = ActionContext<CourseProgressState, RootState>;
-export type LessonListEntry = {
+export interface LessonListEntry {
     id: string,
     lesson: Lesson,
     hasProgress: boolean,
     isFinished: boolean
-};
+}
+export interface LevelListEntry {
+    nr: number,
+    level: Level,
+    hasProgress: boolean,
+    isFinished: boolean
+}
 
 interface LevelProgressPayload {
     lessonId: string,
@@ -143,12 +149,41 @@ const CourseProgressModule: Module<CourseProgressState, RootState> = {
                 return undefined;
             }
         },
+        currentLessonProgress: (state: CourseProgressState): LessonProgress|undefined => {
+            if (state.currentLesson !== undefined) {
+                return getLessonProgress(state, state.currentLesson);
+            }
+        },
+        levels: (state: CourseProgressState, getters: any): LevelListEntry[] => {
+            const lesson: Lesson = getters.currentLesson;
+            const lessonId = state.currentLesson;
+            if (lesson && lessonId) {
+                return lesson.getLevels().map((level: Level, index: number) => {
+                    const progress = getLevelProgress(state, lessonId, index);
+                    if (progress) {
+                        return {nr: index, level, hasProgress: true, isFinished: progress.isFinished};
+                    } else {
+                        return {nr: index, level, hasProgress: false, isFinished: false};
+                    }
+                });
+            } else {
+                return [];
+            }
+        },
         currentLevel: (state: CourseProgressState): Level|undefined => {
             if (state.currentLesson !== undefined && state.currentLevel !== undefined) {
                 return AllLessons[state.currentLesson].getLevels()[state.currentLevel];
             } else {
                 return undefined;
             }
+        },
+        currentLevelProgress: (state: CourseProgressState): LevelProgress|undefined => {
+            if (state.currentLesson !== undefined && state.currentLevel !== undefined) {
+                return getLevelProgress(state, state.currentLesson, state.currentLevel);
+            }
+        },
+        hasCurrentLevel: (state: CourseProgressState, getters: any): boolean => {
+            return getters.currentLevel !== undefined;
         }
     }
 };
