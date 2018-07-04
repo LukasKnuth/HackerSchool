@@ -56,8 +56,10 @@
                 ></b-table>
             </div>
         </div>
-        <b-modal ref="gameOverModal" title="Game Over">
-            <p class="my-4">{{gameOverReason}}</p>
+        <b-modal ref="gameOverModal"
+                 title="Victory!" ok-title="Next Level" cancel-title="Stay here"
+                 @ok="onNextLevel">
+            <p>{{gameOverReason}}</p>
         </b-modal>
     </b-container>
 </template>
@@ -130,6 +132,9 @@
             if (victory) {
                 (this.$refs.gameOverModal as any).show();
             }
+        }
+        public onNextLevel() {
+            // TODO navigate to next level
         }
 
         // ----- DEBUG LOG EVENTS ---
