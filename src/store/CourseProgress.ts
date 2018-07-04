@@ -87,6 +87,9 @@ const CourseProgressModule: Module<CourseProgressState, RootState> = {
             state.currentLevel = levelNr;
         },
         setLevelProgress: (state: CourseProgressState, payload: LevelProgressPayload) => {
+            if (!(payload.lessonId in state.lessonProgress)) {
+                state.lessonProgress[payload.lessonId] = {levelProgress: {}};
+            }
             state.lessonProgress[payload.lessonId].levelProgress[payload.levelNr] = payload.progress;
         }
     },
@@ -122,7 +125,7 @@ const CourseProgressModule: Module<CourseProgressState, RootState> = {
             }
         },
         [ACTION_SET_LEVEL_PROGRESS]: (context: Context, progress: LevelProgress) => {
-            if (context.state.currentLesson && context.state.currentLevel) {
+            if (context.state.currentLesson !== undefined && context.state.currentLevel !== undefined) {
                 context.commit("setLevelProgress", {
                     lessonId: context.state.currentLesson,
                     levelNr: context.state.currentLevel,
