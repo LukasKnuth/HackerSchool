@@ -28,7 +28,7 @@
             if (!this.$store.getters.hasCurrentLevel) {
                 // We have no level. Maybe we can set it from the route-props?
                 const lessonId = this.$route.params["lessonId"];
-                const levelId = this.$route.params["levelId"];
+                const levelId = parseInt(this.$route.params["levelId"]);
                 this.$store.dispatch(ACTION_SELECT_LESSON, lessonId);
                 this.$store.dispatch(ACTION_SELECT_LEVEL, levelId);
             }
