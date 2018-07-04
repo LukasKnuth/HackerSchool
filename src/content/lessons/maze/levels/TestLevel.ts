@@ -2,7 +2,7 @@ import {BlockToolbox, Level} from '@/content/Lesson';
 import {
     GameState,
     GridPosition, GridState, GridTile, PlayerPosition,
-    TILE_COLLECTIBLE, TILE_ENEMY, TILE_ENEMY_COLOR, TILE_NEUTRAL,
+    TILE_COLLECTIBLE, TILE_ENEMY, TILE_ENEMY_COLOR, TILE_GREEN, TILE_NEUTRAL,
     TILE_PIT,
     TILE_TELEPORT_ENTRY, TILE_TRAP
 } from '@/components/game/GameState';
@@ -26,7 +26,7 @@ export default class TestLevel implements Level {
         [2, 0, 0, 0, 2, 2, 0, 4, 0, 2],
         [2, 0, 0, 0, 0, 0, 0, 0, 0, 2],
         [2, 0, 0, 0, 3, 0, 2, 2, 2, 2],
-        [2, 0, 0, 0, 0, 0, 0, 3, 0, 2],
+        [2, 0, 0, 0, 0, 0, 0, 4, 0, 2],
         [2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
     ];
 
@@ -75,7 +75,7 @@ export default class TestLevel implements Level {
                 // Teleport player
                 gameState.setPlayerPosition(new PlayerPosition(7, 2, player.angle));
                 break;
-            case TILE_GOAL:
+            case TILE_GREEN:
                 gameState.setGameOver(true, true, "Goal was reached");
         }
     }
