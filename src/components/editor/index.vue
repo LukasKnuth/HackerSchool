@@ -1,8 +1,8 @@
 <template>
     <div>
         <b-nav>
-            <b-nav-item :disabled="!canUndo" @click="undo()">Undo</b-nav-item>
-            <b-nav-item :disabled="!canRedo" @click="redo()">Redo</b-nav-item>
+            <b-nav-item :disabled="!canUndo" @click="undo()">{{$t("editor.undoLabel")}}</b-nav-item>
+            <b-nav-item :disabled="!canRedo" @click="redo()">{{$t("editor.redoLabel")}}</b-nav-item>
         </b-nav>
         <div id="blocklyDiv"></div>
         <Toolbox>

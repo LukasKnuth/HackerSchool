@@ -1,9 +1,16 @@
 <template>
     <b-navbar toggleable="md" type="dark" variant="dark">
-        <b-navbar-brand href="#">HackerSchool</b-navbar-brand>
+        <b-navbar-brand to="/">HackerSchool</b-navbar-brand>
         <b-collapse is-nav id="nav_collapse">
             <b-navbar-nav>
-                <b-nav-item v-for="link in links" :key="link.path" @click="gotoRoute(link)">{{link.label}}</b-nav-item>
+                <b-nav-item v-for="link in leftLinks" :key="link.path" @click="gotoRoute(link)">
+                    {{$t(link.i18nKey)}}
+                </b-nav-item>
+            </b-navbar-nav>
+            <b-navbar-nav class="ml-auto">
+                <b-nav-item v-for="link in rightLinks" :key="link.path" @click="gotoRoute(link)">
+                    {{$t(link.i18nKey)}}
+                </b-nav-item>
             </b-navbar-nav>
         </b-collapse>
     </b-navbar>
@@ -13,18 +20,18 @@
     import {Component, Vue} from "vue-property-decorator";
 
     interface Link {
-        label: string;
+        i18nKey: string;
         path: string;
     }
 
     @Component
     export default class Navigation extends Vue {
 
-        public links: Link[] = [
-            {label: "Home", path: "/"},
-            {label: "Lessons", path: "/lessons"},
-            {label: "About", path: "/about"},
-            {label: "Editor", path: "/editor"}
+        public leftLinks: Link[] = [
+            {i18nKey: "navigation.lessonsLabel", path: "/lessons"}
+        ];
+        public rightLinks: Link[] = [
+            {i18nKey: "navigation.aboutLabel", path: "/about"}
         ];
 
         public gotoRoute(link: Link) {

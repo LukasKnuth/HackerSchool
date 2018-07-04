@@ -26,7 +26,7 @@
             return this.$store.getters.lessons;
         }
         getButtonText(entry: LessonListEntry) {
-            return entry.hasProgress ? "Continue" : "Start";
+            return entry.hasProgress ? this.$t("lessons.continueLessonLabel") : this.$t("lessons.startLessonLabel");
         }
         getButtonVariant(entry: LessonListEntry) {
             return entry.hasProgress ? "success" : "primary"

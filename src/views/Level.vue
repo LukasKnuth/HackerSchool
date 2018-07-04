@@ -1,9 +1,9 @@
 <template>
     <b-container fluid>
         <b-row align-h="center" id="course-nav">
-            <b-col cols="2"><span class="level-name">{{levelName}}</span></b-col>
+            <b-col cols="2"><h3 class="level-name">{{levelName}}</h3></b-col>
             <b-col cols="4">
-                <span></span>
+                <span class="level-label">{{$t("level.levelListLabel")}}</span>
                 <span v-for="l in levelList"
                       class="level-list-entry"
                       :class="{progress: !l.isFinished && l.hasProgress, finished: l.isFinished, selected: l.nr === selectedLevel}"
@@ -58,6 +58,11 @@
         margin-top: 20px;
         margin-bottom: 20px;
 
+        .level-label {
+            margin-right: 10px;
+            vertical-align: middle;
+            font-size: 1.1em;
+        }
         .level-list-entry {
             $radius: 20px;
             width: $radius;

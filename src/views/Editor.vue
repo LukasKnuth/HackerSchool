@@ -10,15 +10,15 @@
                 />
                 <b-container>
                     <b-row class="gameover-row" v-if="gameOverReason">
-                        <b-col cols="4">Game Over</b-col>
+                        <b-col cols="4">{{$t("game.stats.gameOverLabel")}}</b-col>
                         <b-col>{{gameOverReason}}</b-col>
                     </b-row>
                     <b-row class="stat-row">
-                        <b-col cols="5">Instructions</b-col>
+                        <b-col cols="5">{{$t("game.stats.instructionCounterLabel")}}</b-col>
                         <b-col>{{instructionCounter}}</b-col>
                     </b-row>
                     <b-row class="stat-row">
-                        <b-col cols="5">Blocks</b-col>
+                        <b-col cols="5">{{$t("game.stats.blocksCounterLabel")}}</b-col>
                         <b-col>{{blockCount}} / {{level.maxBlocks}}</b-col>
                     </b-row>
                     <b-row class="control-row" align-h="center">
@@ -27,7 +27,7 @@
                         </b-col>
                     </b-row>
                 </b-container>
-                <h3 class="header-spacing">Description</h3>
+                <h3 class="header-spacing">{{$t("game.level.descriptionHeadline")}}</h3>
                 <p>{{level.description}}</p>
             </b-col>
             <b-col cols="8" id="blocklyArea">
@@ -41,7 +41,7 @@
             <div class="preview">
                 <h3 class="peek" @click="showDebugLog = !showDebugLog">
                     <font-awesome-icon :icon="debugLogIcon" />
-                    <span class="title">Debug Log</span>
+                    <span class="title">{{$t("editor.debugLog.sliderLabel")}}</span>
                     <b-badge variant="primary">{{debugLog.length}}</b-badge>
                 </h3>
             </div>
@@ -54,7 +54,8 @@
             </div>
         </div>
         <b-modal ref="gameOverModal"
-                 title="Victory!" ok-title="Next Level" cancel-title="Stay here"
+                 :title="$t('game.modal.title')"
+                 :ok-title="$t('game.modal.okBtn')" :cancel-title="$t('game.modal.cancelBtn')"
                  @ok="onNextLevel">
             <p>{{gameOverReason}}</p>
         </b-modal>
@@ -94,14 +95,17 @@
             return this.showDebugLog ? "angle-down" : "angle-up";
         }
         get logTableFields() {
-            return [{key: "line", label: "Log Output"}, {key: "instruction", label: "At Instruction"}];
+            return [
+                {key: "line", label: this.$t("editor.debugLog.headerOutput")},
+                {key: "instruction", label: this.$t("editor.debugLog.headerInstruction")}
+            ];
         }
 
         get runButtonColor() {
             return this.gameIsRunning ? "danger" : "primary";
         }
         get runButtonText() {
-            return this.gameIsRunning ? "Stop Game" : "Run Game";
+            return this.gameIsRunning ? this.$t("game.stopBtnLabel") : this.$t("game.startBtnLabel");
         }
 
         public runButtonClick() {
