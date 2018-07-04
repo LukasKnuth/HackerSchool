@@ -102,13 +102,13 @@ const CourseProgressModule: Module<CourseProgressState, RootState> = {
             }
         },
         [ACTION_SELECT_LEVEL]: (context: Context, levelNr: number) => {
-            const lesson: Lesson|undefined = context.getters.currentLesson();
+            const lesson: Lesson|undefined = context.getters.currentLesson;
             if (lesson) {
-                if (lesson.getLevels().length < levelNr) {
+                if (levelNr < lesson.getLevels().length) {
                     context.commit('setLevel', levelNr);
                 } else {
                     console.warn(`Can't set level to ${levelNr}.`
-                        + `The current lesson (${lesson.name}) only has ${lesson.getLevels().length} levels!`
+                        + ` The current lesson (${lesson.name}) only has ${lesson.getLevels().length} levels!`
                     );
                 }
             } else {
