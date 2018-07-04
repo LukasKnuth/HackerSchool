@@ -41,6 +41,7 @@
     "no-console": false,
     "max-classes-per-file": false,
     "member-ordering": false,
+    "member-access": false,
     "ban-types": [true,
       ["Boolean", "Avoid using the `Boolean` type. Did you mean `boolean`?"],
       ["Number", "Avoid using the `Number` type. Did you mean `number`?"],
