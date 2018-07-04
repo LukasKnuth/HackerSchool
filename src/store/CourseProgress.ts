@@ -20,33 +20,33 @@ export interface LevelProgress {
 export interface LessonProgress {
     levelProgress: {
         [index: number]: LevelProgress
-    }
+    };
 }
 interface CourseProgressState {
-    currentLesson?: string,
-    currentLevel?: number,
+    currentLesson?: string;
+    currentLevel?: number;
     lessonProgress: {
         [index: string]: LessonProgress
-    }
+    };
 }
 type Context = ActionContext<CourseProgressState, RootState>;
 export interface LessonListEntry {
-    id: string,
-    lesson: Lesson,
-    hasProgress: boolean,
-    isFinished: boolean
+    id: string;
+    lesson: Lesson;
+    hasProgress: boolean;
+    isFinished: boolean;
 }
 export interface LevelListEntry {
-    nr: number,
-    level: Level,
-    hasProgress: boolean,
-    isFinished: boolean
+    nr: number;
+    level: Level;
+    hasProgress: boolean;
+    isFinished: boolean;
 }
 
 interface LevelProgressPayload {
-    lessonId: string,
-    levelNr: number,
-    progress: LevelProgress
+    lessonId: string;
+    levelNr: number;
+    progress: LevelProgress;
 }
 
 function getLessonProgress(state: CourseProgressState, lessonId: string): LessonProgress|undefined {
@@ -77,7 +77,7 @@ const CourseProgressModule: Module<CourseProgressState, RootState> = {
             currentLevel: undefined,
             currentLesson: undefined,
             lessonProgress: {}
-        }
+        };
     },
     mutations: { // These shouldn't be used directly, as they allow setting invalid state...
         setLesson: (state: CourseProgressState, lessonId: string) => {
