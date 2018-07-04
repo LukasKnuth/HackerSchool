@@ -15,6 +15,7 @@ export default class Lvl01_SimpleInstructions implements Level {
     public readonly mazeHeight = 15;
     public readonly mazeWidth = 15;
     public readonly name = "Level 1 - Anweisungen";
+    public showDebugLog = true;
 
     private initialMazeLayout: GridState = [
         [X, X, X, X, X, X, X, X, X, X, X, X, X, X, X],
@@ -36,11 +37,11 @@ export default class Lvl01_SimpleInstructions implements Level {
 
 
     exportAPI(gameState: GameState) {
-        return undefined;
+        return () => {};
     }
 
     getBlocks(): BlockToolbox {
-        return undefined;
+        return {};
     }
 
     initializeState(gameState: GameState): void {

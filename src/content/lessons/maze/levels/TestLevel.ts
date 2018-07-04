@@ -10,7 +10,7 @@ import {API, default as Interpreter, InterpreterScope} from 'js-interpreter';
 import {attachGameBlockAPI} from '@/content/blocks/API';
 
 export default class TestLevel implements Level {
-    public readonly name = "Level 1";
+    public readonly name = "Test Level";
     public readonly description = "A test level about mazes!";
     public maxBlocks = Infinity;
     public allowMethods = true;

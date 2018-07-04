@@ -1,11 +1,13 @@
 import {Lesson, Level} from '@/content/Lesson';
 import TestLevel from '@/content/lessons/maze/levels/TestLevel';
+import Lvl01_SimpleInstructions from "@/content/lessons/maze/levels/Lvl01_SimpleInstructions";
 
 export default class MazeLesson implements Lesson {
     private readonly levels: Level[] = [];
 
     constructor() {
         this.levels.push(new TestLevel());
+        this.levels.push(new Lvl01_SimpleInstructions());
     }
 
     get name() {
