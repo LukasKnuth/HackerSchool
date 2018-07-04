@@ -46,7 +46,9 @@
         }
 
         changeLevel(newLevel: number) {
+            // TODO this could be easier... use vuex-router-sync?
             this.$store.dispatch(ACTION_SELECT_LEVEL, newLevel);
+            this.$router.push(`/lessons/${this.$route.params["lessonId"]}/levels/${newLevel}`);
         }
     }
 </script>
