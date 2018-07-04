@@ -87,7 +87,7 @@
                 height: $selectedRadius;
                 border-radius: $selectedRadius/2;
                 text-align: center;
-                line-height: $selectedRadius;
+                line-height: $selectedRadius - 2;
                 font-size: 1.2em;
             }
         }
