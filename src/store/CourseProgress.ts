@@ -6,11 +6,11 @@ import {Lesson, Level} from "@/content/Lesson";
 export const ACTION_SELECT_LESSON = "selectLesson";
 export const ACTION_SELECT_LEVEL = "selectLevel";
 
-interface LevelProgressState {
+interface CourseProgressState {
     currentLesson?: string,
     currentLevel?: number
 }
-type Context = ActionContext<LevelProgressState, RootState>;
+type Context = ActionContext<CourseProgressState, RootState>;
 
 type LessonList = {id: string, lesson: Lesson}[];
 
@@ -18,7 +18,7 @@ const AllLessons: {[index: string]: Lesson} = {
     maze: new MazeLesson()
 };
 
-const LevelProgressModule: Module<LevelProgressState, RootState> = {
+const CourseProgressModule: Module<CourseProgressState, RootState> = {
     state: () => {
         return {
             currentLevel: undefined,
@@ -26,11 +26,11 @@ const LevelProgressModule: Module<LevelProgressState, RootState> = {
         }
     },
     mutations: { // These shouldn't be used directly, as they allow setting invalid state...
-        setLesson: (state: LevelProgressState, lessonId: string) => {
+        setLesson: (state: CourseProgressState, lessonId: string) => {
             state.currentLesson = lessonId;
             state.currentLevel = 0;
         },
-        setLevel: (state: LevelProgressState, levelNr: number) => {
+        setLevel: (state: CourseProgressState, levelNr: number) => {
             state.currentLevel = levelNr;
         }
     },
@@ -63,14 +63,14 @@ const LevelProgressModule: Module<LevelProgressState, RootState> = {
                 return {id, lesson: AllLessons[id]}
             });
         },
-        currentLesson: (state: LevelProgressState): Lesson|undefined => {
+        currentLesson: (state: CourseProgressState): Lesson|undefined => {
             if (state.currentLesson !== undefined) {
                 return AllLessons[state.currentLesson];
             } else {
                 return undefined;
             }
         },
-        currentLevel: (state: LevelProgressState): Level|undefined => {
+        currentLevel: (state: CourseProgressState): Level|undefined => {
             if (state.currentLesson !== undefined && state.currentLevel !== undefined) {
                 return AllLessons[state.currentLesson].getLevels()[state.currentLevel];
             } else {
@@ -80,4 +80,4 @@ const LevelProgressModule: Module<LevelProgressState, RootState> = {
     }
 };
 
-export default LevelProgressModule;
+export default CourseProgressModule;

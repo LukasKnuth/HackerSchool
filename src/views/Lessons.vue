@@ -17,7 +17,7 @@
 
 <script lang="ts">
     import {Component, Vue} from "vue-property-decorator";
-    import {ACTION_SELECT_LESSON} from "../store/LevelProgress";
+    import {ACTION_SELECT_LESSON} from "../store/CourseProgress";
 
     @Component
     export default class Lessons extends Vue {
