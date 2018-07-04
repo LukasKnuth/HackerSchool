@@ -1,9 +1,6 @@
 <template>
     <b-container>
         <b-row>
-            <h1>{{level.name}}</h1>
-        </b-row>
-        <b-row>
             <b-col>
                 <game ref="game" :level="level"
                       @block-executing="highlightBlock"
@@ -82,15 +79,16 @@
     })
     export default class Editor extends Vue {
 
-        @Prop({default: () => new TestLevel()})
-        public level?: Level;
-
         public instructionCounter: number = 0;
         public gameIsRunning: boolean = false;
         public blockCount: number = 0;
         public debugLog: DebugLogEntry[] = [];
         public showDebugLog: boolean = false;
         public gameOverReason: string = "";
+
+        get level() {
+            return this.$store.getters.currentLevel; // TODO this doesn't work fi game is undefined. Improve!!
+        }
 
         get debugLogIcon() {
             return this.showDebugLog ? "angle-down" : "angle-up";

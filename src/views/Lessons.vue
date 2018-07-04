@@ -34,6 +34,7 @@
 
         startLevel(lessonId: string) {
             this.$store.dispatch(ACTION_SELECT_LESSON, lessonId);
+            this.$router.push(`/lessons/${lessonId}/levels/`);
         }
     }
 </script>

@@ -4,6 +4,7 @@ import Home from './views/Home.vue';
 import About from './views/About.vue';
 import Editor from "./views/Editor.vue";
 import Lessons from "./views/Lessons.vue";
+import Level from "./views/Level.vue";
 
 Vue.use(Router);
 
@@ -20,14 +21,20 @@ export default new Router({
           component: About
       },
       {
-          path: '/editor',
-          name: 'editor',
-          component: Editor
-      },
-      {
           path: '/lessons',
           name: 'lessons',
           component: Lessons
+      },
+      {
+          path: '/lessons/:lessonId/levels/',
+          component: Level,
+          children: [{
+              path: '',
+              redirect: '0'
+          },{
+              path: ':levelId',
+              component: Editor
+          }]
       }
   ],
 });
