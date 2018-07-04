@@ -8,7 +8,8 @@
                         :img-alt="l.lesson.name"
                         img-top>
                     <p class="card-text">{{l.lesson.description}}</p>
-                    <b-button @click="startLevel(l.id)">Start</b-button>
+                    <b-button :variant="getButtonVariant(l)"
+                              @click="startLevel(l.id)">{{getButtonText(l)}}</b-button>
                 </b-card>
             </b-col>
         </b-row>
@@ -17,12 +18,18 @@
 
 <script lang="ts">
     import {Component, Vue} from "vue-property-decorator";
-    import {ACTION_SELECT_LESSON} from "../store/CourseProgress";
+    import {ACTION_SELECT_LESSON, LessonListEntry} from "../store/CourseProgress";
 
     @Component
     export default class Lessons extends Vue {
         get lessons() {
             return this.$store.getters.lessons;
+        }
+        getButtonText(entry: LessonListEntry) {
+            return entry.hasProgress ? "Continue" : "Start";
+        }
+        getButtonVariant(entry: LessonListEntry) {
+            return entry.hasProgress ? "success" : "primary"
         }
 
         startLevel(lessonId: string) {
