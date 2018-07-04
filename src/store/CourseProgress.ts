@@ -70,7 +70,7 @@ const CourseProgressModule: Module<CourseProgressState, RootState> = {
         return {
             currentLevel: undefined,
             currentLesson: undefined,
-            lessonProgress: {maze: {levelProgress: {0: {isFinished: true}}}}
+            lessonProgress: {}
         }
     },
     mutations: { // These shouldn't be used directly, as they allow setting invalid state...
