@@ -15,7 +15,7 @@ export const ACTION_SET_LEVEL_PROGRESS = "setLevelProgress";
 
 export interface LevelProgress {
     isFinished: boolean;
-    // TODO extend this to hold workspace-xml, etz.
+    workspaceData: string;
 }
 export interface LessonProgress {
     levelProgress: {

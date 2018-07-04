@@ -25,6 +25,7 @@
     import ToolboxCategory from "./Category";
     import ToolboxButton from "./Button";
     import {BLOCK_EXECUTING} from "../game/Game";
+    import {ACTION_SET_LEVEL_PROGRESS} from "../../store/CourseProgress";
 
     export default {
         components: {Toolbox, ToolboxBlock, ToolboxCategory, ToolboxButton},
@@ -64,6 +65,15 @@
                 if (event.type === Blockly.Events.BLOCK_CREATE || event.type === Blockly.Events.BLOCK_DELETE) {
                     this.emitBlockCountUpdate(this.workspace.getAllBlocks().length);
                 }
+                // Store state:
+                if (event.type !== Blockly.Events.UI) {
+                    const xml = Blockly.Xml.workspaceToDom(this.workspace);
+                    const xmlText = Blockly.Xml.domToText(xml);
+                    this.$store.dispatch(ACTION_SET_LEVEL_PROGRESS, {
+                        isFinished: false, // TODO this should support partial set!
+                        workspaceData: xmlText
+                    });
+                }
             });
             this.workspace.registerButtonCallback("newVariable", this.newVariable.bind(this));
         },
@@ -100,12 +110,17 @@
         },
         watch: {
             level(oldVal, newVal) {
-                console.log("Updating editor");
                 // New blocks are already loaded in the template, reset everything:
                 this.workspace.clear();
                 this.emitBlockCountUpdate(0);
                 this.workspace.clearUndo();
                 this.workspace.options.maxBlocks = newVal.maxBlocks;
+                // Load workspace data
+                const progress = this.$store.getters.currentLevelProgress;
+                if (progress) {
+                    const xml = Blockly.Xml.textToDom(progress.workspaceData);
+                    Blockly.Xml.domToWorkspace(xml, this.workspace);
+                }
             }
         }
     };
