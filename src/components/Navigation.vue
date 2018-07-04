@@ -22,6 +22,7 @@
 
         public links: Link[] = [
             {label: "Home", path: "/"},
+            {label: "Lessons", path: "/lessons"},
             {label: "About", path: "/about"},
             {label: "Editor", path: "/editor"}
         ];
