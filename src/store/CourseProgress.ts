@@ -70,7 +70,7 @@ const CourseProgressModule: Module<CourseProgressState, RootState> = {
         return {
             currentLevel: undefined,
             currentLesson: undefined,
-            lessonProgress: {}
+            lessonProgress: {maze: {levelProgress: {0: {isFinished: true}}}}
         }
     },
     mutations: { // These shouldn't be used directly, as they allow setting invalid state...
@@ -88,7 +88,15 @@ const CourseProgressModule: Module<CourseProgressState, RootState> = {
         [ACTION_SELECT_LESSON]: (context: Context, lessonId: string) => {
             if (lessonId in AllLessons) {
                 context.commit("setLesson", lessonId);
-                context.commit("setLevel", 0); // TODO find first uncompleted level, set that.
+                let firstNoProgressLevel = 0;
+                for (let i = 0; i < AllLessons[lessonId].getLevels().length; i++) {
+                    const progress = getLevelProgress(context.state, lessonId, i);
+                    if (!progress || !progress.isFinished) {
+                        firstNoProgressLevel = i;
+                        break;
+                    }
+                }
+                context.commit("setLevel", firstNoProgressLevel);
             } else {
                 console.warn(`Unknown lesson-id "${lessonId}", ignoring...`);
             }
