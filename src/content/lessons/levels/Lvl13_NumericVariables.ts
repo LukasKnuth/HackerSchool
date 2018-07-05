@@ -13,7 +13,7 @@ export default class Lvl13_NumericVariables implements Level {
     public readonly maxBlocks = 6;
     public readonly mazeHeight = 15;
     public readonly mazeWidth = 15;
-    public readonly name = "Level 12 - Bool'sche Variabeln";
+    public readonly name = "Level 12 - Numerische Variabeln";
 
     private initialMazeLayout: GridState = [
         [X, X, X, X, X, X, X, X, X, X, X, X, X, X, X],
