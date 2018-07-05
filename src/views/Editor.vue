@@ -66,7 +66,7 @@
     import {Component, Vue} from "vue-property-decorator";
     import BlocklyEditor from "../components/editor/index.vue";
     import Game from "../components/game/index.vue";
-    import {MUTATION_SET_LEVEL} from "../store/CourseProgress";
+    import {ACTION_SELECT_LEVEL, MUTATION_SET_LEVEL} from "../store/CourseProgress";
 
     interface DebugLogEntry {
         line: string;
@@ -157,7 +157,14 @@
             }
         }
         public onNextLevel() {
-            // TODO navigate to next level
+            // TODO this could be easier... use vuex-router-sync?
+            if (this.$store.getters.hasNextLevel) {
+                const nextLevel = this.$store.state.CourseProgressModule.currentLevel + 1;
+                this.$store.dispatch(ACTION_SELECT_LEVEL, nextLevel);
+                this.$router.push(`/lessons/${this.$route.params["lessonId"]}/levels/${nextLevel}`);
+            } else {
+                this.$router.push('/lessons')
+            }
         }
 
         // ----- DEBUG LOG EVENTS ---

@@ -213,6 +213,15 @@ const CourseProgressModule: Module<CourseProgressState, RootState> = {
         },
         hasCurrentLevel: (state: CourseProgressState, getters: any): boolean => {
             return getters.currentLevel !== null;
+        },
+        hasNextLevel: (state: CourseProgressState, getters: any): boolean => {
+            const lesson = getters.currentLesson;
+            const level = state.currentLevel;
+            if (lesson && level !== null) {
+                return lesson.getLevels().length > (level + 1);
+            } else {
+                return false;
+            }
         }
     }
 };
