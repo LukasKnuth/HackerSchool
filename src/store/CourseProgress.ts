@@ -13,6 +13,8 @@ export const ACTION_SELECT_LESSON = "selectLesson";
 export const ACTION_SELECT_LEVEL = "selectLevel";
 export const ACTION_CHANGE_LEVEL_PROGRESS = "changeLevelProgress";
 
+export const MUTATION_SET_LEVEL = "setLevel";
+
 export interface LevelProgress {
     isFinished: boolean;
     workspaceData: string;
@@ -65,7 +67,7 @@ const CourseProgressModule: Module<CourseProgressState, RootState> = {
         setLesson: (state: CourseProgressState, lessonId: string) => {
             state.currentLesson = lessonId;
         },
-        setLevel: (state: CourseProgressState, levelNr: number) => {
+        [MUTATION_SET_LEVEL]: (state: CourseProgressState, levelNr: number) => {
             state.currentLevel = levelNr;
         },
         changeLevelProgress: (state: CourseProgressState, payload: LevelProgressPayload) => {

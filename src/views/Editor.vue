@@ -31,7 +31,6 @@
                 <p>{{description}}</p>
             </b-col>
             <b-col cols="8" id="blocklyArea">
-                <!-- todo the v-if above prevents error in editor, because getBlocks() isn't reactive! -->
                 <blockly-editor ref="editor"
                                 :level="level"
                                 :blocks.sync="blockCount"
@@ -64,11 +63,10 @@
 </template>
 
 <script lang="ts">
-    import {Component, Prop, Vue} from "vue-property-decorator";
+    import {Component, Vue} from "vue-property-decorator";
     import BlocklyEditor from "../components/editor/index.vue";
     import Game from "../components/game/index.vue";
-    import {Level} from "../content/Lesson";
-    import TestLevel from "../content/lessons/maze/levels/TestLevel";
+    import {MUTATION_SET_LEVEL} from "../store/CourseProgress";
 
     interface DebugLogEntry {
         line: string;
@@ -88,8 +86,19 @@
         public showDebugLog: boolean = false;
         public gameOverReason: string = "";
 
+        mounted() {
+            const vue = this;
+            this.$store.subscribe((mutation) => {
+                if (mutation.type === MUTATION_SET_LEVEL) {
+                    vue.instructionCounter = 0;
+                    vue.debugLog = [];
+                    vue.gameOverReason = "";
+                }
+            })
+        }
+
         get level() {
-            return this.$store.getters.currentLevel; // TODO this doesn't work fi game is undefined. Improve!!
+            return this.$store.getters.currentLevel;
         }
         get renderDebugLog() {
             return this.level ? this.level.showDebugLog : false;
@@ -133,7 +142,9 @@
 
         // ----- GAME EVENTS -------
         public highlightBlock(blockId: string) {
-            this.instructionCounter++;
+            if (blockId !== null) {
+                this.instructionCounter++;
+            }
             (this.$refs.editor as any).highlightBlock(blockId);
         }
         public debugLogAppend(log: string, blockId: string) {
