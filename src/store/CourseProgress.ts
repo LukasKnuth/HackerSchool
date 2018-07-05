@@ -1,11 +1,17 @@
 import {ActionContext, Module} from 'vuex';
 import {RootState} from "@/store";
-import MazeLesson from "@/content/lessons/maze/MazeLesson";
+import DebuggingLesson from "@/content/lessons/DebuggingLesson";
 import {Lesson, Level} from "@/content/Lesson";
+import PrimitivesAndLoopsLesson from "@/content/lessons/PrimitivesAndLoopsLesson";
+import ConditionalsAndVariablesLesson from "@/content/lessons/ConditionalsAndVariablesLesson";
+import ChallengesLesson from "@/content/lessons/ChallengesLesson";
 
 // --------- STATIC DATA -------------
 const AllLessons: {[index: string]: Lesson} = {
-    maze: new MazeLesson()
+    maze: new DebuggingLesson(),
+    basics: new PrimitivesAndLoopsLesson(),
+    advanced: new ConditionalsAndVariablesLesson(),
+    challenges: new ChallengesLesson()
 };
 
 // -------- MODULE -------------
