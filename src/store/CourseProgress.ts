@@ -27,8 +27,8 @@ export interface LessonProgress {
     };
 }
 interface CourseProgressState {
-    currentLesson?: string;
-    currentLevel?: number;
+    currentLesson: string|null;
+    currentLevel: number|null;
     lessonProgress: {
         [index: string]: LessonProgress
     };
@@ -56,8 +56,8 @@ interface LevelProgressPayload {
 const CourseProgressModule: Module<CourseProgressState, RootState> = {
     state: () => {
         return {
-            currentLevel: undefined,
-            currentLesson: undefined,
+            currentLevel: null,
+            currentLesson: null,
             lessonProgress: {}
         };
     },
@@ -123,7 +123,7 @@ const CourseProgressModule: Module<CourseProgressState, RootState> = {
     },
     getters: {
         // ------------ UTILITIES ---------------
-        lessonProgress: (state: CourseProgressState) => (lessonId: string): LessonProgress|undefined => {
+        lessonProgress: (state: CourseProgressState) => (lessonId: string): LessonProgress|null => {
             /*
                 This MUST be here, because otherwise this method isn't re-evaluated on changes to lessonProgress.
                 Something with reactivity is fucked here, todo fix it!
@@ -134,19 +134,19 @@ const CourseProgressModule: Module<CourseProgressState, RootState> = {
             if (lessonId in state.lessonProgress) {
                 return state.lessonProgress[lessonId];
             } else {
-                return undefined;
+                return null;
             }
         },
         levelProgress: (state: CourseProgressState, getters: any) =>
-            (lessonId: string, level: number): LevelProgress|undefined => {
+            (lessonId: string, level: number): LevelProgress|null => {
             const lesson = getters.lessonProgress(lessonId);
             if (lesson && level in state.lessonProgress[lessonId].levelProgress) {
                 return state.lessonProgress[lessonId].levelProgress[level];
             }
-            return undefined;
+            return null;
         },
         hasLevelProgress: (state: CourseProgressState, getters: any) => (lessonId: string, level: number): boolean => {
-            return getters.levelProgress(lessonId, level) !== undefined;
+            return getters.levelProgress(lessonId, level) !== null;
         },
         isLevelFinished: (state: CourseProgressState, getters: any) => (lessonId: string, level: number): boolean => {
             const progress = getters.levelProgress(lessonId, level);
@@ -161,18 +161,18 @@ const CourseProgressModule: Module<CourseProgressState, RootState> = {
                 return {id, lesson, hasProgress: progress, isFinished: finished};
             });
         },
-        currentLesson: (state: CourseProgressState): Lesson|undefined => {
-            if (state.currentLesson !== undefined) {
+        currentLesson: (state: CourseProgressState): Lesson|null => {
+            if (state.currentLesson !== null) {
                 return AllLessons[state.currentLesson];
             } else {
-                return undefined;
+                return null;
             }
         },
-        currentLessonProgress: (state: CourseProgressState, getters: any): LessonProgress|undefined => {
-            if (state.currentLesson !== undefined) {
+        currentLessonProgress: (state: CourseProgressState, getters: any): LessonProgress|null => {
+            if (state.currentLesson !== null) {
                 return getters.lessonProgress(state.currentLesson);
             } else {
-                return undefined;
+                return null;
             }
         },
         levels: (state: CourseProgressState, getters: any): LevelListEntry[] => {
@@ -181,7 +181,7 @@ const CourseProgressModule: Module<CourseProgressState, RootState> = {
             if (lesson && lessonId) {
                 return lesson.getLevels().map((level: Level, index: number) => {
                     const progress = getters.levelProgress(lessonId, index);
-                    if (progress !== undefined) {
+                    if (progress !== null) {
                         return {
                             nr: index, level,
                             hasProgress: progress.workspaceData.length > 0,
@@ -195,20 +195,22 @@ const CourseProgressModule: Module<CourseProgressState, RootState> = {
                 return [];
             }
         },
-        currentLevel: (state: CourseProgressState): Level|undefined => {
-            if (state.currentLesson !== undefined && state.currentLevel !== undefined) {
+        currentLevel: (state: CourseProgressState): Level|null => {
+            if (state.currentLesson !== null && state.currentLevel !== null) {
                 return AllLessons[state.currentLesson].getLevels()[state.currentLevel];
             } else {
-                return undefined;
+                return null;
             }
         },
-        currentLevelProgress: (state: CourseProgressState, getters: any): LevelProgress|undefined => {
-            if (state.currentLesson !== undefined && state.currentLevel !== undefined) {
+        currentLevelProgress: (state: CourseProgressState, getters: any): LevelProgress|null => {
+            if (state.currentLesson !== null && state.currentLevel !== null) {
                 return getters.levelProgress(state.currentLesson, state.currentLevel);
+            } else {
+                return null;
             }
         },
         hasCurrentLevel: (state: CourseProgressState, getters: any): boolean => {
-            return getters.currentLevel !== undefined;
+            return getters.currentLevel !== null;
         }
     }
 };
