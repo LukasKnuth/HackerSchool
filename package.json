@@ -21,7 +21,8 @@
     "vue-i18n": "^8.0.0",
     "vue-property-decorator": "^6.0.0",
     "vue-router": "^3.0.1",
-    "vuex": "^3.0.1"
+    "vuex": "^3.0.1",
+    "vuex-persist": "^1.4.3"
   },
   "devDependencies": {
     "@types/pixi.js": "^4.7.5",

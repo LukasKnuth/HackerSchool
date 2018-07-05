@@ -9,7 +9,7 @@
     ]
   },
   "rules": {
-    "no-empty-interface": true,
+    "no-empty-interface": false,
     "class-name": true,
     "no-var-requires": true,
     "no-var-keyword": true,
