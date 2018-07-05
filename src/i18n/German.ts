@@ -22,7 +22,9 @@ export default {
     },
     game: {
         startBtnLabel: "Spiel Starten",
-        stopBtnLabel: "Spiel Stoppen",
+        pauseBtnLabel: "Spiel anhalten",
+        continueBtnLabel: "Spiel fortsetzen",
+        stopBtnLabel: "Stoppen",
         level: {
             descriptionHeadline: "Beschreibung"
         },

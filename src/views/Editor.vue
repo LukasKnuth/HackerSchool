@@ -7,6 +7,7 @@
                       @debug-log-append="debugLogAppend"
                       @game-over="onGameOver"
                       :running.sync="gameIsRunning"
+                      :paused.sync="gameIsPaused"
                 />
                 <b-container>
                     <b-row class="gameover-row" v-if="gameOverReason">
@@ -22,8 +23,11 @@
                         <b-col>{{blockCount}} / {{maxBlocks}}</b-col>
                     </b-row>
                     <b-row class="control-row" align-h="center">
-                        <b-col cols="5">
+                        <b-col>
                             <b-button :variant="runButtonColor" @click="runButtonClick">{{runButtonText}}</b-button>
+                        </b-col>
+                        <b-col>
+                            <b-button variant="danger" @click="stopButtonClick">{{$t("game.stopBtnLabel")}}</b-button>
                         </b-col>
                     </b-row>
                 </b-container>
@@ -79,12 +83,15 @@
     })
     export default class Editor extends Vue {
 
+        // state:
         public instructionCounter: number = 0;
-        public gameIsRunning: boolean = false;
-        public blockCount: number = 0;
         public debugLog: DebugLogEntry[] = [];
         public showDebugLog: boolean = false;
         public gameOverReason: string = "";
+        // synced:
+        public blockCount: number = 0;
+        public gameIsRunning: boolean = false;
+        public gameIsPaused: boolean = false;
 
         mounted() {
             const vue = this;
@@ -121,15 +128,27 @@
         }
 
         get runButtonColor() {
-            return this.gameIsRunning ? "danger" : "primary";
+            return this.gameIsRunning ? "warning" : "primary";
         }
         get runButtonText() {
-            return this.gameIsRunning ? this.$t("game.stopBtnLabel") : this.$t("game.startBtnLabel");
+            if (this.gameIsRunning) {
+                if (this.gameIsPaused) {
+                    return this.$t("game.continueBtnLabel");
+                } else {
+                    return this.$t("game.pauseBtnLabel");
+                }
+            } else {
+                return this.$t("game.startBtnLabel");
+            }
         }
 
         public runButtonClick() {
             if (this.gameIsRunning) {
-                (this.$refs.game as any).stopGame();
+                if (this.gameIsPaused) {
+                    (this.$refs.game as any).continueGame();
+                } else {
+                    (this.$refs.game as any).pauseGame();
+                }
             } else {
                 this.debugLog = [];
                 this.gameOverReason = "";
@@ -138,6 +157,9 @@
                 console.log(`-------- ${new Date()}: Newly generated code ------\n`, code);
                 (this.$refs.game as any).startGame(code);
             }
+        }
+        public stopButtonClick() {
+            (this.$refs.game as any).stopGame();
         }
 
         // ----- GAME EVENTS -------

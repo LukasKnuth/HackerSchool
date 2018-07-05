@@ -21,6 +21,7 @@ const FILE_SOUND_SUCCESS = "/sounds/success.mp3";
 const FILE_SOUND_FAIL = "/sounds/fail.mp3";
 
 export interface GameLoop {
+    isPaused: boolean;
     tickWait: number;
     ticker: (delta: number) => void;
     onBlockExecuting?: (blockId: string) => void;
@@ -124,7 +125,7 @@ export function startGameLoop(app: PIXI.Application, level: Level, userCode: str
     let gameTime = 0;
     const loop = (delta: number) => {
         gameTime += app.ticker.elapsedMS * delta;
-        if (gameTime >= gameLoop.tickWait && hasMoreCode && !gameState.isGameOver) {
+        if (gameTime >= gameLoop.tickWait && !gameLoop.isPaused && hasMoreCode && !gameState.isGameOver) {
             gameTime = 0;
             do {
                 hasMoreCode = interpreter.step();
@@ -145,7 +146,7 @@ export function startGameLoop(app: PIXI.Application, level: Level, userCode: str
         }
         render(gameState);
     };
-    gameLoop = {ticker: loop, tickWait};
+    gameLoop = {ticker: loop, tickWait, isPaused: false};
     app.ticker.add(loop);
     app.ticker.start();
     return gameLoop;

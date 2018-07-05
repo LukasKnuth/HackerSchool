@@ -86,7 +86,7 @@
         }
 
         get maxGameSpeed() {
-            return GAME_SPEED_SLOW;
+            return GAME_SPEED_SLOW; // TODO this is weird, because if the control is fully right, game-speed isn't max!
         }
         get minGameSpeed() {
             return GAME_SPEED_FAST;
@@ -121,7 +121,22 @@
                 this.emitRunningUpdate(false);
             }
         }
+        public pauseGame() {
+            if (this.engine && this.gameLoop) {
+                this.gameLoop.isPaused = true;
+                this.emitPausedUpdate(true)
+            }
+        }
+        public continueGame() {
+            if (this.engine && this.gameLoop) {
+                this.gameLoop.isPaused = false;
+                this.emitPausedUpdate(false)
+            }
+        }
 
+        private emitPausedUpdate(isPaused: boolean) {
+            this.$emit("update:paused", isPaused);
+        }
         private emitRunningUpdate(isRunning: boolean) {
             if (!isRunning) {
                 // this clears the highlighting in the editor
