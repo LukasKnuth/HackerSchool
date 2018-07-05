@@ -73,6 +73,7 @@
             const [engine, level] = [this.engine, this.level];
             if (engine && level) {
                 game.renderPreview(engine, level, this.frameRenderer.bind(this));
+                engine.render();
             }
         }
         private frameRenderer(state: GameState) {
