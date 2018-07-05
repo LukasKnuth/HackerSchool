@@ -130,6 +130,7 @@ export function startGameLoop(app: PIXI.Application, level: Level, userCode: str
                 hasMoreCode = interpreter.step();
             } while (!blockExecutionPause && hasMoreCode);
             blockExecutionPause = false;
+            gameState.hasMoreCode = hasMoreCode;
             level.tick(gameState);
             // Check game termination
             if (gameState.isGameOver || !hasMoreCode) {

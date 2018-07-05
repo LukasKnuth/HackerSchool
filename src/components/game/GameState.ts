@@ -89,6 +89,7 @@ export class PlayerPosition extends GridPosition {
 
 export class GameState {
 
+    public hasMoreCode: boolean = true;
     public isGameRunning: boolean = true;
     private _gameOverReason: string = "";
     private _isGameOver: boolean = false;
