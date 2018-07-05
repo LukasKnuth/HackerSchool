@@ -61,7 +61,10 @@
         @Watch("level")
         private onLevelChange(){
             this.stopGame();
-            this.renderPreview();
+            if (this.resources) {
+                // this prevents a race-condition with game.initializeRenderer() when the page is first created!
+                this.renderPreview();
+            }
         }
 
         private renderPreview() {

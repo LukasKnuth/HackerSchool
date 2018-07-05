@@ -19,7 +19,7 @@
                     </b-row>
                     <b-row class="stat-row">
                         <b-col cols="5">{{$t("game.stats.blocksCounterLabel")}}</b-col>
-                        <b-col>{{blockCount}} / {{level.maxBlocks}}</b-col>
+                        <b-col>{{blockCount}} / {{maxBlocks}}</b-col>
                     </b-row>
                     <b-row class="control-row" align-h="center">
                         <b-col cols="5">
@@ -28,16 +28,17 @@
                     </b-row>
                 </b-container>
                 <h3 class="header-spacing">{{$t("game.level.descriptionHeadline")}}</h3>
-                <p>{{level.description}}</p>
+                <p>{{description}}</p>
             </b-col>
-            <b-col cols="8" id="blocklyArea">
+            <b-col cols="8" id="blocklyArea" v-if="level">
+                <!-- todo the v-if above prevents error in editor, because getBlocks() isn't reactive! -->
                 <blockly-editor ref="editor"
                                 :level="level"
                                 :blocks.sync="blockCount"
                 />
             </b-col>
         </b-row>
-        <div class="overlay" v-if="level.showDebugLog">
+        <div class="overlay" v-if="renderDebugLog">
             <div class="preview">
                 <h3 class="peek" @click="showDebugLog = !showDebugLog">
                     <font-awesome-icon :icon="debugLogIcon" />
@@ -89,6 +90,15 @@
 
         get level() {
             return this.$store.getters.currentLevel; // TODO this doesn't work fi game is undefined. Improve!!
+        }
+        get renderDebugLog() {
+            return this.level ? this.level.showDebugLog : false;
+        }
+        get maxBlocks() {
+            return this.level ? this.level.maxBlocks : Infinity;
+        }
+        get description() {
+            return this.level ? this.level.description : "";
         }
 
         get debugLogIcon() {
