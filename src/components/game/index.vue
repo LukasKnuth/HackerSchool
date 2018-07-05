@@ -20,6 +20,7 @@
     import {Level} from "../../content/Lesson";
     import {GameLoop, GameResources} from "./Game";
     import {GameState} from "./GameState";
+    import {ACTION_CHANGE_LEVEL_PROGRESS} from '../../store/CourseProgress';
 
     const GAME_SPEED_FAST = 100;
     const GAME_SPEED_SLOW = 1000;
@@ -134,6 +135,11 @@
             this.$emit("debug-log-append", log, blockId);
         }
         private emitGameOver(victory: boolean, reason: string) {
+            if (victory) {
+                this.$store.dispatch(ACTION_CHANGE_LEVEL_PROGRESS, {
+                    isFinished: victory
+                });
+            }
             this.$emit("game-over", victory, reason);
         }
 

@@ -25,7 +25,7 @@
     import ToolboxCategory from "./Category";
     import ToolboxButton from "./Button";
     import {BLOCK_EXECUTING} from "../game/Game";
-    import {ACTION_SET_LEVEL_PROGRESS} from "../../store/CourseProgress";
+    import {ACTION_CHANGE_LEVEL_PROGRESS} from "../../store/CourseProgress";
 
     export default {
         components: {Toolbox, ToolboxBlock, ToolboxCategory, ToolboxButton},
@@ -67,10 +67,10 @@
                 }
                 // Store state:
                 if (event.type !== Blockly.Events.UI) {
+                    // TODO this is triggered when workspace.clear() is called and saves empty progress. Workaround?
                     const xml = Blockly.Xml.workspaceToDom(this.workspace);
                     const xmlText = Blockly.Xml.domToText(xml);
-                    this.$store.dispatch(ACTION_SET_LEVEL_PROGRESS, {
-                        isFinished: false, // TODO this should support partial set!
+                    this.$store.dispatch(ACTION_CHANGE_LEVEL_PROGRESS, {
                         workspaceData: xmlText
                     });
                 }

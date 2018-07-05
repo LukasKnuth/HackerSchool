@@ -11,12 +11,16 @@ const AllLessons: {[index: string]: Lesson} = {
 // -------- MODULE -------------
 export const ACTION_SELECT_LESSON = "selectLesson";
 export const ACTION_SELECT_LEVEL = "selectLevel";
-export const ACTION_SET_LEVEL_PROGRESS = "setLevelProgress";
+export const ACTION_CHANGE_LEVEL_PROGRESS = "changeLevelProgress";
 
 export interface LevelProgress {
     isFinished: boolean;
     workspaceData: string;
 }
+const LEVEL_PROGRESS_DEFAULTS: LevelProgress = {
+    isFinished: false,
+    workspaceData: ""
+};
 export interface LessonProgress {
     levelProgress: {
         [index: number]: LevelProgress
@@ -64,7 +68,7 @@ const CourseProgressModule: Module<CourseProgressState, RootState> = {
         setLevel: (state: CourseProgressState, levelNr: number) => {
             state.currentLevel = levelNr;
         },
-        setLevelProgress: (state: CourseProgressState, payload: LevelProgressPayload) => {
+        changeLevelProgress: (state: CourseProgressState, payload: LevelProgressPayload) => {
             if (!(payload.lessonId in state.lessonProgress)) {
                 state.lessonProgress[payload.lessonId] = {levelProgress: {}};
             }
@@ -102,12 +106,15 @@ const CourseProgressModule: Module<CourseProgressState, RootState> = {
                 console.warn("Can't set the level yet, no lesson was selected!");
             }
         },
-        [ACTION_SET_LEVEL_PROGRESS]: (context: Context, progress: LevelProgress) => {
+        [ACTION_CHANGE_LEVEL_PROGRESS]: (context: Context, progress: LevelProgress) => {
             if (context.state.currentLesson !== undefined && context.state.currentLevel !== undefined) {
-                context.commit("setLevelProgress", {
+                const currentProgress = context.getters.levelProgress(
+                    context.state.currentLesson, context.state.currentLevel
+                );
+                context.commit("changeLevelProgress", {
                     lessonId: context.state.currentLesson,
                     levelNr: context.state.currentLevel,
-                    progress
+                    progress: Object.assign({}, LEVEL_PROGRESS_DEFAULTS, currentProgress, progress)
                 });
             } else {
                 console.warn("Can't set level progress because no level/lesson is selected!");
@@ -175,8 +182,10 @@ const CourseProgressModule: Module<CourseProgressState, RootState> = {
                 return lesson.getLevels().map((level: Level, index: number) => {
                     const progress = getters.levelProgress(lessonId, index);
                     if (progress !== undefined) {
-                        return {nr: index, level,
-                            hasProgress: progress.workspaceData.length > 0, isFinished: progress.isFinished
+                        return {
+                            nr: index, level,
+                            hasProgress: progress.workspaceData.length > 0,
+                            isFinished: progress.isFinished
                         };
                     } else {
                         return {nr: index, level, hasProgress: false, isFinished: false};
