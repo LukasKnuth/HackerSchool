@@ -12,7 +12,9 @@
             </b-col>
         </b-row>
         <b-row>
-            <router-view></router-view>
+            <b-col align-h="center">
+                <router-view></router-view>
+            </b-col>
         </b-row>
     </b-container>
 </template>

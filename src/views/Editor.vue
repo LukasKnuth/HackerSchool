@@ -1,7 +1,7 @@
 <template>
     <b-container>
         <b-row>
-            <b-col>
+            <b-col cols="4">
                 <game ref="game" :level="level"
                       @block-executing="highlightBlock"
                       @debug-log-append="debugLogAppend"
@@ -165,7 +165,7 @@
     }
     .overlay {
         padding: 0 20px;
-        position: absolute;
+        position: fixed;
         z-index: 1000;
         bottom: 0;
         left: 0;
