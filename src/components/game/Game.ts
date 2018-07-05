@@ -21,6 +21,7 @@ const FILE_SOUND_SUCCESS = "/sounds/success.mp3";
 const FILE_SOUND_FAIL = "/sounds/fail.mp3";
 
 export interface GameLoop {
+    tickWait: number;
     ticker: (delta: number) => void;
     onBlockExecuting?: (blockId: string) => void;
     onGameTerminated?: () => void;
@@ -78,15 +79,14 @@ async function loadResources(app: pixi.Application): Promise<GameResources> {
 
 // ------------------- GAME LOOP ----------------------
 
-const LOGIC_TICK_THRESHOLD = 1000;
-
 export function renderPreview(app: PIXI.Application, level: Level, render: GameRenderer) {
     const gameState = new GameState(level.mazeWidth, level.mazeHeight); // This is thrown away immediately...
     level.initializeState(gameState);
     render(gameState);
 }
 
-export function startGameLoop(app: PIXI.Application, level: Level, userCode: string, render: GameRenderer): GameLoop {
+export function startGameLoop(app: PIXI.Application, level: Level, userCode: string,
+                              render: GameRenderer, tickWait: number): GameLoop {
     // Create fresh state:
     let gameLoop: GameLoop;
     const gameState = new GameState(level.mazeWidth, level.mazeHeight);
@@ -124,7 +124,7 @@ export function startGameLoop(app: PIXI.Application, level: Level, userCode: str
     let gameTime = 0;
     const loop = (delta: number) => {
         gameTime += app.ticker.elapsedMS * delta;
-        if (gameTime >= LOGIC_TICK_THRESHOLD && hasMoreCode && !gameState.isGameOver) {
+        if (gameTime >= gameLoop.tickWait && hasMoreCode && !gameState.isGameOver) {
             gameTime = 0;
             do {
                 hasMoreCode = interpreter.step();
@@ -144,7 +144,7 @@ export function startGameLoop(app: PIXI.Application, level: Level, userCode: str
         }
         render(gameState);
     };
-    gameLoop = {ticker: loop};
+    gameLoop = {ticker: loop, tickWait};
     app.ticker.add(loop);
     app.ticker.start();
     return gameLoop;

@@ -35,6 +35,9 @@ export default {
             title: "Sieg",
             okBtn: "Zum nächsten Level",
             cancelBtn: "Hier bleiben"
+        },
+        controls: {
+            speedSliderLabel: "Geschwindigkeit"
         }
     }
 };

@@ -1,5 +1,15 @@
 <template>
-    <div id="game-window"></div>
+    <b-container>
+        <div id="game-window"></div>
+        <b-row id="game-controls" align-v="end">
+            <b-col><label for="game-speed">{{$t("game.controls.speedSliderLabel")}}</label></b-col>
+            <b-col>
+                <b-form-input id="game-speed" type="range"
+                              :min="minGameSpeed" :max="maxGameSpeed"
+                              v-model.number="gameSpeed"></b-form-input>
+            </b-col>
+        </b-row>
+    </b-container>
 </template>
 
 <script lang="ts">
@@ -11,11 +21,16 @@
     import {GameLoop, GameResources} from "./Game";
     import {GameState} from "./GameState";
 
+    const GAME_SPEED_FAST = 100;
+    const GAME_SPEED_SLOW = 1000;
+
     @Component
     export default class Game extends Vue {
 
         @Prop()
         public level?: Level;
+
+        public gameSpeed: number = GAME_SPEED_SLOW;
 
         private engine?: pixi.Application;
         private gameLoop?: GameLoop;
@@ -25,7 +40,7 @@
             this.engine = new pixi.Application({
                 width: 280, height: 280, antialias: true
             });
-            this.$el.appendChild(this.engine.view);
+            this.$el.querySelector("#game-window").appendChild(this.engine.view);
 
             this.engine.ticker.autoStart = false;
             this.engine.renderer.autoResize = true; // TODO stretch to full available width of container
@@ -65,11 +80,23 @@
             }
         }
 
+        get maxGameSpeed() {
+            return GAME_SPEED_SLOW;
+        }
+        get minGameSpeed() {
+            return GAME_SPEED_FAST;
+        }
+        @Watch("gameSpeed")
+        private onGameSpeedChanged() {
+            if (this.gameLoop) {
+                this.gameLoop.tickWait = this.gameSpeed;
+            }
+        }
         public startGame(userCode: string) {
             this.stopGame();
             const [engine, level] = [this.engine, this.level];
             if (engine && level) {
-                this.gameLoop = game.startGameLoop(engine, level, userCode, this.frameRenderer.bind(this));
+                this.gameLoop = game.startGameLoop(engine, level, userCode, this.frameRenderer.bind(this), this.gameSpeed);
                 this.gameLoop.onBlockExecuting = (blockId: string) => this.emitBlockExecuting(blockId);
                 this.gameLoop.onGameTerminated = () => {
                     console.log("User Code has no more steps to execute!");
