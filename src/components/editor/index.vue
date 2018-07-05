@@ -109,7 +109,7 @@
             }
         },
         watch: {
-            level(oldVal, newVal) {
+            level(newVal, oldVal) {
                 // New blocks are already loaded in the template, reset everything:
                 this.workspace.clear();
                 this.emitBlockCountUpdate(0);
