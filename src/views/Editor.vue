@@ -30,7 +30,7 @@
                 <h3 class="header-spacing">{{$t("game.level.descriptionHeadline")}}</h3>
                 <p>{{description}}</p>
             </b-col>
-            <b-col cols="8" id="blocklyArea" v-if="level">
+            <b-col cols="8" id="blocklyArea">
                 <!-- todo the v-if above prevents error in editor, because getBlocks() isn't reactive! -->
                 <blockly-editor ref="editor"
                                 :level="level"
