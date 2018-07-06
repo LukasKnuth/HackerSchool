@@ -174,7 +174,7 @@ export async function initializeRenderer(app: pixi.Application): Promise<GameRes
     app.stage.addChild(sprites.player1Cone);
 
     sprites.player1.position.set(40, 100);
-    sprites.player1.scale.set(0.1, 0.1);
+    sprites.player1.scale.set(0.12, 0.15);
 
     return sprites;
 }
@@ -231,8 +231,8 @@ export function renderFrame(app: PIXI.Application, resources: GameResources, sta
 
     // TODO instead of this, add a arrow to the sprite and rotate it!
     resources.player1Cone.clear();
-    resources.player1Cone.beginFill(0xfa1122, .7);
-    const size = 20;
+    resources.player1Cone.beginFill(0xfa1122, .8);
+    const size = 30;
     resources.player1Cone.moveTo(0, 0);
     resources.player1Cone.lineTo(0, size);
     resources.player1Cone.lineTo(size, size);
