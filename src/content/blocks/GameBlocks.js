@@ -84,8 +84,10 @@ export default function(blocks, generators) {
 
     // ------- SENSORS ---------
     const tileTypeEnum = [
-        ["a collectible", api.PARAM_COLLECTIBLE], ["a trap", api.PARAM_TRAP],
-        ["an enemy color", api.PARAM_ENEMY_COLOR], ["an enemy", api.PARAM_ENEMY],
+        ["crystal", api.PARAM_COLLECTIBLE], ["trap", api.PARAM_TRAP],
+        ["enemy color", api.PARAM_ENEMY_COLOR], ["enemy", api.PARAM_ENEMY],
+        ["green", api.PARAM_GREEN], ["blue", api.PARAM_BLUE],
+        ["pit", api.PARAM_PIT],
     ];
 
     blocks['sensor_camera'] = {
@@ -95,7 +97,7 @@ export default function(blocks, generators) {
             this.setInputsInline(true);
             this.setOutput(true, "Boolean");
             this.setColour(GAME_HUE);
-            this.setTooltip("Use the camera to check a Tile on step in the current player direction.");
+            this.setTooltip("Use the camera to check a tile one step in the current player direction.");
         }
     };
     generators['sensor_camera'] = (block) => {
@@ -110,7 +112,7 @@ export default function(blocks, generators) {
             this.setInputsInline(true);
             this.setOutput(true, "Boolean");
             this.setColour(GAME_HUE);
-            this.setTooltip("Use the radar to check a two tiles around the current player position.");
+            this.setTooltip("Use the radar to check a two tiles area around the current player position.");
         }
     };
     generators['sensor_radar'] = (block) => {
