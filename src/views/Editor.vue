@@ -1,7 +1,7 @@
 <template>
     <b-container fluid>
         <b-row>
-            <b-col cols="4">
+            <b-col cols="5">
                 <game ref="game" :level="level"
                       @block-executing="highlightBlock"
                       @debug-log-append="debugLogAppend"
@@ -35,7 +35,7 @@
                     </b-row>
                 </b-container>
             </b-col>
-            <b-col cols="8" id="blocklyArea">
+            <b-col cols="7" id="blocklyArea">
                 <blockly-editor ref="editor"
                                 :level="level"
                                 :blocks.sync="blockCount"

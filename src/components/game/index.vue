@@ -42,7 +42,7 @@
 
         private mounted() {
             this.engine = new pixi.Application({
-                width: 280, height: 280, antialias: true
+                width: 400, height: 400, antialias: true
             });
             this.$el.querySelector("#game-window").appendChild(this.engine.view);
 
@@ -170,6 +170,10 @@
 </script>
 
 <style lang="scss">
+    #game-window > canvas {
+        margin: 0 auto;
+        display: block;
+    }
     #game-speed {
         // Rotate, so the speed increases from left to right. This wouldn't work by flipping values because min must
         // be larger than max...
