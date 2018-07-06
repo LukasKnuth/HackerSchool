@@ -1,14 +1,16 @@
 <template>
     <b-container>
         <div id="game-window"></div>
-        <b-row id="game-controls" align-v="end">
-            <b-col><label for="game-speed">{{$t("game.controls.speedSliderLabel")}}</label></b-col>
-            <b-col>
-                <!-- todo move this out of here to the other game-related controls in the editor! -->
+        <b-row id="game-controls" align-v="center" class="justify-content-md-center">
+            <!-- todo move this out of here to the other game-related controls in the editor! -->
+            <b-col cols="1"><font-awesome-icon icon="frog"/></b-col>
+            <b-col style="padding-right: 5px;">
                 <b-form-input id="game-speed" type="range"
                               :min="minGameSpeed" :max="maxGameSpeed"
+                              :title="$t('game.controls.speedSliderLabel')"
                               v-model.number="gameSpeed"></b-form-input>
             </b-col>
+            <b-col cols="1"><font-awesome-icon icon="fighter-jet" /></b-col>
         </b-row>
     </b-container>
 </template>

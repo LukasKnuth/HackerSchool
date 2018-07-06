@@ -14,23 +14,27 @@
                         <b-col cols="4">{{$t("game.stats.gameOverLabel")}}</b-col>
                         <b-col>{{gameOverReason}}</b-col>
                     </b-row>
-                    <b-row class="stat-row">
-                        <b-col cols="5">{{$t("game.stats.instructionCounterLabel")}}</b-col>
+                    <b-row class="stat-row" :title="$t('game.stats.instructionCounterLabel')">
+                        <b-col cols="2"><font-awesome-icon icon="shoe-prints"/></b-col>
                         <b-col>{{instructionCounter}}</b-col>
                     </b-row>
-                    <b-row class="stat-row">
-                        <b-col cols="5">{{$t("game.stats.blocksCounterLabel")}}</b-col>
+                    <b-row class="stat-row" :title="$t('game.stats.blocksCounterLabel')">
+                        <b-col cols="2"><font-awesome-icon icon="puzzle-piece" /></b-col>
                         <b-col>{{blockCount}} / {{maxBlocks}}</b-col>
                     </b-row>
-                    <b-row class="control-row" align-h="center">
-                        <b-col>
+                    <b-row class="control-row justify-content-md-center" align-h="center">
+                        <b-col md="auto">
                             <b-button :variant="runButtonColor"
                                       :disabled="!gameIsRunning && instructionCounter > 0"
+                                      :title="runButtonText"
                                       @click="runButtonClick"
-                            >{{runButtonText}}</b-button>
-                        </b-col>
-                        <b-col>
-                            <b-button variant="danger" @click="stopButtonClick">{{$t("game.stopBtnLabel")}}</b-button>
+                                      class="game-control-btn"
+                            ><font-awesome-icon :icon="runButtonIcon" /></b-button>
+                            <b-button variant="danger"
+                                      :title="$t('game.stopBtnLabel')"
+                                      @click="stopButtonClick"
+                                      class="game-control-btn"
+                            ><font-awesome-icon icon="stop"/></b-button>
                         </b-col>
                     </b-row>
                 </b-container>
@@ -146,6 +150,17 @@
                 return this.$t("game.startBtnLabel");
             }
         }
+        get runButtonIcon() {
+            if (this.gameIsRunning) {
+                if (this.gameIsPaused) {
+                    return "play";
+                } else {
+                    return "pause";
+                }
+            } else {
+                return "play";
+            }
+        }
 
         public runButtonClick() {
             if (this.gameIsRunning) {
@@ -212,10 +227,14 @@
         margin-top: 20px;
     }
     .stat-row {
-        margin-top: 2px;
+        margin-top: 4px;
     }
     .control-row {
         margin-top: 20px;
+
+        .game-control-btn {
+            margin: 0 2px;
+        }
     }
     .gameover-row {
         color: #ff5f44;

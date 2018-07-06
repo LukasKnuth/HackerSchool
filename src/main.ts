@@ -6,11 +6,14 @@ import store from "./store";
 import VueI18n from 'vue-i18n';
 import BootstrapVue from "bootstrap-vue";
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faAngleUp, faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import * as icons from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import German from "@/i18n/German";
 
-library.add(faAngleUp, faAngleDown);
+library.add(
+    icons.faAngleUp, icons.faAngleDown, icons.faUndoAlt, icons.faRedoAlt, icons.faFrog, icons.faFighterJet,
+    icons.faShoePrints, icons.faPuzzlePiece, icons.faPlay, icons.faPause, icons.faStop
+);
 
 Vue.config.productionTip = false;
 
