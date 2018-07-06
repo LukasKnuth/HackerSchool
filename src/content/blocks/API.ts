@@ -6,6 +6,7 @@ import {
     TILE_ENEMY,
     TILE_ENEMY_COLOR,
     TILE_GREEN,
+    TILE_NEUTRAL,
     TILE_PIT,
     TILE_TRAP
 } from '@/components/game/GameState';
@@ -22,6 +23,7 @@ export const PARAM_PIT = "pit";
 export const PARAM_TRAP = "trap";
 export const PARAM_ENEMY_COLOR = "enemy_color";
 export const PARAM_ENEMY = "enemy";
+export const PARAM_FLOOR = "floor";
 
 /**
  * Attaches the interpreter-API for all custom game-related blocks to the given interpreter.
@@ -55,6 +57,8 @@ export function attachGameBlockAPI(interpreter: Interpreter, scope: InterpreterS
                 return tile === TILE_ENEMY_COLOR;
             case PARAM_ENEMY:
                 return tile === TILE_ENEMY;
+            case PARAM_FLOOR:
+                return tile === TILE_NEUTRAL;
             default:
                 return false;
         }
