@@ -43,7 +43,7 @@
                 // take available rest-height of window:
                 const rect = blocklyArea.getBoundingClientRect();
                 // TODO magick number here is basically 150px from overlay + something. Make not magick!
-                blocklyDiv.style.height = (window.innerHeight - rect.top - 200) + 'px';
+                blocklyDiv.style.height = (window.innerHeight - rect.top - 150) + 'px';
             };
             window.addEventListener('resize', resizeEditor, false);
             resizeEditor();

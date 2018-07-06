@@ -234,7 +234,7 @@
 
         .scrollable {
             background-color: white;
-            height: 150px;
+            height: 100px;
             overflow-y: scroll;
         }
     }
