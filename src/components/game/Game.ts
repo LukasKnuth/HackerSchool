@@ -125,22 +125,25 @@ export function startGameLoop(app: PIXI.Application, level: Level, userCode: str
     let gameTime = 0;
     const loop = (delta: number) => {
         gameTime += app.ticker.elapsedMS * delta;
-        if (gameTime >= gameLoop.tickWait && !gameLoop.isPaused && hasMoreCode && !gameState.isGameOver) {
+        if (gameTime >= gameLoop.tickWait) {
             gameTime = 0;
-            do {
-                hasMoreCode = interpreter.step();
-            } while (!blockExecutionPause && hasMoreCode);
-            blockExecutionPause = false;
-            gameState.hasMoreCode = hasMoreCode;
-            level.tick(gameState);
-            // Check game termination
-            if (gameState.isGameOver || !hasMoreCode) {
-                if (gameLoop.onGameTerminated) {
-                    gameState.isGameRunning = false;
-                    gameLoop.onGameTerminated();
-                }
-                if (gameState.isGameOver && gameLoop.onGameOver) {
-                    gameLoop.onGameOver(gameState.isGameWon, gameState.gameOverReason);
+            // check pre-conditions
+            if (!gameLoop.isPaused && hasMoreCode && !gameState.isGameOver) {
+                do {
+                    hasMoreCode = interpreter.step();
+                } while (!blockExecutionPause && hasMoreCode);
+                blockExecutionPause = false;
+                gameState.hasMoreCode = hasMoreCode;
+                level.tick(gameState);
+                // Check game termination
+                if (gameState.isGameOver || !hasMoreCode) {
+                    if (gameLoop.onGameTerminated) {
+                        gameState.isGameRunning = false;
+                        gameLoop.onGameTerminated();
+                    }
+                    if (gameState.isGameOver && gameLoop.onGameOver) {
+                        gameLoop.onGameOver(gameState.isGameWon, gameState.gameOverReason);
+                    }
                 }
             }
         }
