@@ -107,10 +107,10 @@ export default function(blocks, generators) {
 
     blocks['sensor_radar'] = {
         init() {
-            this.appendDummyInput().appendField("radar senses")
+            this.appendDummyInput().appendField("radar distance")
                 .appendField(new Blockly.FieldDropdown(tileTypeEnum), "tile_type");
             this.setInputsInline(true);
-            this.setOutput(true, "Boolean");
+            this.setOutput(true, "Number");
             this.setColour(GAME_HUE);
             this.setTooltip("Use the radar to check a two tiles area around the current player position.");
         }

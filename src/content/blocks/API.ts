@@ -1,4 +1,5 @@
 import {
+    DISTANCE_NOT_FOUND,
     GameState,
     GridTile,
     TILE_BLUE,
@@ -25,6 +26,17 @@ export const PARAM_ENEMY_COLOR = "enemy_color";
 export const PARAM_ENEMY = "enemy";
 export const PARAM_FLOOR = "floor";
 
+const TYPE_TO_TILE: {[keys: string]: GridTile} = {
+    [PARAM_COLLECTIBLE]: TILE_COLLECTIBLE,
+    [PARAM_BLUE]: TILE_BLUE,
+    [PARAM_GREEN]: TILE_GREEN,
+    [PARAM_PIT]: TILE_PIT,
+    [PARAM_TRAP]: TILE_TRAP,
+    [PARAM_ENEMY_COLOR]: TILE_ENEMY_COLOR,
+    [PARAM_ENEMY]: TILE_ENEMY,
+    [PARAM_FLOOR]: TILE_NEUTRAL
+};
+
 /**
  * Attaches the interpreter-API for all custom game-related blocks to the given interpreter.
  * @param {Interpreter} interpreter the interpreter to attach the API to
@@ -41,39 +53,25 @@ export function attachGameBlockAPI(interpreter: Interpreter, scope: InterpreterS
     };
     interpreter.setProperty(scope, FUNCTION_TURN, interpreter.createNativeFunction(turnWrapper));
     // Sensors
-    const checkType = (tile: GridTile, type: string) => {
-        switch (type) {
-            case PARAM_COLLECTIBLE:
-                return tile === TILE_COLLECTIBLE;
-            case PARAM_BLUE:
-                return tile === TILE_BLUE;
-            case PARAM_GREEN:
-                return tile === TILE_GREEN;
-            case PARAM_PIT:
-                return tile === TILE_PIT;
-            case PARAM_TRAP:
-                return tile === TILE_TRAP;
-            case PARAM_ENEMY_COLOR:
-                return tile === TILE_ENEMY_COLOR;
-            case PARAM_ENEMY:
-                return tile === TILE_ENEMY;
-            case PARAM_FLOOR:
-                return tile === TILE_NEUTRAL;
-            default:
-                return false;
-        }
-    };
     const cameraWrapper = (type: PrimitiveObject) => {
         const tile = gameState.sensorNext();
-        const result = checkType(tile, type.toString());
-        return interpreter.createPrimitive(result);
+        const typeString = type.toString();
+        if (typeString in TYPE_TO_TILE) {
+            return interpreter.createPrimitive(TYPE_TO_TILE[typeString] === tile);
+        } else {
+            return interpreter.createPrimitive(false);
+        }
     };
     interpreter.setProperty(scope, FUNCTION_SENSOR_CAMERA, interpreter.createNativeFunction(cameraWrapper));
     const radarWrapper = (type: PrimitiveObject) => {
-        const tiles = gameState.sensorAround();
         const typeString = type.toString();
-        const result = tiles.some((tile: GridTile) => checkType(tile, typeString));
-        return interpreter.createPrimitive(result);
+        if (typeString in TYPE_TO_TILE) {
+            const tileType = TYPE_TO_TILE[typeString];
+            const result = gameState.sensorShortestDistance(tileType);
+            return interpreter.createPrimitive(result);
+        } else {
+            return interpreter.createPrimitive(DISTANCE_NOT_FOUND);
+        }
     };
     interpreter.setProperty(scope, FUNCTION_SENSOR_RADAR, interpreter.createNativeFunction(radarWrapper));
 }

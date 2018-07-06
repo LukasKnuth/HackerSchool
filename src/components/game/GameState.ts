@@ -27,6 +27,7 @@ export const PLAYER_ORIENTATION_DOWN = 180;
 export const PLAYER_ORIENTATION_LEFT = 270;
 
 const ANGLE_MAX = 360;
+export const DISTANCE_NOT_FOUND = -1;
 
 export class GridPosition {
     constructor(public x: number, public y: number){}
@@ -182,6 +183,26 @@ export class GameState {
             }
         }
         return Array.from(results);
+    }
+
+    public sensorShortestDistance(tileType: GridTile, playerIndex = 0): number {
+        let shortestDistance = DISTANCE_NOT_FOUND;
+        const playerPosition = this.getPlayerPosition(playerIndex);
+        const gridPosition = new GridPosition(0, 0);
+        for (let x = 0; x < this.mazeWidth; x++) {
+            for (let y = 0; y < this.mazeHeight; y++) {
+                gridPosition.x = x;
+                gridPosition.y = y;
+                const currentTile = this.getGridTile(gridPosition);
+                if (currentTile === tileType) {
+                    const distance = Math.abs(x - playerPosition.x) + Math.abs(y - playerPosition.y);
+                    if (shortestDistance === DISTANCE_NOT_FOUND || distance < shortestDistance) {
+                        shortestDistance = distance;
+                    }
+                }
+            }
+        }
+        return shortestDistance;
     }
 
     /**
