@@ -10,7 +10,7 @@
                       :paused.sync="gameIsPaused"
                 />
                 <b-container>
-                    <b-row class="gameover-row" v-if="gameOverReason">
+                    <b-row class="gameover-row" :class="{win: gameOverWin}" v-if="gameOverReason">
                         <b-col cols="4">{{$t("game.stats.gameOverLabel")}}</b-col>
                         <b-col>{{gameOverReason}}</b-col>
                     </b-row>
@@ -88,6 +88,7 @@
         public debugLog: DebugLogEntry[] = [];
         public showDebugLog: boolean = false;
         public gameOverReason: string = "";
+        public gameOverWin: boolean = false;
         // synced:
         public blockCount: number = 0;
         public gameIsRunning: boolean = false;
@@ -100,6 +101,7 @@
                     vue.instructionCounter = 0;
                     vue.debugLog = [];
                     vue.gameOverReason = "";
+                    vue.gameOverWin = false;
                 }
             })
         }
@@ -152,6 +154,7 @@
             } else {
                 this.debugLog = [];
                 this.gameOverReason = "";
+                this.gameOverWin = false;
                 this.instructionCounter = 0;
                 const code = (this.$refs.editor as any).compile();
                 console.log(`-------- ${new Date()}: Newly generated code ------\n`, code);
@@ -174,6 +177,7 @@
         }
         public onGameOver(victory: boolean, reason: string) {
             this.gameOverReason = reason;
+            this.gameOverWin = victory;
             if (victory) {
                 (this.$refs.gameOverModal as any).show();
             }
@@ -211,7 +215,10 @@
         margin-top: 20px;
     }
     .gameover-row {
-        color: red;
+        color: #ff5f44;
+        &.win {
+            color: #54a928;
+        }
     }
     .overlay {
         padding: 0 20px;
