@@ -24,7 +24,10 @@
                     </b-row>
                     <b-row class="control-row" align-h="center">
                         <b-col>
-                            <b-button :variant="runButtonColor" @click="runButtonClick">{{runButtonText}}</b-button>
+                            <b-button :variant="runButtonColor"
+                                      :disabled="!gameIsRunning && instructionCounter > 0"
+                                      @click="runButtonClick"
+                            >{{runButtonText}}</b-button>
                         </b-col>
                         <b-col>
                             <b-button variant="danger" @click="stopButtonClick">{{$t("game.stopBtnLabel")}}</b-button>
@@ -152,17 +155,17 @@
                     (this.$refs.game as any).pauseGame();
                 }
             } else {
-                this.debugLog = [];
-                this.gameOverReason = "";
-                this.gameOverWin = false;
-                this.instructionCounter = 0;
                 const code = (this.$refs.editor as any).compile();
                 console.log(`-------- ${new Date()}: Newly generated code ------\n`, code);
                 (this.$refs.game as any).startGame(code);
             }
         }
         public stopButtonClick() {
-            (this.$refs.game as any).stopGame();
+            this.debugLog = [];
+            this.gameOverReason = "";
+            this.gameOverWin = false;
+            this.instructionCounter = 0;
+            (this.$refs.game as any).stopAndResetGame();
         }
 
         // ----- GAME EVENTS -------

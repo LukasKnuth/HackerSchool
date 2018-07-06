@@ -35,8 +35,8 @@
         public gameSpeed: number = GAME_SPEED_SLOW;
 
         private engine?: pixi.Application;
-        private gameLoop?: GameLoop;
         private resources?: GameResources;
+        private gameLoop?: GameLoop;
 
         private mounted() {
             this.engine = new pixi.Application({
@@ -107,7 +107,6 @@
                 this.gameLoop.onGameTerminated = () => {
                     console.log("User Code has no more steps to execute!");
                     this.stopGame();
-                    this.emitRunningUpdate(false);
                 };
                 this.gameLoop.onGameOver = (victory: boolean, reason: string) => this.emitGameOver(victory, reason);
                 this.gameLoop.onDebugLog = (log: string, blockId: string) => this.emitLogAppend(log, blockId);
@@ -119,8 +118,13 @@
         public stopGame() {
             if (this.engine && this.gameLoop) {
                 game.stopGameLoop(this.engine, this.gameLoop);
+                this.gameLoop = null;
                 this.emitRunningUpdate(false);
             }
+        }
+        public stopAndResetGame() {
+            this.stopGame();
+            this.renderPreview();
         }
         public pauseGame() {
             if (this.engine && this.gameLoop) {
