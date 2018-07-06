@@ -110,10 +110,12 @@
 
         get fullLog() {
             const copy = this.debugLog.slice();
-            copy.unshift({
-                type: this.$t("editor.debugLogTypes.levelDescription"),
-                line: this.level.description, color: "none"
-            });
+            if (this.level) {
+                copy.unshift({
+                    type: this.$t("editor.debugLogTypes.levelDescription"),
+                    line: this.level.description, color: "none"
+                });
+            }
             return copy;
         }
 
