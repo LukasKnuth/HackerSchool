@@ -74,7 +74,7 @@
             initEditor() {
                 const blocklyDiv = document.getElementById('blocklyDiv');
                 const toolbox = this.level
-                    ? makeToolboxXML(this.level.getBlocks(), this.level.allowMethods, this.level.allowVariables)
+                    ? makeToolboxXML(this.level.getBlocks(), this.level.allowVariables, this.level.allowMethods)
                     : "";
                 this.workspace = Blockly.inject(blocklyDiv, {
                     toolbox,
