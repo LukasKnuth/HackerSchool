@@ -1,5 +1,5 @@
 <template>
-    <b-container>
+    <b-container fluid>
         <b-row>
             <b-col cols="4">
                 <game ref="game" :level="level"
@@ -10,10 +10,6 @@
                       :paused.sync="gameIsPaused"
                 />
                 <b-container>
-                    <b-row class="gameover-row" :class="{win: gameOverWin}" v-if="gameOverReason">
-                        <b-col cols="4">{{$t("game.stats.gameOverLabel")}}</b-col>
-                        <b-col>{{gameOverReason}}</b-col>
-                    </b-row>
                     <b-row class="stat-row" :title="$t('game.stats.instructionCounterLabel')">
                         <b-col cols="2"><font-awesome-icon icon="shoe-prints"/></b-col>
                         <b-col>{{instructionCounter}}</b-col>
@@ -38,8 +34,6 @@
                         </b-col>
                     </b-row>
                 </b-container>
-                <h3 class="header-spacing">{{$t("game.level.descriptionHeadline")}}</h3>
-                <p>{{description}}</p>
             </b-col>
             <b-col cols="8" id="blocklyArea">
                 <blockly-editor ref="editor"
@@ -48,20 +42,13 @@
                 />
             </b-col>
         </b-row>
-        <div class="overlay" v-if="renderDebugLog">
-            <div class="preview">
-                <h3 class="peek" @click="showDebugLog = !showDebugLog">
-                    <font-awesome-icon :icon="debugLogIcon" />
-                    <span class="title">{{$t("editor.debugLog.sliderLabel")}}</span>
-                    <b-badge variant="primary">{{debugLog.length}}</b-badge>
-                </h3>
-            </div>
-            <div class="scrollable" v-show="showDebugLog" @mouseleave="onLogLeave">
-                <b-table hover
-                         :items="debugLog"
-                         :fields="logTableFields"
-                         @row-hovered="onLogHover"
-                ></b-table>
+        <div class="overlay">
+            <div class="scrollable">
+                <b-table hover small :items="fullLog" :fields="logTableFields" thead-class="no-header">
+                    <template slot="type" slot-scope="data">
+                        <span :style="{color: data.item.color}">{{data.item.type}}</span>
+                    </template>
+                </b-table>
             </div>
         </div>
         <b-modal ref="gameOverModal"
@@ -79,10 +66,10 @@
     import Game from "../components/game/index.vue";
     import {ACTION_SELECT_LEVEL, MUTATION_SET_LEVEL} from "../store/CourseProgress";
 
-    interface DebugLogEntry {
+    interface LogEntry {
         line: string;
-        blockId: string;
-        instruction: number;
+        type: string;
+        color: string;
     }
 
     @Component({
@@ -92,10 +79,9 @@
 
         // state:
         public instructionCounter: number = 0;
-        public debugLog: DebugLogEntry[] = [];
+        public debugLog: LogEntry[] = [];
         public showDebugLog: boolean = false;
         public gameOverReason: string = "";
-        public gameOverWin: boolean = false;
         // synced:
         public blockCount: number = 0;
         public gameIsRunning: boolean = false;
@@ -108,7 +94,6 @@
                     vue.instructionCounter = 0;
                     vue.debugLog = [];
                     vue.gameOverReason = "";
-                    vue.gameOverWin = false;
                 }
             })
         }
@@ -122,8 +107,14 @@
         get maxBlocks() {
             return this.level ? this.level.maxBlocks : Infinity;
         }
-        get description() {
-            return this.level ? this.level.description : "";
+
+        get fullLog() {
+            const copy = this.debugLog.slice();
+            copy.unshift({
+                type: this.$t("editor.debugLogTypes.levelDescription"),
+                line: this.level.description, color: "none"
+            });
+            return copy;
         }
 
         get debugLogIcon() {
@@ -131,8 +122,8 @@
         }
         get logTableFields() {
             return [
-                {key: "line", label: this.$t("editor.debugLog.headerOutput")},
-                {key: "instruction", label: this.$t("editor.debugLog.headerInstruction")}
+                {key: "type", label: ""},
+                {key: "line", label: ""}
             ];
         }
 
@@ -178,7 +169,6 @@
         public stopButtonClick() {
             this.debugLog = [];
             this.gameOverReason = "";
-            this.gameOverWin = false;
             this.instructionCounter = 0;
             (this.$refs.game as any).stopAndResetGame();
         }
@@ -191,11 +181,13 @@
             (this.$refs.editor as any).highlightBlock(blockId);
         }
         public debugLogAppend(log: string, blockId: string) {
-            this.debugLog.push({line: log, blockId, instruction: this.instructionCounter});
+            this.debugLog.push({line: log, color: '#2e66cc', type: this.$t("editor.debugLogTypes.debugLog")});
         }
         public onGameOver(victory: boolean, reason: string) {
             this.gameOverReason = reason;
-            this.gameOverWin = victory;
+            this.debugLog.push({
+                line: reason, type: this.$t("editor.debugLogTypes.gameOver"), color: victory ? "#54a928" : "#ff5f44"
+            });
             if (victory) {
                 (this.$refs.gameOverModal as any).show();
             }
@@ -211,18 +203,13 @@
             }
         }
 
-        // ----- DEBUG LOG EVENTS ---
-        public onLogHover(item: DebugLogEntry) {
-            (this.$refs.editor as any).highlightBlock(item.blockId);
-        }
-        public onLogLeave() {
-            (this.$refs.editor as any).highlightBlock(null);
-        }
-
     }
 </script>
 
 <style lang="scss">
+    .no-header {
+        display: none;
+    }
     .header-spacing {
         margin-top: 20px;
     }
@@ -236,29 +223,18 @@
             margin: 0 2px;
         }
     }
-    .gameover-row {
-        color: #ff5f44;
-        &.win {
-            color: #54a928;
-        }
-    }
     .overlay {
-        padding: 0 20px;
+        border-top: 1px solid #ccc;
+        padding-left: 10px;
         position: fixed;
         z-index: 1000;
         bottom: 0;
         left: 0;
         right: 0;
 
-        .peek {
-            cursor: pointer;
-            .title {
-                margin: 0 10px 0 20px;
-            }
-        }
         .scrollable {
             background-color: white;
-            height: 250px;
+            height: 150px;
             overflow-y: scroll;
         }
     }

@@ -110,7 +110,8 @@ export function startGameLoop(app: PIXI.Application, level: Level, userCode: str
         const blockExecWrapper = (id: any) => onBlockExecuting(id ? id.toString() : '');
         interp.setProperty(scope, BLOCK_EXECUTING, interp.createNativeFunction(blockExecWrapper));
         const logWrapper = (variable: string, log: string, blockId: string) => {
-            const line = `${variable.toString()} is: ${log.toString()}`;
+            // TODO make this translatable! Return raw data??
+            const line = `${variable.toString()} mit Wert: ${log.toString()}`;
             onLogAppend(line, blockId ? blockId.toString() : '');
         };
         interp.setProperty(scope, "debugLog", interp.createNativeFunction(logWrapper));

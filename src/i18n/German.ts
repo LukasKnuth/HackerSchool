@@ -14,10 +14,10 @@ export default {
     editor: {
         undoLabel: "Rückgängig",
         redoLabel: "Wiederholen",
-        debugLog: {
-            sliderLabel: "Debug Ausgaben",
-            headerOutput: "Log Ausgabe",
-            headerInstruction: "bei Anweisung"
+        debugLogTypes: {
+            levelDescription: "Level Anweisungen",
+            gameOver: "Game Over",
+            debugLog: "Debug"
         }
     },
     game: {
@@ -25,11 +25,7 @@ export default {
         pauseBtnLabel: "Spiel anhalten",
         continueBtnLabel: "Spiel fortsetzen",
         stopBtnLabel: "Stoppen",
-        level: {
-            descriptionHeadline: "Beschreibung"
-        },
         stats: {
-            gameOverLabel: "Game Over",
             instructionCounterLabel: "Anweisungen",
             blocksCounterLabel: "Blöcke"
         },
