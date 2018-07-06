@@ -1,8 +1,7 @@
 <template>
     <b-container fluid>
-        <b-row align-h="center" id="course-nav">
-            <b-col cols="2"><h3 class="level-name">{{levelName}}</h3></b-col>
-            <b-col cols="4">
+        <b-row class="justify-content-md-center" id="course-nav">
+            <b-col md="auto">
                 <span class="level-label">{{$t("level.levelListLabel")}}</span>
                 <span v-for="l in levelList"
                       class="level-list-entry"
@@ -10,6 +9,9 @@
                       @click="changeLevel(l.nr)"
                 >{{l.nr === selectedLevel ? l.nr : "&nbsp;"}}</span>
             </b-col>
+        </b-row>
+        <b-row class="justify-content-md-center level-name">
+            <b-col md="auto"><span>{{levelName}}</span></b-col>
         </b-row>
         <b-row>
             <b-col align-h="center">
@@ -56,9 +58,16 @@
 </script>
 
 <style lang="scss">
-    #course-nav {
-        margin-top: 20px;
+    .level-name {
         margin-bottom: 20px;
+        span {
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+    }
+
+    #course-nav {
+        margin-top: 10px;
 
         .level-label {
             margin-right: 10px;
@@ -77,7 +86,7 @@
             border: 2px solid darkgray;
 
             &.finished {
-                background-color: darkgray;
+                background-color: #54a928;
             }
             &.progress {
                 background-color: lightgray;
