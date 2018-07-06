@@ -90,6 +90,7 @@ export class PlayerPosition extends GridPosition {
 export class GameState {
 
     public hasMoreCode: boolean = true;
+    //TODO rename or hide this variable because it is confusing since this suggests that isGameRunning = !isGameOver for API consumers.
     public isGameRunning: boolean = true;
     private _gameOverReason: string = "";
     private _isGameOver: boolean = false;

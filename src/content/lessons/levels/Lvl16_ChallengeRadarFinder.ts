@@ -9,7 +9,7 @@ import {API, default as Interpreter, InterpreterScope} from 'js-interpreter';
 export default class Lvl16_ChallengeRadarFinder implements Level {
     public readonly allowMethods = false;
     public readonly allowVariables = false;
-    public readonly description = "Diesmal sind die Kristalle versteckt und ihre Anordnung ändert sich von mal zu Mal." +
+    public readonly description = "Diesmal sind die Kristalle versteckt und ihre Anordnung ändert sich von Mal zu Mal." +
         " Benutze dein neues Radar, um sie ausfindig zu machen.";
     public readonly maxBlocks = 20; //verify that number
     public readonly mazeHeight = 15;
