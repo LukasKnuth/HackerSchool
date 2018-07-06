@@ -4,6 +4,7 @@
         <b-row id="game-controls" align-v="end">
             <b-col><label for="game-speed">{{$t("game.controls.speedSliderLabel")}}</label></b-col>
             <b-col>
+                <!-- todo move this out of here to the other game-related controls in the editor! -->
                 <b-form-input id="game-speed" type="range"
                               :min="minGameSpeed" :max="maxGameSpeed"
                               v-model.number="gameSpeed"></b-form-input>
@@ -161,3 +162,11 @@
 
     }
 </script>
+
+<style lang="scss">
+    #game-speed {
+        // Rotate, so the speed increases from left to right. This wouldn't work by flipping values because min must
+        // be larger than max...
+        transform: rotate(180deg);
+    }
+</style>
