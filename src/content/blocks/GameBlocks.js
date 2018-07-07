@@ -25,7 +25,7 @@ export default function(blocks, generators) {
             this.setColour(GAME_HUE);
             this.setNextStatement(true);
             this.setPreviousStatement(true);
-            this.appendDummyInput().appendField('🠶 ⭢'); // label
+            this.appendDummyInput().appendField('→'); // label
         }
     };
     generators['forward'] = () => `${api.FUNCTION_MOVE}(1);\n`;
@@ -36,7 +36,7 @@ export default function(blocks, generators) {
             this.setColour(GAME_HUE);
             this.setNextStatement(true);
             this.setPreviousStatement(true);
-            this.appendDummyInput().appendField('⭠ 🠶'); // label
+            this.appendDummyInput().appendField('←'); // label
         }
     };
     generators['backward'] = () => `${api.FUNCTION_MOVE}(-1);\n`;
@@ -48,7 +48,7 @@ export default function(blocks, generators) {
             this.setColour(GAME_HUE);
             this.setNextStatement(true);
             this.setPreviousStatement(true);
-            this.appendDummyInput().appendField('🠶 ⮥'); // label
+            this.appendDummyInput().appendField('↻'); // label
         }
     };
     generators['turn_left'] = () => `${api.FUNCTION_TURN}(-90);\n`;
@@ -59,7 +59,7 @@ export default function(blocks, generators) {
             this.setColour(GAME_HUE);
             this.setNextStatement(true);
             this.setPreviousStatement(true);
-            this.appendDummyInput().appendField('🠶 ⮧'); // label
+            this.appendDummyInput().appendField('↺'); // label
         }
     };
     generators['turn_right'] = () => `${api.FUNCTION_TURN}(90);\n`;
