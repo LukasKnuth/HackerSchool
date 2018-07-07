@@ -12,7 +12,8 @@ import German from "@/i18n/German";
 
 library.add(
     icons.faAngleUp, icons.faAngleDown, icons.faUndoAlt, icons.faRedoAlt, icons.faFrog, icons.faFighterJet,
-    icons.faShoePrints, icons.faPuzzlePiece, icons.faPlay, icons.faPause, icons.faStop
+    icons.faShoePrints, icons.faPuzzlePiece, icons.faPlay, icons.faPause, icons.faStop, icons.faChalkboardTeacher,
+    icons.faGamepad
 );
 
 Vue.config.productionTip = false;
