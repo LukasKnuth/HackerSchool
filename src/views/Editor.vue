@@ -112,7 +112,7 @@
             const copy = this.debugLog.slice();
             if (this.level) {
                 copy.unshift({
-                    type: this.$t("editor.debugLogTypes.levelDescription"),
+                    type: this.$t("editor.debugLogTypes.levelDescription").toString(),
                     line: this.level.description, color: "none"
                 });
             }
@@ -183,12 +183,12 @@
             (this.$refs.editor as any).highlightBlock(blockId);
         }
         public debugLogAppend(log: string, blockId: string) {
-            this.debugLog.push({line: log, color: '#2e66cc', type: this.$t("editor.debugLogTypes.debugLog")});
+            this.debugLog.push({line: log, color: '#2e66cc', type: this.$t("editor.debugLogTypes.debugLog").toString()});
         }
         public onGameOver(victory: boolean, reason: string) {
             this.gameOverReason = reason;
             this.debugLog.push({
-                line: reason, type: this.$t("editor.debugLogTypes.gameOver"), color: victory ? "#54a928" : "#ff5f44"
+                line: reason, type: this.$t("editor.debugLogTypes.gameOver").toString(), color: victory ? "#54a928" : "#ff5f44"
             });
             if (victory) {
                 (this.$refs.gameOverModal as any).show();

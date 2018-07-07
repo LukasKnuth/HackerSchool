@@ -41,20 +41,24 @@
         private gameLoop?: GameLoop;
 
         private mounted() {
-            this.engine = new pixi.Application({
-                width: 400, height: 400, antialias: true
-            });
-            this.$el.querySelector("#game-window").appendChild(this.engine.view);
+            const gameWindow = this.$el.querySelector("#game-window");
+            if (gameWindow) {
+                this.engine = new pixi.Application({
+                    width: 400, height: 400, antialias: true
+                });
+                gameWindow.appendChild(this.engine.view);
+                this.engine.ticker.autoStart = false;
+                this.engine.renderer.autoResize = true; // TODO stretch to full available width of container
 
-            this.engine.ticker.autoStart = false;
-            this.engine.renderer.autoResize = true; // TODO stretch to full available width of container
-
-            game.initializeRenderer(this.engine).then((resources: GameResources) => {
-                this.resources = resources;
-                this.renderPreview();
-            }).catch((err) => {
-                console.error(err); // TODO show error in UI!
-            });
+                game.initializeRenderer(this.engine).then((resources: GameResources) => {
+                    this.resources = resources;
+                    this.renderPreview();
+                }).catch((err) => {
+                    console.error(err); // TODO show error in UI!
+                });
+            } else {
+                console.error("Couldn't mount game!")
+            }
         }
         private beforeDestroy() {
             if (this.engine) {
@@ -120,7 +124,7 @@
         public stopGame() {
             if (this.engine && this.gameLoop) {
                 game.stopGameLoop(this.engine, this.gameLoop);
-                this.gameLoop = null;
+                this.gameLoop = undefined;
                 this.emitRunningUpdate(false);
             }
         }
