@@ -55,7 +55,7 @@ export default class Lvl11_ConditionalsWithElseIf implements Level {
             Game: ["forward", "backward", 'turn_left', 'turn_right', 'sensor_camera'/*, 'sensor_radar'*/],
             //   Logic: ["logic_compare", "logic_operation", "logic_negate", "math_arithmetic", "math_modulo"],
             Values: ["math_number"/*, "text", "logic_boolean", "math_random_int"*/],
-            //   Debug: ["debug_log"]
+            Debug: ["debug_log"]
         };
     }
 
