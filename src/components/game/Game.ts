@@ -34,6 +34,8 @@ export type GameRenderer = (state: GameState) => void;
 export interface GameResources {
     player1: pixi.Sprite;
     player1Cone: pixi.Graphics;
+    player1Radar: pixi.Graphics;
+    player1Camera: pixi.Graphics;
     background: pixi.Sprite;
     grid: pixi.Graphics;
     win: pixi.sound.Sound;
@@ -71,6 +73,8 @@ async function loadResources(app: pixi.Application): Promise<GameResources> {
     return {
         player1: resourceToSprite(FILE_ASSET_PLAYER1),
         player1Cone: new pixi.Graphics(),
+        player1Radar: new pixi.Graphics(),
+        player1Camera: new pixi.Graphics(),
         background: resourceToSprite(FILE_ASSET_BACKGROUND),
         grid: new pixi.Graphics(),
         win: resourceToSound(FILE_SOUND_SUCCESS),
@@ -130,6 +134,7 @@ export function startGameLoop(app: PIXI.Application, level: Level, userCode: str
             gameTime = 0;
             // check pre-conditions
             if (!gameLoop.isPaused && hasMoreCode && !gameState.isGameOver) {
+                gameState.resetPlayerActions();
                 do {
                     hasMoreCode = interpreter.step();
                 } while (!blockExecutionPause && hasMoreCode);
@@ -172,6 +177,8 @@ export async function initializeRenderer(app: pixi.Application): Promise<GameRes
     app.stage.addChild(sprites.grid);
     app.stage.addChild(sprites.player1);
     app.stage.addChild(sprites.player1Cone);
+    app.stage.addChild(sprites.player1Radar);
+    app.stage.addChild(sprites.player1Camera);
 
     sprites.player1.position.set(40, 100);
     sprites.player1.scale.set(0.12, 0.15);
@@ -242,6 +249,27 @@ export function renderFrame(app: PIXI.Application, resources: GameResources, sta
     resources.player1Cone.x = playerX + (xGridSize / 2);
     resources.player1Cone.y = playerY + (yGridSize / 2);
     resources.player1Cone.endFill();
+
+    const actions = state.getPlayerActions();
+
+    // TODO can we animate this by tweening between values and increasing a "visible Frame" counter somewhere??
+    resources.player1Radar.clear();
+    if (actions.usedRadar) {
+        resources.player1Radar.lineStyle(3, 0xf22d2d, .7);
+        resources.player1Radar.drawCircle(
+            playerX + (resources.player1.width / 2),
+            playerY + (resources.player1.height / 2),
+            40
+        );
+    }
+
+    const nextPosition = state.getNextPosition(0);
+    resources.player1Camera.clear();
+    if (actions.usedCamera) {
+        resources.player1Camera.beginFill(0xffffff, .5);
+        resources.player1Camera.drawRect(nextPosition.x * xGridSize, nextPosition.y * yGridSize, xGridSize, yGridSize);
+        resources.player1Camera.endFill();
+    }
 
     // Play sounds?
     if (state.isGameOver && state.isGameWon) {

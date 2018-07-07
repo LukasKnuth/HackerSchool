@@ -183,7 +183,7 @@ export class GameState {
         this.setPlayerPosition(position, playerIndex);
     }
 
-    private getNextPosition(playerIndex: number, steps = 1) {
+    public getNextPosition(playerIndex: number, steps = 1) {
         const position = this.getPlayerPosition(playerIndex);
         if (position.angle >= 45 && position.angle < 135) {
             position.x += steps;
