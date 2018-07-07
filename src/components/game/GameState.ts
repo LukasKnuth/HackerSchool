@@ -88,10 +88,32 @@ export class PlayerPosition extends GridPosition {
     }
 }
 
+export class PlayerActionState {
+    usedRadar: boolean = false;
+    usedCamera: boolean = false;
+
+    fillWith(otherState: PlayerActionState) {
+        this.usedRadar = otherState.usedRadar;
+        this.usedCamera = otherState.usedCamera;
+    }
+
+    clone() {
+        const clone = new PlayerActionState();
+        clone.fillWith(this);
+        return clone;
+    }
+
+    reset() {
+        this.usedRadar = false;
+        this.usedCamera = false;
+    }
+}
+
 export class GameState {
 
     public hasMoreCode: boolean = true;
-    //TODO rename or hide this variable because it is confusing since this suggests that isGameRunning = !isGameOver for API consumers.
+    // TODO rename or hide this variable because it is confusing since this suggests
+    // that isGameRunning = !isGameOver for API consumers.
     public isGameRunning: boolean = true;
     private _gameOverReason: string = "";
     private _isGameOver: boolean = false;
@@ -100,6 +122,7 @@ export class GameState {
         new PlayerPosition(0, 0, 0), // player
         new PlayerPosition(-100, -100, 0) // enemy (placed out-of-bounds to avoid sensoring him by accident!)
     ];
+    private playerActions: PlayerActionState[] = [new PlayerActionState(), new PlayerActionState()];
     private levelState: GridState;
 
     constructor(mazeWidth: number, mazeHeight: number) {
@@ -126,6 +149,31 @@ export class GameState {
             return this.playerPosition[playerIndex].clone();
         } else {
             return new PlayerPosition(-1, -1, 0);
+        }
+    }
+
+    public setPlayerActions(actions: PlayerActionState, playerIndex = 0): void {
+        if (this.playerActions.length > playerIndex) {
+            this.playerActions[playerIndex].fillWith(actions);
+        } else {
+            console.error(
+                `No player at index ${playerIndex}, only ${this.playerPosition.length} players available. `
+                + "Ignoring..."
+            );
+        }
+    }
+
+    public getPlayerActions(playerIndex = 0): PlayerActionState {
+        if (this.playerActions.length > playerIndex) {
+            return this.playerActions[playerIndex].clone();
+        } else {
+            return new PlayerActionState();
+        }
+    }
+
+    public resetPlayerActions(): void {
+        for (const actions of this.playerActions) {
+            actions.reset();
         }
     }
 

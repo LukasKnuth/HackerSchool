@@ -54,6 +54,9 @@ export function attachGameBlockAPI(interpreter: Interpreter, scope: InterpreterS
     interpreter.setProperty(scope, FUNCTION_TURN, interpreter.createNativeFunction(turnWrapper));
     // Sensors
     const cameraWrapper = (type: PrimitiveObject) => {
+        const actions = gameState.getPlayerActions();
+        actions.usedCamera = true;
+        gameState.setPlayerActions(actions);
         const tile = gameState.sensorNext();
         const typeString = type.toString();
         if (typeString in TYPE_TO_TILE) {
@@ -64,6 +67,9 @@ export function attachGameBlockAPI(interpreter: Interpreter, scope: InterpreterS
     };
     interpreter.setProperty(scope, FUNCTION_SENSOR_CAMERA, interpreter.createNativeFunction(cameraWrapper));
     const radarWrapper = (type: PrimitiveObject) => {
+        const actions = gameState.getPlayerActions();
+        actions.usedRadar = true;
+        gameState.setPlayerActions(actions);
         const typeString = type.toString();
         if (typeString in TYPE_TO_TILE) {
             const tileType = TYPE_TO_TILE[typeString];
