@@ -2,11 +2,16 @@ import * as pixi from "pixi.js";
 import "pixi-sound";
 import {
     GameState,
-    GridPosition, TILE_BLUE,
-    TILE_COLLECTIBLE, TILE_GREEN,
+    GridPosition,
+    TILE_BLUE,
+    TILE_COLLECTIBLE,
+    TILE_GREEN,
     TILE_NEUTRAL,
-    TILE_PIT, TILE_TELEPORT_ENTRY, TILE_TELEPORT_EXIT,
-
+    TILE_PIT,
+    TILE_RED,
+    TILE_TELEPORT_ENTRY,
+    TILE_TELEPORT_EXIT,
+    TILE_YELLOW,
 } from '@/components/game/GameState';
 import {Level} from '@/content/Lesson';
 import Interpreter, {API, InterpreterScope} from 'js-interpreter';
@@ -203,6 +208,12 @@ export function renderFrame(app: PIXI.Application, resources: GameResources, sta
                     break;
                 case TILE_GREEN:
                     resources.grid.beginFill(0x22CC22);
+                    break;
+                case TILE_YELLOW:
+                    resources.grid.beginFill(0xf4f731);
+                    break;
+                case TILE_RED:
+                    resources.grid.beginFill(0xf72020);
                     break;
                 case TILE_COLLECTIBLE:
                     resources.grid.beginFill(0xdfdd2d);

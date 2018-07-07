@@ -3,12 +3,14 @@ const MAP_INVALID_SQUARE = -1;
 // Map squares:
 export const TILE_BLUE = 3;
 export const TILE_GREEN = 4;
+export const TILE_YELLOW = 5;
+export const TILE_RED = 6;
 export const TILE_NEUTRAL = 1;
 export const TILE_PIT = 2;
 export const TILE_TRAP = 3;
 export const TILE_COLLECTIBLE = 9;
-export const TILE_TELEPORT_ENTRY = 5;
-export const TILE_TELEPORT_EXIT = 6;
+export const TILE_TELEPORT_ENTRY = 10;
+export const TILE_TELEPORT_EXIT = 11;
 
 // This isn't actually placeable, it's used as a fake-return to check around the player.
 export const TILE_ENEMY = -1;
