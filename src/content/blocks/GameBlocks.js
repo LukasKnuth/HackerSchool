@@ -94,7 +94,7 @@ export default function(blocks, generators) {
             [{"src":"/sprites/TILE_RED.png","width":22,"height":22, "alt":"red"},api.PARAM_RED]*/
         ["crystal", api.PARAM_COLLECTIBLE],["pit", api.PARAM_PIT], ["floor", api.PARAM_FLOOR],/*["trap", api.PARAM_TRAP],
         ["enemy color", api.PARAM_ENEMY_COLOR], ["enemy", api.PARAM_ENEMY],*/
-        ["green", api.PARAM_GREEN], ["blue", api.PARAM_BLUE],
+        ["green", api.PARAM_GREEN], ["blue", api.PARAM_BLUE], ["red", api.PARAM_RED]
 
     ];
 

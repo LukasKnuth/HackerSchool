@@ -10,7 +10,7 @@ import {
     TILE_BLUE,
     TILE_PIT,
     TILE_RED,
-    TILE_YELLOW,
+    TILE_GREEN,
     X
 } from '@/components/game/GameState';
 import {API, default as Interpreter, InterpreterScope} from 'js-interpreter';
@@ -116,7 +116,7 @@ export default class Lvl17_ChallengeRunForYourLives implements Level {
         } else if (tremorsLevel >= COLLAPSE_DANGER_HIGH_TIME) {
             Lvl17_ChallengeRunForYourLives.applyTremorLevel(gameState, TILE_RED, this.epicentre);
         } else if (tremorsLevel >= COLLAPSE_DANGER_MEDIUM_TIME) {
-            Lvl17_ChallengeRunForYourLives.applyTremorLevel(gameState, TILE_YELLOW, this.epicentre);
+            Lvl17_ChallengeRunForYourLives.applyTremorLevel(gameState, TILE_GREEN, this.epicentre);
         } else if (tremorsLevel >= COLLAPSE_DANGER_LOW_TIME) {
             Lvl17_ChallengeRunForYourLives.applyTremorLevel(gameState, TILE_BLUE, this.epicentre);
         }

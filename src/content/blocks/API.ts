@@ -8,8 +8,8 @@ import {
     TILE_ENEMY_COLOR,
     TILE_GREEN,
     TILE_NEUTRAL,
-    TILE_PIT,
-    TILE_TRAP
+    TILE_PIT, TILE_RED,
+    TILE_TRAP, TILE_YELLOW
 } from '@/components/game/GameState';
 import {default as Interpreter, InterpreterScope, PrimitiveObject} from 'js-interpreter';
 
@@ -20,6 +20,8 @@ export const FUNCTION_SENSOR_RADAR = "sensorRadar";
 export const PARAM_COLLECTIBLE = "collectible";
 export const PARAM_GREEN = "green";
 export const PARAM_BLUE = "blue";
+export const PARAM_RED = "red";
+export const PARAM_YELLOW = "yellow";
 export const PARAM_PIT = "pit";
 export const PARAM_TRAP = "trap";
 export const PARAM_ENEMY_COLOR = "enemy_color";
@@ -29,6 +31,8 @@ export const PARAM_FLOOR = "floor";
 const TYPE_TO_TILE: {[keys: string]: GridTile} = {
     [PARAM_COLLECTIBLE]: TILE_COLLECTIBLE,
     [PARAM_BLUE]: TILE_BLUE,
+    [PARAM_YELLOW]: TILE_YELLOW,
+    [PARAM_RED]: TILE_RED,
     [PARAM_GREEN]: TILE_GREEN,
     [PARAM_PIT]: TILE_PIT,
     [PARAM_TRAP]: TILE_TRAP,
