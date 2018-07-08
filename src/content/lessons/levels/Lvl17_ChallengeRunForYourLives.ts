@@ -28,7 +28,7 @@ export default class Lvl17_ChallengeRunForYourLives implements Level {
     public readonly showDebugLog = true;
     public readonly allowVariables = true;
     public readonly description = "Überlebe so lange du kannst!";
-    public readonly maxBlocks = 20; //verify that number
+    public readonly maxBlocks = 40; //verify that number
     public readonly mazeHeight = 15;
     public readonly mazeWidth = 15;
 
