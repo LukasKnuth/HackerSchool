@@ -7,6 +7,7 @@ import {
     PLAYER_ORIENTATION_RIGHT,
     PlayerPosition,
     TILE_BLUE,
+    TILE_NEUTRAL,
     TILE_PIT,
     X
 } from '@/components/game/GameState';
@@ -141,13 +142,17 @@ export default class Lvl20_ChallengeXMarksTheSpot implements Level {
     private static drawCross(maze: GridState, crossPos: GridPosition){
         for (var i = -2; i < 3; i++) {
             //skip center
-            if(i === 0)continue;
+
+            var targetTile = TILE_BLUE;
+            if(i === 0){
+                targetTile = TILE_NEUTRAL;
+            }
 
             //first diagonal
-            maze[crossPos.y + i][crossPos.x + i] = TILE_BLUE;
+            maze[crossPos.y + i][crossPos.x + i] = targetTile;
 
             //second diagonal
-            maze[crossPos.y - i][crossPos.x + i] = TILE_BLUE;
+            maze[crossPos.y - i][crossPos.x + i] = targetTile;
         }
     }
 
