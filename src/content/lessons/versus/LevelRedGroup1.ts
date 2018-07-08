@@ -1,10 +1,10 @@
 import {BlockToolbox, Level} from '@/content/Lesson';
 import {
-    _,
+    _, B, G,
     GameState,
     GridState,
     PLAYER_ORIENTATION_RIGHT,
-    PlayerPosition,
+    PlayerPosition, T,
     TILE_COLLECTIBLE,
     TILE_PIT,
     X
@@ -26,19 +26,19 @@ export default class LevelRedGroup1 implements Level {
 
     private initialMazeLayout: GridState = [
         [X, X, X, X, X, X, X, X, X, X, X, X, X, X, X],
-        [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
-        [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
-        [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
-        [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
-        [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
-        [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
-        [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
-        [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
-        [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
-        [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
-        [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
-        [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
-        [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
+        [X, _, _, _, _, X, X, X, X, X, X, X, X, X, X],
+        [X, X, X, X, _, X, X, X, X, X, X, X, X, X, X],
+        [X, X, X, X, _, X, X, X, X, X, X, X, X, X, X],
+        [X, X, X, X, _, _, _, X, X, X, X, X, X, X, X],
+        [X, X, X, X, X, X, _, X, X, X, X, X, X, X, X],
+        [X, X, X, X, X, X, _, X, X, X, X, X, X, X, X],
+        [X, X, _, _, _, B, _, _, _, X, X, X, X, X, X],
+        [X, X, _, X, X, X, X, X, _, X, X, X, X, X, X],
+        [X, X, G, X, X, X, X, X, _, X, X, X, X, X, X],
+        [X, _, _, _, _, X, X, X, _, X, X, X, X, X, X],
+        [X, _, X, X, _, X, X, X, _, X, X, X, X, X, X],
+        [X, _, _, _, _, X, X, X, _, X, X, X, X, X, X],
+        [X, X, X, X, X, X, X, G, _, T, X, X, X, X, X],
         [X, X, X, X, X, X, X, X, X, X, X, X, X, X, X],
     ];
 
@@ -60,8 +60,7 @@ export default class LevelRedGroup1 implements Level {
 
     initializeState(gameState: GameState): void {
         gameState.setGridState(this.initialMazeLayout);
-        // Todo set initial player position
-        gameState.setPlayerPosition(new PlayerPosition(1, 7, PLAYER_ORIENTATION_RIGHT));
+        gameState.setPlayerPosition(new PlayerPosition(1, 1, PLAYER_ORIENTATION_RIGHT));
     }
 
     tick(gameState: GameState): void {
