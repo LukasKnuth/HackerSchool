@@ -2,11 +2,10 @@ import {BlockToolbox, Level} from '@/content/Lesson';
 import {
     _,
     GameState,
-    GridPosition,
     GridState,
     PLAYER_ORIENTATION_RIGHT,
     PlayerPosition,
-    TILE_BLUE, TILE_COLLECTIBLE,
+    TILE_COLLECTIBLE,
     TILE_PIT,
     X
 } from '@/components/game/GameState';
@@ -14,16 +13,16 @@ import {API, default as Interpreter, InterpreterScope} from 'js-interpreter';
 import {attachGameBlockAPI} from "@/content/blocks/API";
 import {MSG_CODE_OVER_BUT_COLLECTABLE_NOT_GATHERED, MSG_FALLEN_IN_PIT} from "@/content/LevelCommons";
 
-export default class LevelRedGroup implements Level {
+export default class LevelBlueGroup2 implements Level {
     public readonly allowMethods = true;
     public readonly showDebugLog = true;
     public readonly allowVariables = true;
 
-    public readonly description = "Finde den mit dem Kreuz markierten Schatz. Aber Vorsicht vor falschen Fährten.";
+    public readonly description = "";
     public readonly mazeHeight = 15;
     public readonly mazeWidth = 15;
-    public readonly name = "Gruppe Lukas";
-    public readonly maxBlocks = 25; //todo set this!
+    public readonly name = "Team Blau";
+    public readonly maxBlocks = 15; //todo set this!
 
     private initialMazeLayout: GridState = [
         [X, X, X, X, X, X, X, X, X, X, X, X, X, X, X],

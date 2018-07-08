@@ -1,11 +1,13 @@
 import {Lesson, Level} from "../Lesson";
-import LevelBlueGroup from '@/content/lessons/versus/LevelBlueGroup';
+import LevelBlueGroup1 from '@/content/lessons/versus/LevelBlueGroup1';
+import LevelBlueGroup2 from "@/content/lessons/versus/LevelBlueGroup2";
 
 export default class ChallengesLesson implements Lesson {
     private readonly levels: Level[] = [];
 
     constructor() {
-        this.levels.push(new LevelBlueGroup());
+        this.levels.push(new LevelBlueGroup1());
+        this.levels.push(new LevelBlueGroup2());
     }
 
     get name() {
