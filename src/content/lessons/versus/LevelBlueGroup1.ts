@@ -1,10 +1,14 @@
 import {BlockToolbox, Level} from '@/content/Lesson';
 import {
     _,
+    B,
+    G,
     GameState,
     GridState,
     PLAYER_ORIENTATION_RIGHT,
     PlayerPosition,
+    R,
+    T,
     TILE_COLLECTIBLE,
     TILE_PIT,
     X
@@ -21,24 +25,24 @@ export default class LevelBlueGroup1 implements Level {
     public readonly description = "";
     public readonly mazeHeight = 15;
     public readonly mazeWidth = 15;
-    public readonly name = "Team Blau";
+    public readonly name = "Moderne Kunst?";
     public readonly maxBlocks = 15; //todo set this!
 
     private initialMazeLayout: GridState = [
         [X, X, X, X, X, X, X, X, X, X, X, X, X, X, X],
-        [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
-        [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
-        [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
-        [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
-        [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
-        [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
-        [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
-        [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
-        [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
-        [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
-        [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
-        [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
-        [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
+        [X, G, G, G, G, G, B, _, X, _, _, _, _, G, X],
+        [X, X, X, X, X, G, _, G, G, G, X, X, X, _, X],
+        [X, _, _, _, _, G, G, G, X, G, _, _, _, _, X],
+        [X, _, B, _, _, _, _, _, X, G, B, _, _, _, X],
+        [X, _, _, _, _, _, _, _, _, G, G, _, B, _, X],
+        [X, _, _, _, _, _, _, _, _, _, G, G, _, _, X],
+        [X, _, _, R, _, B, X, X, X, X, X, B, X, _, X],
+        [X, _, _, R, R, _, X, _, _, _, X, G, X, _, X],
+        [X, R, R, R, R, R, X, _, T, _, X, G, X, _, X],
+        [X, _, _, R, R, _, X, _, G, _, X, G, X, _, X],
+        [X, B, _, R, _, _, X, _, G, X, X, G, X, _, X],
+        [X, _, _, _, _, B, X, B, G, G, G, G, X, _, X],
+        [X, G, _, _, _, _, X, _, _, _, X, B, X, G, X],
         [X, X, X, X, X, X, X, X, X, X, X, X, X, X, X],
     ];
 
@@ -61,7 +65,7 @@ export default class LevelBlueGroup1 implements Level {
     initializeState(gameState: GameState): void {
         gameState.setGridState(this.initialMazeLayout);
         // Todo set initial player position
-        gameState.setPlayerPosition(new PlayerPosition(1, 7, PLAYER_ORIENTATION_RIGHT));
+        gameState.setPlayerPosition(new PlayerPosition(1, 1, PLAYER_ORIENTATION_RIGHT));
     }
 
     tick(gameState: GameState): void {

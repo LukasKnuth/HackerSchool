@@ -22,6 +22,7 @@ export const X = TILE_PIT;
 export const T = TILE_COLLECTIBLE;
 export const B = TILE_BLUE;
 export const G = TILE_GREEN;
+export const R = TILE_RED;
 
 export const PLAYER_ORIENTATION_UP = 0;
 export const PLAYER_ORIENTATION_RIGHT = 90;
