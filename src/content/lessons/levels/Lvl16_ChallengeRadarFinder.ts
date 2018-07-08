@@ -25,7 +25,7 @@ export default class Lvl16_ChallengeRadarFinder implements Level {
     public readonly showDebugLog = true;
     public readonly description = "Diesmal sind die Kristalle versteckt und ihre Anordnung ändert sich von Mal zu Mal." +
         " Benutze dein neues Radar, um sie ausfindig zu machen.";
-    public readonly maxBlocks = 200; //verify that number
+    public readonly maxBlocks = 40; //verify that number
     public readonly mazeHeight = 15;
     public readonly mazeWidth = 15;
     public readonly name = "Herausforderung: Unsichtbar";
@@ -44,7 +44,7 @@ export default class Lvl16_ChallengeRadarFinder implements Level {
         [X, X, _, _, _, _, _, _, _, _, _, _, _, X, X],
         [X, X, _, _, _, _, _, _, _, _, _, _, _, X, X],
         [X, X, _, _, _, _, _, _, _, _, _, _, _, X, X],
-        [X, X, _, _, _, _, _, _, _, _, _, _, _, X, X],
+        [X, X, _, _, X, _, _, _, _, _, X, _, _, X, X],
         [X, X, _, _, _, _, _, _, _, _, _, _, _, X, X],
         [X, X, _, _, _, _, _, _, _, _, _, _, _, X, X],
         [X, X, _, _, _, _, _, _, _, _, _, _, _, X, X],

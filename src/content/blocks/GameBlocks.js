@@ -92,10 +92,10 @@ export default function(blocks, generators) {
             [{"src":"/sprites/TILE_GREEN.png","width":22,"height":22, "alt":"green"},api.PARAM_GREEN],
             [{"src":"/sprites/TILE_YELLOW.png","width":22,"height":22, "alt":"yellow"},api.PARAM_YELLOW],
             [{"src":"/sprites/TILE_RED.png","width":22,"height":22, "alt":"red"},api.PARAM_RED]*/
-        ["crystal", api.PARAM_COLLECTIBLE], ["trap", api.PARAM_TRAP],
-        ["enemy color", api.PARAM_ENEMY_COLOR], ["enemy", api.PARAM_ENEMY],
+        ["crystal", api.PARAM_COLLECTIBLE],["pit", api.PARAM_PIT], ["floor", api.PARAM_FLOOR],/*["trap", api.PARAM_TRAP],
+        ["enemy color", api.PARAM_ENEMY_COLOR], ["enemy", api.PARAM_ENEMY],*/
         ["green", api.PARAM_GREEN], ["blue", api.PARAM_BLUE],
-        ["pit", api.PARAM_PIT], ["floor", api.PARAM_FLOOR],
+
     ];
 
     blocks['sensor_camera'] = {

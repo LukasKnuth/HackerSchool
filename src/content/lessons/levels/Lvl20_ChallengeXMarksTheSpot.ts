@@ -19,8 +19,8 @@ export default class Lvl20_ChallengeXMarksTheSpot implements Level {
     public readonly showDebugLog = true;
     public readonly allowVariables = true;
 
-    public readonly description = "Finde den mit dem Kreuz markierten Schatz. Aber Vorsicht vor falschen Fährten.";
-    public readonly maxBlocks = 25; //verify that number
+    public readonly description = "Finde den mit dem Kreuz markierten Schatz. Aber Vorsicht vor falschen Fährten. Der Kristall ist unsichtbar, befindet sich aber in der Mitte des balauen Kreuzes.";
+    public readonly maxBlocks = 40; //verify that number
     public readonly mazeHeight = 15;
     public readonly mazeWidth = 15;
     public readonly name = "Prüfung: Unbeirrt";
@@ -32,19 +32,19 @@ export default class Lvl20_ChallengeXMarksTheSpot implements Level {
 
     private initialMazeLayout: GridState = [
         [X, X, X, X, X, X, X, X, X, X, X, X, X, X, X],
+        [X, X, _, _, _, _, _, _, _, _, _, _, _, X, X],
         [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
         [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
         [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
         [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
         [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
+        [X, _, _, _, _, _, _, X, _, _, _, _, _, _, X],
         [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
         [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
         [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
         [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
         [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
-        [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
-        [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
-        [X, _, _, _, _, _, _, _, _, _, _, _, _, _, X],
+        [X, X, _, _, _, _, _, _, _, _, _, _, _, X, X],
         [X, X, X, X, X, X, X, X, X, X, X, X, X, X, X],
     ];
 
@@ -119,8 +119,8 @@ export default class Lvl20_ChallengeXMarksTheSpot implements Level {
 
             const actualMaze = Array.from(this.initialMazeLayout, (arr) => Array.from(arr))
             Lvl20_ChallengeXMarksTheSpot.drawCross(actualMaze, this.crossPos);
-            Lvl20_ChallengeXMarksTheSpot.drawDecoyLine(actualMaze, this.decoyVerticalPos, true);
-            Lvl20_ChallengeXMarksTheSpot.drawDecoyLine(actualMaze, this.decoyHorizontalPos, false);
+            //Lvl20_ChallengeXMarksTheSpot.drawDecoyLine(actualMaze, this.decoyVerticalPos, true);
+            //Lvl20_ChallengeXMarksTheSpot.drawDecoyLine(actualMaze, this.decoyHorizontalPos, false);
 
             gameState.setGridState(actualMaze);
         }

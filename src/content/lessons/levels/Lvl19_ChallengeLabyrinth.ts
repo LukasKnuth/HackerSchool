@@ -45,6 +45,8 @@ export default class Lvl19_ChallengeLabyrinth implements Level {
 
     private mazeCover: boolean[][] = [];
     private randomizedMaze: GridState = [];
+    private hasFirstTickOccured = true;
+    private playerStartingPos: PlayerPosition = new PlayerPosition(0,0,PLAYER_ORIENTATION_DOWN);
 
     exportAPI(gameState: GameState) {
         return (interpreter: Interpreter, scope: InterpreterScope) => {
@@ -63,83 +65,88 @@ export default class Lvl19_ChallengeLabyrinth implements Level {
     }
 
     initializeState(gameState: GameState): void {
-        //randomize layout of maze by rotating or mirroring the initial maze area
-        this.randomizedMaze = Array.from(this.initialMazeLayout, (arr) => Array.from(arr))
+        if(this.hasFirstTickOccured) {
+            this.hasFirstTickOccured = false;
 
-        const shouldFlipDiagonally = Math.round(Math.random()) === 0;
-        const shouldFlipHorizontally = Math.round(Math.random()) === 0;
-        const shouldFlipVertically = Math.round(Math.random()) === 0;
+            //randomize layout of maze by rotating or mirroring the initial maze area
+            this.randomizedMaze = Array.from(this.initialMazeLayout, (arr) => Array.from(arr))
 
-        //we assume a perfectly square matrix
-        let len = this.initialMazeLayout.length;
-        for (var sourceX = 0; sourceX < len; sourceX++) {
-            for(var sourceY = 0; sourceY < len; sourceY++){
-                var targetX = sourceX;
-                var targetY = sourceY;
+            const shouldFlipDiagonally = Math.round(Math.random()) === 0;
+            const shouldFlipHorizontally = Math.round(Math.random()) === 0;
+            const shouldFlipVertically = Math.round(Math.random()) === 0;
 
-                if(shouldFlipVertically){
-                    targetX = len - 1 - targetX;
-                }
+            //we assume a perfectly square matrix
+            let len = this.initialMazeLayout.length;
+            for (var sourceX = 0; sourceX < len; sourceX++) {
+                for (var sourceY = 0; sourceY < len; sourceY++) {
+                    var targetX = sourceX;
+                    var targetY = sourceY;
 
-                if(shouldFlipHorizontally){
-                    targetY = len - 1 - targetY;
-                }
+                    if (shouldFlipVertically) {
+                        targetX = len - 1 - targetX;
+                    }
 
-                if(shouldFlipDiagonally){
-                    const tmp = targetY;
-                    targetY = targetX;
-                    targetX = tmp;
-                }
+                    if (shouldFlipHorizontally) {
+                        targetY = len - 1 - targetY;
+                    }
 
-                this.randomizedMaze[targetX][targetY] = this.initialMazeLayout[sourceX][sourceY];
-            }
-        }
+                    if (shouldFlipDiagonally) {
+                        const tmp = targetY;
+                        targetY = targetX;
+                        targetX = tmp;
+                    }
 
-        //Place collectible and player randomly on one of the ground spaces. Since alle pathways
-        //are connected it is always possible to find it.
-
-        //find all available spaces player and collectible placement
-        let availableSpaces: GridPosition[] = [];
-        let currentTilePos = new GridPosition(0, 0);
-
-        for (let row = 0; row < this.randomizedMaze.length; ++row) {
-            currentTilePos.y = row;
-            for (let col = 0; col < this.randomizedMaze[row].length; ++col) {
-                currentTilePos.x = col;
-
-                let tile = this.randomizedMaze[currentTilePos.y][currentTilePos.x];
-                if (tile !== TILE_PIT) {
-                    availableSpaces.push(currentTilePos.clone());
+                    this.randomizedMaze[targetX][targetY] = this.initialMazeLayout[sourceX][sourceY];
                 }
             }
+
+            //Place collectible and player randomly on one of the ground spaces. Since alle pathways
+            //are connected it is always possible to find it.
+
+            //find all available spaces player and collectible placement
+            let availableSpaces: GridPosition[] = [];
+            let currentTilePos = new GridPosition(0, 0);
+
+            for (let row = 0; row < this.randomizedMaze.length; ++row) {
+                currentTilePos.y = row;
+                for (let col = 0; col < this.randomizedMaze[row].length; ++col) {
+                    currentTilePos.x = col;
+
+                    let tile = this.randomizedMaze[currentTilePos.y][currentTilePos.x];
+                    if (tile !== TILE_PIT) {
+                        availableSpaces.push(currentTilePos.clone());
+                    }
+                }
+            }
+
+            //pick one of available positions at random
+            const playerPosNumber = Math.round(Math.random() * (availableSpaces.length - 1));
+            const selectedPlayerTile = availableSpaces.splice(playerPosNumber, 1).pop();
+
+            const collectiblePosNumber = Math.round(Math.random() * (availableSpaces.length - 1));
+            const selectedCollectibleTile = availableSpaces[collectiblePosNumber];
+
+            this.randomizedMaze[selectedCollectibleTile.y][selectedCollectibleTile.x] = TILE_COLLECTIBLE;
+
+            if (selectedPlayerTile) {
+                this.playerStartingPos = new PlayerPosition(selectedPlayerTile.x, selectedPlayerTile.y, PLAYER_ORIENTATION_DOWN);
+            } else {
+                console.log("WTF selected position should never be undefined!");
+                return;
+            }
+
+            this.mazeCover.length = 0;
+            this.mazeCover = Array.from(this.randomizedMaze, (arr) => Array.from(arr, () => false));
+
+            Lvl19_ChallengeLabyrinth.revealHotSpot(this.mazeCover, selectedCollectibleTile);
+            Lvl19_ChallengeLabyrinth.revealHotSpot(this.mazeCover, selectedPlayerTile);
         }
-
-        //pick one of available positions at random
-        const playerPosNumber = Math.round(Math.random() * (availableSpaces.length - 1));
-        const selectedPlayerTile = availableSpaces.splice(playerPosNumber, 1).pop();
-
-        const collectiblePosNumber = Math.round(Math.random() * (availableSpaces.length - 1));
-        const selectedCollectibleTile = availableSpaces[collectiblePosNumber];
-
-        this.randomizedMaze[selectedCollectibleTile.y][selectedCollectibleTile.x] = TILE_COLLECTIBLE;
-
-        if (selectedPlayerTile) {
-            gameState.setPlayerPosition(new PlayerPosition(selectedPlayerTile.x, selectedPlayerTile.y, PLAYER_ORIENTATION_DOWN));
-        }else{
-            console.log("WTF selected position should never be undefined!");
-            return;
-        }
-
-        this.mazeCover.length = 0;
-        this.mazeCover = Array.from(this.randomizedMaze, (arr) => Array.from(arr, () => false));
-
-        Lvl19_ChallengeLabyrinth.revealHotSpot(this.mazeCover, selectedCollectibleTile);
-        Lvl19_ChallengeLabyrinth.revealHotSpot(this.mazeCover, selectedPlayerTile);
-
+        gameState.setPlayerPosition(this.playerStartingPos);
         gameState.setGridState(Lvl19_ChallengeLabyrinth.calculateConcealedMap(this.randomizedMaze, this.mazeCover));
     }
 
     tick(gameState: GameState): void {
+        this.hasFirstTickOccured = true;
         //reveal the level gradually to the player around the robot.
         const playerPos = gameState.getPlayerPosition();
         const standingOn = this.randomizedMaze[playerPos.y][playerPos.x];
