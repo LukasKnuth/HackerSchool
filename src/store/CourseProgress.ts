@@ -4,13 +4,17 @@ import {Lesson, Level} from "@/content/Lesson";
 import PrimitivesAndLoopsLesson from "@/content/lessons/PrimitivesAndLoopsLesson";
 import ConditionalsAndVariablesLesson from "@/content/lessons/ConditionalsAndVariablesLesson";
 import ChallengesLesson from "@/content/lessons/ChallengesLesson";
+import LessonBlueGroup from '@/content/lessons/LessonBlueGroup';
+import LessonRedGroup from '@/content/lessons/LessonRedGroup';
 
 // --------- STATIC DATA -------------
 const AllLessons: {[index: string]: Lesson} = {
     //maze: new DebuggingLesson(),
     basics: new PrimitivesAndLoopsLesson(),
     advanced: new ConditionalsAndVariablesLesson(),
-    challenges: new ChallengesLesson()
+    challenges: new ChallengesLesson(),
+    teamBlue: new LessonBlueGroup(),
+    teamRed: new LessonRedGroup()
 };
 
 // -------- MODULE -------------
