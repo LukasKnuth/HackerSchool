@@ -4,7 +4,7 @@
             <b-col v-for="l in lessons" :key="l.id" cols="4">
                 <b-card :title="l.lesson.name"
                         class="mb-2"
-                        :img-src="`/lessons/${l.id}.png`"
+                        :img-src="getImageSource(l)"
                         :img-alt="l.lesson.name"
                         img-top>
                     <p class="card-text">{{l.lesson.description}}</p>
@@ -30,6 +30,9 @@
         }
         getButtonVariant(entry: LessonListEntry) {
             return entry.hasProgress ? "success" : "primary"
+        }
+        getImageSource(entry: LessonListEntry) {
+            return `${BASE_URL}lessons/${entry.id}.png`;
         }
 
         startLevel(lessonId: string) {

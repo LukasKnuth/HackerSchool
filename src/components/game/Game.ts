@@ -20,10 +20,10 @@ export const BLOCK_EXECUTING = "blockExecuting";
 
 // ----------------- ASSET LOADING -----------------
 
-const FILE_ASSET_PLAYER1 = "/sprites/player.png";
-const FILE_ASSET_BACKGROUND = "/sprites/background.png";
-const FILE_SOUND_SUCCESS = "/sounds/success.mp3";
-const FILE_SOUND_FAIL = "/sounds/fail.mp3";
+const FILE_ASSET_PLAYER1 = BASE_URL + "sprites/player.png";
+const FILE_ASSET_BACKGROUND = BASE_URL + "sprites/background.png";
+const FILE_SOUND_SUCCESS = BASE_URL + "sounds/success.mp3";
+const FILE_SOUND_FAIL = BASE_URL + "sounds/fail.mp3";
 
 export interface GameLoop {
     isPaused: boolean;
